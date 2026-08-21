@@ -10,6 +10,7 @@
 :root{
   --bg:#06182c;
   --card:#102944;
+  --card2:#0c223a;
   --line:#27425e;
   --text:#f5f7fa;
   --muted:#9eacba;
@@ -135,6 +136,7 @@ main{
 
 .green{color:var(--green)}
 .yellow{color:var(--yellow)}
+.red{color:var(--red)}
 
 .search-row{
   display:grid;
@@ -143,7 +145,9 @@ main{
   margin-bottom:12px;
 }
 
-.search{
+.search,
+.edit-input,
+.edit-select{
   width:100%;
   border:1px solid var(--line);
   background:#0b2037;
@@ -153,7 +157,8 @@ main{
   outline:none;
 }
 
-.search::placeholder{
+.search::placeholder,
+.edit-input::placeholder{
   color:#7e8f9f;
 }
 
@@ -239,6 +244,24 @@ main{
   color:var(--muted);
   font-size:12px;
   margin-top:3px;
+}
+
+.status-line{
+  margin-top:4px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.status-safe{
+  color:var(--green);
+}
+
+.status-probable{
+  color:var(--yellow);
+}
+
+.status-unclear{
+  color:#a8b4c2;
 }
 
 .select-btn{
@@ -374,7 +397,8 @@ main{
   margin-bottom:12px;
 }
 
-#boardFInput{
+#boardFInput,
+#assignmentInput{
   display:none;
 }
 
@@ -463,6 +487,22 @@ main{
   padding:11px;
 }
 
+.check-toolbar{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:10px;
+}
+
+.check-filter{
+  width:100%;
+  border:1px solid var(--line);
+  background:#0b2037;
+  color:white;
+  border-radius:10px;
+  padding:9px;
+}
+
 .check-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -475,6 +515,7 @@ main{
   border-radius:12px;
   padding:6px;
   text-align:center;
+  color:white;
 }
 
 .check-item img{
@@ -490,6 +531,26 @@ main{
   font-size:12px;
   font-weight:800;
   color:#dce6ef;
+}
+
+.check-status{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  display:inline-block;
+  margin-left:4px;
+}
+
+.dot-safe{
+  background:var(--green);
+}
+
+.dot-probable{
+  background:var(--yellow);
+}
+
+.dot-unclear{
+  background:#8291a1;
 }
 
 .modal{
@@ -510,6 +571,8 @@ main{
 .modal-card{
   width:100%;
   max-width:520px;
+  max-height:92vh;
+  overflow:auto;
   background:#0d243d;
   border:1px solid rgba(255,255,255,.08);
   border-radius:20px;
@@ -529,7 +592,7 @@ main{
 
 .modal-image{
   width:100%;
-  max-height:48vh;
+  max-height:40vh;
   object-fit:contain;
   background:#071625;
   border-radius:14px;
@@ -550,6 +613,44 @@ main{
 
 .modal-detail strong{
   color:white;
+}
+
+.edit-section{
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+
+.edit-label{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:5px;
+}
+
+.edit-field{
+  margin-bottom:12px;
+}
+
+.save-btn{
+  width:100%;
+  border:0;
+  background:var(--green);
+  color:#041b0d;
+  border-radius:11px;
+  padding:12px;
+  font-weight:850;
+}
+
+.import-success{
+  display:none;
+  margin-top:10px;
+  color:#70df98;
+  font-size:14px;
+}
+
+.import-success.show{
+  display:block;
 }
 
 .bottom-nav{
@@ -583,6 +684,12 @@ main{
   font-size:20px;
   margin-bottom:2px;
 }
+
+@media(max-width:390px){
+  .check-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
 </style>
 </head>
 
@@ -593,7 +700,7 @@ main{
 <header class="topbar">
   <div class="toprow">
     <div class="logo">Cap<span>Trade</span></div>
-    <div class="version">V0.10</div>
+    <div class="version">V0.11</div>
   </div>
 </header>
 
@@ -608,6 +715,7 @@ main{
   </div>
 
   <div class="summary">
+
     <div class="summary-card">
       <div class="summary-label">Kronkorken</div>
       <div id="totalCaps" class="summary-value">0</div>
@@ -617,24 +725,32 @@ main{
       <div class="summary-label">Ausgewählt</div>
       <div id="selectedHome" class="summary-value green">0</div>
     </div>
+
   </div>
 
   <div class="search-row">
+
     <input
       id="searchInput"
       class="search"
       placeholder="Nach Nummer oder Brauerei suchen..."
     >
+
     <button class="search-btn">⌕</button>
+
   </div>
 
   <div class="toolbar">
-    <div class="toolbar-title">Alle Kronkorken</div>
+
+    <div class="toolbar-title">
+      Alle Kronkorken
+    </div>
 
     <select id="sortSelect" class="sort">
       <option value="number">Nummer</option>
       <option value="brewery">Brauerei</option>
     </select>
+
   </div>
 
   <div id="homeList" class="cap-list"></div>
@@ -651,6 +767,7 @@ main{
   </div>
 
   <div class="selection-header">
+
     <div class="selection-count">
       <span id="selectionCount">0</span> ausgewählt
     </div>
@@ -658,6 +775,7 @@ main{
     <button id="clearTrade" class="clear-btn">
       Auswahl leeren
     </button>
+
   </div>
 
   <div id="selectionList"></div>
@@ -674,6 +792,7 @@ main{
   </div>
 
   <div class="summary">
+
     <div class="summary-card">
       <div class="summary-label">Auf jeden Fall</div>
       <div id="safeCount" class="summary-value green">0</div>
@@ -683,6 +802,7 @@ main{
       <div class="summary-label">Vielleicht</div>
       <div id="maybeCount" class="summary-value yellow">0</div>
     </div>
+
   </div>
 
   <div class="group">
@@ -715,61 +835,36 @@ main{
 
   <div class="intro">
     <strong>Verwalten:</strong>
-    Brett F kannst du importieren und anschließend alle
-    ausgeschnittenen Kronkorken kontrollieren.
-  </div>
-
-  <div class="manage-card">
-
-    <div class="manage-title">
-      Brett F importieren
-    </div>
-
-    <div class="manage-text">
-      Wähle genau das Originalfoto von Brett F aus,
-      das du mir geschickt hast.
-    </div>
-
-    <input
-      id="boardFInput"
-      type="file"
-      accept="image/*"
-    >
-
-    <button id="boardFButton" class="primary-btn">
-      Originalfoto von Brett F auswählen
-    </button>
-
-    <div id="progressBox" class="progress">
-      <strong id="progressText">Import wird vorbereitet …</strong>
-
-      <div class="progress-bar">
-        <div id="progressFill" class="progress-fill"></div>
-      </div>
-    </div>
-
-    <div id="successBox" class="success-box">
-      ✓ Brett F wurde importiert.<br>
-      <strong>139 Kronkorken</strong> sind gespeichert.
-    </div>
-
-    <div class="warning-box">
-      Die Brauerei-Zuordnung kommt danach.
-      Zuerst prüfen wir nur, ob alle Einzelbilder sauber aussehen.
-    </div>
-
+    Hier kontrollierst und bearbeitest du deine Kronkorken.
+    Der Lagerort bleibt unabhängig von der Brauerei gespeichert.
   </div>
 
 
   <div class="manage-card">
 
     <div class="manage-title">
-      Kronkorken prüfen
+      Kronkorken prüfen & zuordnen
     </div>
 
     <div class="manage-text">
-      Tippe auf einen Kronkorken, um ihn groß zu öffnen
-      und Lagerort, Reihe und Position zu prüfen.
+      Tippe auf einen Kronkorken. Dort kannst du Brauerei
+      und Erkennungsstatus bearbeiten.
+    </div>
+
+    <div class="check-toolbar">
+
+      <select id="checkFilter" class="check-filter">
+        <option value="all">Alle</option>
+        <option value="unclear">Nur unklar</option>
+        <option value="probable">Wahrscheinlich</option>
+        <option value="safe">Sicher</option>
+      </select>
+
+      <select id="checkSort" class="check-filter">
+        <option value="number">Nach Nummer</option>
+        <option value="brewery">Nach Brauerei</option>
+      </select>
+
     </div>
 
     <div id="checkGrid" class="check-grid"></div>
@@ -780,12 +875,82 @@ main{
   <div class="manage-card">
 
     <div class="manage-title">
-      Testdaten
+      Zuordnungen gesammelt importieren
     </div>
 
     <div class="manage-text">
-      Falls beim Test etwas schiefgeht, kannst du Brett F
-      komplett löschen und neu importieren.
+      Hier können wir später eine von mir vorbereitete Datei
+      mit vielen Brauerei-Zuordnungen auf einmal einlesen.
+      Deine Kronkorkenbilder und Lagerorte bleiben dabei erhalten.
+    </div>
+
+    <input
+      id="assignmentInput"
+      type="file"
+      accept=".json,application/json"
+    >
+
+    <button id="assignmentButton" class="secondary-btn">
+      Zuordnungsdatei auswählen
+    </button>
+
+    <div id="assignmentSuccess" class="import-success">
+      ✓ Zuordnungen wurden übernommen.
+    </div>
+
+  </div>
+
+
+  <div class="manage-card">
+
+    <div class="manage-title">
+      Brett F erneut importieren
+    </div>
+
+    <div class="manage-text">
+      Nur nötig, falls du die Einzelbilder einmal neu erstellen möchtest.
+      Normalerweise musst du Brett F jetzt nicht erneut importieren.
+    </div>
+
+    <input
+      id="boardFInput"
+      type="file"
+      accept="image/*"
+    >
+
+    <button id="boardFButton" class="secondary-btn">
+      Originalfoto von Brett F auswählen
+    </button>
+
+    <div id="progressBox" class="progress">
+
+      <strong id="progressText">
+        Import wird vorbereitet …
+      </strong>
+
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+
+    </div>
+
+    <div id="successBox" class="success-box">
+      ✓ Brett F wurde importiert.<br>
+      <strong>139 Kronkorken</strong> sind gespeichert.
+    </div>
+
+    <div class="warning-box">
+      Beim erneuten Import werden die bisherigen
+      Brauerei-Zuordnungen von Brett F zurückgesetzt.
+    </div>
+
+  </div>
+
+
+  <div class="manage-card">
+
+    <div class="manage-title">
+      Testdaten
     </div>
 
     <button id="deleteBoardF" class="danger-btn">
@@ -797,7 +962,6 @@ main{
 </section>
 
 </main>
-
 </div>
 
 
@@ -842,6 +1006,55 @@ main{
     <div id="modalTitle" class="modal-title"></div>
 
     <div id="modalDetails" class="modal-detail"></div>
+
+
+    <div class="edit-section">
+
+      <div class="edit-field">
+
+        <label class="edit-label">
+          Brauerei / Marke
+        </label>
+
+        <input
+          id="breweryInput"
+          class="edit-input"
+          placeholder="z. B. Veltins"
+        >
+
+      </div>
+
+
+      <div class="edit-field">
+
+        <label class="edit-label">
+          Zuordnung
+        </label>
+
+        <select id="recognitionStatus" class="edit-select">
+
+          <option value="safe">
+            Sicher
+          </option>
+
+          <option value="probable">
+            Wahrscheinlich
+          </option>
+
+          <option value="unclear">
+            Unklar
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <button id="saveCapButton" class="save-btn">
+        ✓ Speichern
+      </button>
+
+    </div>
 
   </div>
 
@@ -893,6 +1106,34 @@ let trade =
   ) || {};
 
 
+let openCapId =
+  null;
+
+
+/*
+  Alte V0.10-Daten automatisch ergänzen.
+  Dadurch muss Brett F nicht neu importiert werden.
+*/
+
+caps = caps.map(cap => {
+
+  return {
+
+    ...cap,
+
+    brewery:
+      cap.brewery ||
+      "Zuordnung prüfen",
+
+    recognitionStatus:
+      cap.recognitionStatus ||
+      "unclear"
+
+  };
+
+});
+
+
 function saveCaps(){
 
   localStorage.setItem(
@@ -915,7 +1156,54 @@ function saveTrade(){
 
 function selectedIds(){
 
-  return Object.keys(trade).map(Number);
+  return Object
+    .keys(trade)
+    .map(Number);
+
+}
+
+
+function statusText(status){
+
+  if(status === "safe"){
+    return "Sicher";
+  }
+
+  if(status === "probable"){
+    return "Wahrscheinlich";
+  }
+
+  return "Unklar";
+
+}
+
+
+function statusClass(status){
+
+  if(status === "safe"){
+    return "status-safe";
+  }
+
+  if(status === "probable"){
+    return "status-probable";
+  }
+
+  return "status-unclear";
+
+}
+
+
+function dotClass(status){
+
+  if(status === "safe"){
+    return "dot-safe";
+  }
+
+  if(status === "probable"){
+    return "dot-probable";
+  }
+
+  return "dot-unclear";
 
 }
 
@@ -972,7 +1260,11 @@ function renderHome(){
 
     items.sort(
       (a,b) =>
-        a.brewery.localeCompare(b.brewery)
+        a.brewery.localeCompare(
+          b.brewery,
+          "de"
+        ) ||
+        a.id-b.id
     );
 
   }else{
@@ -985,7 +1277,8 @@ function renderHome(){
   }
 
 
-  list.innerHTML = "";
+  list.innerHTML =
+    "";
 
 
   if(!items.length){
@@ -1029,8 +1322,11 @@ function renderHome(){
           ${cap.brewery}
         </div>
 
-        <div class="cap-sub">
-          Verfügbar
+        <div class="
+          status-line
+          ${statusClass(cap.recognitionStatus)}
+        ">
+          ${statusText(cap.recognitionStatus)}
         </div>
 
       </div>
@@ -1104,7 +1400,8 @@ function renderSelection(){
     ids.length;
 
 
-  box.innerHTML = "";
+  box.innerHTML =
+    "";
 
 
   if(!ids.length){
@@ -1128,7 +1425,9 @@ function renderSelection(){
       );
 
 
-    if(!cap) return;
+    if(!cap){
+      return;
+    }
 
 
     const card =
@@ -1159,21 +1458,27 @@ function renderSelection(){
 
           <button
             class="choice-btn safe
-            ${trade[id] === "safe" ? "active" : ""}"
+            ${
+              trade[id] === "safe"
+              ? "active"
+              : ""
+            }"
           >
             ✓ Sicher
           </button>
 
           <button
             class="choice-btn maybe
-            ${trade[id] === "maybe" ? "active" : ""}"
+            ${
+              trade[id] === "maybe"
+              ? "active"
+              : ""
+            }"
           >
             ? Vielleicht
           </button>
 
-          <button
-            class="choice-btn remove"
-          >
+          <button class="choice-btn remove">
             × Raus
           </button>
 
@@ -1184,34 +1489,42 @@ function renderSelection(){
     `;
 
 
-    card.querySelector(".safe").onclick = () => {
+    card
+      .querySelector(".safe")
+      .onclick = () => {
 
-      trade[id] = "safe";
+        trade[id] =
+          "safe";
 
-      saveTrade();
-      renderAll();
+        saveTrade();
+        renderAll();
 
-    };
-
-
-    card.querySelector(".maybe").onclick = () => {
-
-      trade[id] = "maybe";
-
-      saveTrade();
-      renderAll();
-
-    };
+      };
 
 
-    card.querySelector(".remove").onclick = () => {
+    card
+      .querySelector(".maybe")
+      .onclick = () => {
 
-      delete trade[id];
+        trade[id] =
+          "maybe";
 
-      saveTrade();
-      renderAll();
+        saveTrade();
+        renderAll();
 
-    };
+      };
+
+
+    card
+      .querySelector(".remove")
+      .onclick = () => {
+
+        delete trade[id];
+
+        saveTrade();
+        renderAll();
+
+      };
 
 
     box.appendChild(card);
@@ -1257,14 +1570,16 @@ function renderOverview(){
   const safe =
     selectedIds()
       .filter(
-        id => trade[id] === "safe"
+        id =>
+          trade[id] === "safe"
       );
 
 
   const maybe =
     selectedIds()
       .filter(
-        id => trade[id] === "maybe"
+        id =>
+          trade[id] === "maybe"
       );
 
 
@@ -1294,13 +1609,20 @@ function renderOverview(){
     ? safe
         .map(
           id =>
-            caps.find(c => c.id === id)
+            caps.find(
+              cap =>
+                cap.id === id
+            )
         )
         .filter(Boolean)
         .map(simpleCapCard)
         .join("")
 
-    : `<div class="empty">Keine Kronkorken</div>`;
+    : `
+      <div class="empty">
+        Keine Kronkorken
+      </div>
+    `;
 
 
   maybeList.innerHTML =
@@ -1309,13 +1631,20 @@ function renderOverview(){
     ? maybe
         .map(
           id =>
-            caps.find(c => c.id === id)
+            caps.find(
+              cap =>
+                cap.id === id
+            )
         )
         .filter(Boolean)
         .map(simpleCapCard)
         .join("")
 
-    : `<div class="empty">Keine Kronkorken</div>`;
+    : `
+      <div class="empty">
+        Keine Kronkorken
+      </div>
+    `;
 
 }
 
@@ -1335,7 +1664,8 @@ function renderFind(){
       );
 
 
-  box.innerHTML = "";
+  box.innerHTML =
+    "";
 
 
   if(!ids.length){
@@ -1359,7 +1689,9 @@ function renderFind(){
       );
 
 
-    if(!cap) return;
+    if(!cap){
+      return;
+    }
 
 
     const card =
@@ -1424,14 +1756,61 @@ function renderCheckGrid(){
     document.getElementById("checkGrid");
 
 
-  grid.innerHTML = "";
+  const filter =
+    document.getElementById("checkFilter")
+      .value;
 
 
-  if(!caps.length){
+  const sort =
+    document.getElementById("checkSort")
+      .value;
+
+
+  let items =
+    [...caps];
+
+
+  if(filter !== "all"){
+
+    items =
+      items.filter(
+        cap =>
+          cap.recognitionStatus === filter
+      );
+
+  }
+
+
+  if(sort === "brewery"){
+
+    items.sort(
+      (a,b) =>
+        a.brewery.localeCompare(
+          b.brewery,
+          "de"
+        ) ||
+        a.id-b.id
+    );
+
+  }else{
+
+    items.sort(
+      (a,b) =>
+        a.id-b.id
+    );
+
+  }
+
+
+  grid.innerHTML =
+    "";
+
+
+  if(!items.length){
 
     grid.innerHTML = `
       <div class="empty" style="grid-column:1/-1">
-        Noch nichts importiert.
+        Keine passenden Kronkorken.
       </div>
     `;
 
@@ -1440,50 +1819,68 @@ function renderCheckGrid(){
   }
 
 
-  caps
-    .sort(
-      (a,b) =>
-        a.id-b.id
-    )
-    .forEach(cap => {
+  items.forEach(cap => {
 
-      const item =
-        document.createElement("button");
+    const item =
+      document.createElement("button");
 
 
-      item.className =
-        "check-item";
+    item.className =
+      "check-item";
 
 
-      item.innerHTML = `
+    item.innerHTML = `
 
-        <img
-          src="${cap.image}"
-          alt="Kronkorken ${cap.id}"
-        >
+      <img
+        src="${cap.image}"
+        alt="Kronkorken ${cap.id}"
+      >
 
-        <div class="check-number">
-          #${cap.id}
-        </div>
+      <div class="check-number">
+        #${cap.id}
 
-      `;
+        <span
+          class="
+            check-status
+            ${dotClass(cap.recognitionStatus)}
+          "
+        ></span>
+
+      </div>
+
+    `;
 
 
-      item.onclick = () => {
+    item.onclick = () => {
 
-        openDetail(cap);
+      openDetail(cap.id);
 
-      };
+    };
 
 
-      grid.appendChild(item);
+    grid.appendChild(item);
 
-    });
+  });
 
 }
 
 
-function openDetail(cap){
+function openDetail(capId){
+
+  const cap =
+    caps.find(
+      c => c.id === capId
+    );
+
+
+  if(!cap){
+    return;
+  }
+
+
+  openCapId =
+    cap.id;
+
 
   document
     .getElementById("modalImage")
@@ -1501,8 +1898,6 @@ function openDetail(cap){
     .getElementById("modalDetails")
     .innerHTML = `
 
-      <strong>${cap.brewery}</strong><br>
-
       Lagerort:
       <strong>${cap.storage}</strong><br>
 
@@ -1513,6 +1908,20 @@ function openDetail(cap){
       <strong>${cap.position}</strong>
 
     `;
+
+
+  document
+    .getElementById("breweryInput")
+    .value =
+    cap.brewery === "Zuordnung prüfen"
+    ? ""
+    : cap.brewery;
+
+
+  document
+    .getElementById("recognitionStatus")
+    .value =
+    cap.recognitionStatus;
 
 
   document
@@ -1530,7 +1939,61 @@ function closeDetail(){
     .classList
     .remove("show");
 
+
+  openCapId =
+    null;
+
 }
+
+
+document
+  .getElementById("saveCapButton")
+  .onclick = () => {
+
+    if(openCapId === null){
+      return;
+    }
+
+
+    const cap =
+      caps.find(
+        c =>
+          c.id === openCapId
+      );
+
+
+    if(!cap){
+      return;
+    }
+
+
+    const brewery =
+      document
+        .getElementById("breweryInput")
+        .value
+        .trim();
+
+
+    const recognitionStatus =
+      document
+        .getElementById("recognitionStatus")
+        .value;
+
+
+    cap.brewery =
+      brewery ||
+      "Zuordnung prüfen";
+
+
+    cap.recognitionStatus =
+      recognitionStatus;
+
+
+    saveCaps();
+    renderAll();
+    closeDetail();
+
+  };
 
 
 function renderAll(){
@@ -1601,6 +2064,18 @@ document
 
 
 document
+  .getElementById("checkFilter")
+  .onchange =
+  renderCheckGrid;
+
+
+document
+  .getElementById("checkSort")
+  .onchange =
+  renderCheckGrid;
+
+
+document
   .getElementById("clearTrade")
   .onclick = () => {
 
@@ -1641,8 +2116,157 @@ document
   };
 
 
+/*
+  GESAMMELTER ZUORDNUNGSIMPORT
+
+  Erwartetes JSON-Beispiel:
+
+  {
+    "1": {
+      "brewery": "Veltins",
+      "status": "safe"
+    },
+    "2": {
+      "brewery": "Veltins",
+      "status": "probable"
+    }
+  }
+
+*/
+
+
+const assignmentInput =
+  document.getElementById(
+    "assignmentInput"
+  );
+
+
+document
+  .getElementById("assignmentButton")
+  .onclick = () => {
+
+    assignmentInput.click();
+
+  };
+
+
+assignmentInput.onchange = event => {
+
+  const file =
+    event.target.files[0];
+
+
+  if(!file){
+    return;
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload = e => {
+
+    try{
+
+      const assignments =
+        JSON.parse(
+          e.target.result
+        );
+
+
+      let changed =
+        0;
+
+
+      Object
+        .entries(assignments)
+        .forEach(
+          ([id,data]) => {
+
+            const cap =
+              caps.find(
+                c =>
+                  c.id === Number(id)
+              );
+
+
+            if(!cap){
+              return;
+            }
+
+
+            if(
+              typeof data.brewery === "string" &&
+              data.brewery.trim()
+            ){
+
+              cap.brewery =
+                data.brewery.trim();
+
+            }
+
+
+            if(
+              ["safe","probable","unclear"]
+                .includes(data.status)
+            ){
+
+              cap.recognitionStatus =
+                data.status;
+
+            }
+
+
+            changed++;
+
+          }
+        );
+
+
+      saveCaps();
+      renderAll();
+
+
+      const note =
+        document.getElementById(
+          "assignmentSuccess"
+        );
+
+
+      note.textContent =
+        `✓ ${changed} Zuordnungen wurden übernommen.`;
+
+
+      note.classList
+        .add("show");
+
+
+    }catch(error){
+
+      alert(
+        "Die Zuordnungsdatei konnte nicht gelesen werden."
+      );
+
+    }
+
+  };
+
+
+  reader.readAsText(file);
+
+};
+
+
+/*
+  BRETT-F-IMPORT
+*/
+
+
 const boardFInput =
-  document.getElementById("boardFInput");
+  document.getElementById(
+    "boardFInput"
+  );
 
 
 document
@@ -1660,7 +2284,9 @@ boardFInput.onchange = event => {
     event.target.files[0];
 
 
-  if(!file) return;
+  if(!file){
+    return;
+  }
 
 
   const reader =
@@ -1814,37 +2440,35 @@ async function importBoardF(img){
     const sourceX =
       Math.max(
         0,
-        centerX -
-        halfX
+        centerX-halfX
       );
 
 
     const sourceY =
       Math.max(
         0,
-        centerY -
-        halfY
+        centerY-halfY
       );
 
 
     const sourceW =
       Math.min(
-        halfX * 2,
-        img.naturalWidth -
-        sourceX
+        halfX*2,
+        img.naturalWidth-sourceX
       );
 
 
     const sourceH =
       Math.min(
-        halfY * 2,
-        img.naturalHeight -
-        sourceY
+        halfY*2,
+        img.naturalHeight-sourceY
       );
 
 
     const canvas =
-      document.createElement("canvas");
+      document.createElement(
+        "canvas"
+      );
 
 
     canvas.width =
@@ -1866,8 +2490,8 @@ async function importBoardF(img){
     ctx.fillRect(
       0,
       0,
-      canvas.width,
-      canvas.height
+      110,
+      110
     );
 
 
@@ -1894,10 +2518,13 @@ async function importBoardF(img){
     imported.push({
 
       id:
-        i + 1,
+        i+1,
 
       brewery:
         "Zuordnung prüfen",
+
+      recognitionStatus:
+        "unclear",
 
       image,
 
@@ -1919,9 +2546,10 @@ async function importBoardF(img){
     const percent =
       Math.round(
         (
-          (i + 1) /
+          (i+1) /
           boardFPoints.length
-        ) * 100
+        ) *
+        100
       );
 
 
@@ -1930,12 +2558,10 @@ async function importBoardF(img){
 
 
     progressText.textContent =
-      `Kronkorken ${i + 1} von 139 wird vorbereitet …`;
+      `Kronkorken ${i+1} von 139 wird vorbereitet …`;
 
 
-    if(
-      i % 10 === 0
-    ){
+    if(i % 10 === 0){
 
       await new Promise(
         resolve =>
@@ -1961,15 +2587,12 @@ async function importBoardF(img){
   }catch(error){
 
     alert(
-      "Der lokale Speicher ist voll. " +
-      "Dann müssen wir den Bildspeicher anders lösen."
+      "Der lokale Speicher ist voll."
     );
-
 
     progressBox
       .classList
       .remove("show");
-
 
     return;
 
@@ -2028,23 +2651,12 @@ document
     );
 
 
-    document
-      .getElementById("successBox")
-      .classList
-      .remove("show");
-
-
-    document
-      .getElementById("progressBox")
-      .classList
-      .remove("show");
-
-
     renderAll();
 
   };
 
 
+saveCaps();
 renderAll();
 
 </script>
