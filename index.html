@@ -10,6 +10,7 @@
 :root{
   --bg:#06182c;
   --card:#102944;
+  --card2:#0c223a;
   --line:#27425e;
   --text:#f5f7fa;
   --muted:#9eacba;
@@ -52,8 +53,8 @@ button{
   top:0;
   z-index:30;
   padding:14px 16px 12px;
-  background:rgba(6,24,44,.94);
-  backdrop-filter:blur(15px);
+  background:rgba(6,24,44,.95);
+  backdrop-filter:blur(16px);
   border-bottom:1px solid rgba(255,255,255,.06);
 }
 
@@ -74,9 +75,9 @@ button{
 
 .version{
   font-size:13px;
-  font-weight:700;
-  border:1px solid #cda324;
-  color:#f0c33d;
+  font-weight:750;
+  border:1px solid #d0a321;
+  color:#f1c43b;
   border-radius:9px;
   padding:5px 8px;
 }
@@ -232,8 +233,8 @@ main{
 }
 
 .cap-sub{
-  font-size:13px;
   color:var(--muted);
+  font-size:13px;
   margin-top:3px;
 }
 
@@ -393,6 +394,17 @@ main{
   color:white;
 }
 
+.success-btn{
+  width:100%;
+  border:0;
+  background:#23894d;
+  color:white;
+  border-radius:11px;
+  padding:12px 13px;
+  font-weight:800;
+  margin-top:10px;
+}
+
 .storage-item{
   display:flex;
   justify-content:space-between;
@@ -451,71 +463,51 @@ main{
 }
 
 #photoPreview{
-  width:100%;
   display:block;
-  pointer-events:none;
+  width:100%;
+  height:auto;
   user-select:none;
+  pointer-events:none;
 }
 
-.grid-overlay{
-  position:absolute;
-  left:8%;
-  top:8%;
-  width:84%;
-  height:84%;
-  border:2px solid var(--green);
-  touch-action:none;
-}
-
-.grid-lines{
+#gridSvg{
   position:absolute;
   inset:0;
-  pointer-events:none;
-}
-
-.grid-cell{
-  position:absolute;
-  border-right:1px solid rgba(54,201,107,.85);
-  border-bottom:1px solid rgba(54,201,107,.85);
-}
-
-.grid-number{
-  position:absolute;
-  left:4px;
-  top:3px;
-  color:white;
-  background:rgba(0,0,0,.58);
-  border-radius:5px;
-  padding:2px 4px;
-  font-size:10px;
-  font-weight:800;
-}
-
-.drag-label{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  background:rgba(0,0,0,.65);
-  color:white;
-  border-radius:8px;
-  padding:6px 9px;
-  font-size:12px;
-  font-weight:700;
-  pointer-events:none;
-}
-
-.resize-handle{
-  position:absolute;
-  width:26px;
-  height:26px;
-  background:var(--green);
-  border:3px solid white;
-  border-radius:50%;
-  right:-13px;
-  bottom:-13px;
-  z-index:5;
+  width:100%;
+  height:100%;
+  overflow:visible;
   touch-action:none;
+}
+
+.grid-line{
+  stroke:#36c96b;
+  stroke-width:1.5;
+  vector-effect:non-scaling-stroke;
+  opacity:.9;
+  pointer-events:none;
+}
+
+.grid-border{
+  fill:none;
+  stroke:#36c96b;
+  stroke-width:2.2;
+  vector-effect:non-scaling-stroke;
+  pointer-events:none;
+}
+
+.corner-hit{
+  fill:transparent;
+  stroke:transparent;
+  stroke-width:24;
+  cursor:grab;
+}
+
+.corner-dot{
+  fill:#36c96b;
+  stroke:white;
+  stroke-width:2.5;
+  vector-effect:non-scaling-stroke;
+  pointer-events:none;
 }
 
 .grid-settings{
@@ -542,11 +534,36 @@ main{
   color:var(--muted);
   font-size:13px;
   margin-top:4px;
-  line-height:1.4;
+  line-height:1.45;
 }
 
-.reset-btn{
+.saved-note{
+  display:none;
   margin-top:10px;
+  padding:10px 12px;
+  border-radius:11px;
+  background:rgba(54,201,107,.11);
+  border:1px solid rgba(54,201,107,.3);
+  color:#69df91;
+  font-size:14px;
+}
+
+.saved-note.show{
+  display:block;
+}
+
+.import-card{
+  background:rgba(14,36,61,.96);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:12px;
+}
+
+.import-info{
+  color:var(--muted);
+  line-height:1.45;
+  font-size:14px;
 }
 
 .bottom-nav{
@@ -590,7 +607,7 @@ main{
 <header class="topbar">
   <div class="toprow">
     <div class="logo">Cap<span>Trade</span></div>
-    <div class="version">V0.7</div>
+    <div class="version">V0.8</div>
   </div>
 </header>
 
@@ -712,7 +729,7 @@ main{
 
   <div class="intro">
     <strong>Heraussuchen:</strong>
-    Hier siehst du später genau, wo deine ausgewählten Kronkorken liegen.
+    Hier siehst du später den tatsächlichen Lagerort deiner Auswahl.
   </div>
 
   <div id="findList"></div>
@@ -724,8 +741,8 @@ main{
 
   <div class="intro">
     <strong>Verwalten:</strong>
-    Foto auswählen, Reihen und Spalten einstellen und das grüne Raster
-    direkt mit dem Finger über die Kronkorken schieben.
+    Lege die vier grünen Eckpunkte auf die äußeren Kronkorken.
+    Das Raster passt sich automatisch an die Perspektive an.
   </div>
 
 
@@ -769,7 +786,7 @@ main{
   <div class="manage-card">
 
     <div class="manage-title">
-      Foto vorbereiten
+      Foto ausrichten
     </div>
 
     <div class="field">
@@ -784,8 +801,8 @@ main{
 
       <div class="photo-icon">📷</div>
 
-      Foto möglichst gerade aufnehmen.
-      Danach kannst du das Raster selbst passend ausrichten.
+      Foto auswählen und anschließend die vier grünen Punkte
+      an die Ecken der Kronkorkenfläche ziehen.
 
     </div>
 
@@ -813,20 +830,11 @@ main{
           alt="Kronkorkenfoto"
         >
 
-        <div id="gridOverlay" class="grid-overlay">
-
-          <div id="gridLines" class="grid-lines"></div>
-
-          <div class="drag-label">
-            Verschieben
-          </div>
-
-          <div
-            id="resizeHandle"
-            class="resize-handle"
-          ></div>
-
-        </div>
+        <svg
+          id="gridSvg"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+        ></svg>
 
       </div>
 
@@ -841,8 +849,8 @@ main{
             id="rowsInput"
             type="number"
             min="1"
-            max="30"
-            value="10"
+            max="40"
+            value="14"
           >
 
         </div>
@@ -855,7 +863,7 @@ main{
             id="colsInput"
             type="number"
             min="1"
-            max="30"
+            max="40"
             value="10"
           >
 
@@ -867,26 +875,52 @@ main{
       <div class="grid-info">
 
         <div class="grid-count">
-          <span id="positionCount">100</span>
+          <span id="positionCount">140</span>
           Positionen
         </div>
 
         <div class="grid-sub">
-          Finger auf das Raster legen und verschieben.
-          Am grünen Punkt unten rechts kannst du das Raster größer
-          oder kleiner ziehen.
+          Beim Ausrichten werden bewusst keine Nummern angezeigt.
+          Ziehe einfach die vier grünen Punkte so, dass die Rasterlinien
+          möglichst mittig zwischen den Kronkorken verlaufen.
         </div>
 
       </div>
 
-
       <button
         id="resetGridBtn"
-        class="secondary-btn reset-btn"
+        class="secondary-btn"
+        style="margin-top:10px"
       >
         Raster zurücksetzen
       </button>
 
+      <button
+        id="acceptGridBtn"
+        class="success-btn"
+      >
+        ✓ Raster übernehmen
+      </button>
+
+      <div id="savedNote" class="saved-note">
+        ✓ Raster für diesen Lagerort gespeichert.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="import-card">
+
+    <div class="manage-title">
+      Vorbereiteter Import
+    </div>
+
+    <div class="import-info">
+      Hier können wir später die Kronkorken übernehmen,
+      die ich aus einem von dir hier hochgeladenen Foto
+      vorbereitet und zugeordnet habe.
     </div>
 
   </div>
@@ -980,10 +1014,12 @@ const caps = [
   }
 ];
 
+
 let trade =
   JSON.parse(
     localStorage.getItem("captradeSelection")
   ) || {};
+
 
 let storages =
   JSON.parse(
@@ -994,6 +1030,12 @@ let storages =
       name:"TESTbrett A"
     }
   ];
+
+
+let gridProfiles =
+  JSON.parse(
+    localStorage.getItem("captradeGridProfiles")
+  ) || {};
 
 
 function saveTrade(){
@@ -1016,6 +1058,16 @@ function saveStorages(){
 }
 
 
+function saveGridProfiles(){
+
+  localStorage.setItem(
+    "captradeGridProfiles",
+    JSON.stringify(gridProfiles)
+  );
+
+}
+
+
 function selectedIds(){
 
   return Object.keys(trade).map(Number);
@@ -1028,6 +1080,7 @@ function renderHome(){
   const list =
     document.getElementById("homeList");
 
+
   const query =
     document
       .getElementById("searchInput")
@@ -1035,15 +1088,18 @@ function renderHome(){
       .toLowerCase()
       .trim();
 
+
   let items =
     [...caps].filter(c =>
       c.brewery.toLowerCase().includes(query) ||
       String(c.id).includes(query)
     );
 
+
   if(
-    document.getElementById("sortSelect").value
-    === "brewery"
+    document
+      .getElementById("sortSelect")
+      .value === "brewery"
   ){
 
     items.sort(
@@ -1060,17 +1116,23 @@ function renderHome(){
 
   }
 
+
   list.innerHTML = "";
+
 
   items.forEach(c => {
 
     const chosen =
       trade[c.id] !== undefined;
 
+
     const el =
       document.createElement("div");
 
-    el.className = "cap-card";
+
+    el.className =
+      "cap-card";
+
 
     el.innerHTML = `
       <div class="cap-img">
@@ -1078,6 +1140,7 @@ function renderHome(){
       </div>
 
       <div>
+
         <div class="cap-number">
           #${c.id}
         </div>
@@ -1089,6 +1152,7 @@ function renderHome(){
         <div class="cap-sub">
           Verfügbar
         </div>
+
       </div>
 
       <button
@@ -1098,6 +1162,7 @@ function renderHome(){
         ${chosen ? "✓ Dabei" : "Auswählen"}
       </button>
     `;
+
 
     el
       .querySelector(".select-btn")
@@ -1109,7 +1174,8 @@ function renderHome(){
 
         }else{
 
-          trade[c.id] = "unrated";
+          trade[c.id] =
+            "unrated";
 
         }
 
@@ -1117,6 +1183,7 @@ function renderHome(){
         renderAll();
 
       };
+
 
     list.appendChild(el);
 
@@ -1142,8 +1209,10 @@ function renderSelection(){
   const box =
     document.getElementById("selectionList");
 
+
   const ids =
     selectedIds();
+
 
   document
     .getElementById("selectedCountSelection")
@@ -1174,11 +1243,13 @@ function renderSelection(){
         x => x.id === id
       );
 
+
     if(!c) return;
 
 
     const el =
       document.createElement("div");
+
 
     el.className =
       "choice-card";
@@ -1203,18 +1274,14 @@ function renderSelection(){
 
           <button
             class="choice-btn safe
-            ${trade[id] === "safe"
-              ? "active"
-              : ""}"
+            ${trade[id] === "safe" ? "active" : ""}"
           >
             ✓ Sicher
           </button>
 
           <button
             class="choice-btn maybe
-            ${trade[id] === "maybe"
-              ? "active"
-              : ""}"
+            ${trade[id] === "maybe" ? "active" : ""}"
           >
             ? Vielleicht
           </button>
@@ -1234,7 +1301,8 @@ function renderSelection(){
     el.querySelector(".safe")
       .onclick = () => {
 
-        trade[id] = "safe";
+        trade[id] =
+          "safe";
 
         saveTrade();
         renderAll();
@@ -1245,7 +1313,8 @@ function renderSelection(){
     el.querySelector(".maybe")
       .onclick = () => {
 
-        trade[id] = "maybe";
+        trade[id] =
+          "maybe";
 
         saveTrade();
         renderAll();
@@ -1280,6 +1349,7 @@ function renderOverview(){
           trade[id] === "safe"
       );
 
+
   const maybe =
     selectedIds()
       .filter(
@@ -1304,6 +1374,7 @@ function renderOverview(){
     "safeList",
     safe
   );
+
 
   renderGroup(
     "maybeList",
@@ -1345,11 +1416,13 @@ function renderGroup(
         x => x.id === id
       );
 
+
     if(!c) return;
 
 
     const el =
       document.createElement("div");
+
 
     el.className =
       "cap-card";
@@ -1421,11 +1494,13 @@ function renderFind(){
         x => x.id === id
       );
 
+
     if(!c) return;
 
 
     const el =
       document.createElement("div");
+
 
     el.className =
       "location-card";
@@ -1482,6 +1557,7 @@ function renderStorages(){
   const list =
     document.getElementById("storageList");
 
+
   const select =
     document.getElementById("photoStorage");
 
@@ -1495,6 +1571,7 @@ function renderStorages(){
 
       const el =
         document.createElement("div");
+
 
       el.className =
         "storage-item";
@@ -1525,8 +1602,10 @@ function renderStorages(){
       const option =
         document.createElement("option");
 
+
       option.value =
         storage.name;
+
 
       option.textContent =
         storage.name +
@@ -1581,7 +1660,8 @@ document
         .add("active");
 
 
-      btn.classList.add("active");
+      btn.classList
+        .add("active");
 
 
       window.scrollTo({
@@ -1682,14 +1762,24 @@ const photoPreview =
 const preview =
   document.getElementById("preview");
 
-const gridOverlay =
-  document.getElementById("gridOverlay");
-
-const resizeHandle =
-  document.getElementById("resizeHandle");
-
 const photoStage =
   document.getElementById("photoStage");
+
+const gridSvg =
+  document.getElementById("gridSvg");
+
+
+let corners = {
+
+  tl:{x:.06,y:.06},
+  tr:{x:.94,y:.06},
+  bl:{x:.06,y:.94},
+  br:{x:.94,y:.94}
+
+};
+
+
+let draggingCorner = null;
 
 
 document
@@ -1716,6 +1806,7 @@ photoInput.onchange = event => {
   const file =
     event.target.files[0];
 
+
   if(!file) return;
 
 
@@ -1736,9 +1827,9 @@ photoInput.onchange = event => {
         .add("show");
 
 
-      resetGrid();
+      loadGridProfile();
 
-      drawGrid();
+      drawPerspectiveGrid();
 
     };
 
@@ -1750,7 +1841,153 @@ photoInput.onchange = event => {
 };
 
 
-function drawGrid(){
+function resetCorners(){
+
+  corners = {
+
+    tl:{x:.06,y:.06},
+    tr:{x:.94,y:.06},
+    bl:{x:.06,y:.94},
+    br:{x:.94,y:.94}
+
+  };
+
+
+  drawPerspectiveGrid();
+
+}
+
+
+function bilinear(
+  u,
+  v
+){
+
+  const topX =
+    corners.tl.x +
+    (
+      corners.tr.x -
+      corners.tl.x
+    ) * u;
+
+
+  const topY =
+    corners.tl.y +
+    (
+      corners.tr.y -
+      corners.tl.y
+    ) * u;
+
+
+  const bottomX =
+    corners.bl.x +
+    (
+      corners.br.x -
+      corners.bl.x
+    ) * u;
+
+
+  const bottomY =
+    corners.bl.y +
+    (
+      corners.br.y -
+      corners.bl.y
+    ) * u;
+
+
+  return {
+
+    x:
+      topX +
+      (
+        bottomX -
+        topX
+      ) * v,
+
+    y:
+      topY +
+      (
+        bottomY -
+        topY
+      ) * v
+
+  };
+
+}
+
+
+function svgLine(
+  a,
+  b,
+  className
+){
+
+  const line =
+    document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "line"
+    );
+
+
+  line.setAttribute(
+    "x1",
+    a.x
+  );
+
+  line.setAttribute(
+    "y1",
+    a.y
+  );
+
+  line.setAttribute(
+    "x2",
+    b.x
+  );
+
+  line.setAttribute(
+    "y2",
+    b.y
+  );
+
+
+  line.setAttribute(
+    "class",
+    className
+  );
+
+
+  gridSvg.appendChild(line);
+
+}
+
+
+function drawPerspectiveGrid(){
+
+  if(
+    !photoStage.clientWidth ||
+    !photoStage.clientHeight
+  ){
+    return;
+  }
+
+
+  const width =
+    photoStage.clientWidth;
+
+
+  const height =
+    photoStage.clientHeight;
+
+
+  gridSvg.setAttribute(
+    "viewBox",
+    `0 0 ${width} ${height}`
+  );
+
+
+  gridSvg.innerHTML =
+    "";
+
 
   const rows =
     Math.max(
@@ -1774,74 +2011,123 @@ function drawGrid(){
     );
 
 
-  const gridLines =
-    document.getElementById("gridLines");
+  function px(point){
+
+    return {
+      x:
+        point.x *
+        width,
+
+      y:
+        point.y *
+        height
+    };
+
+  }
 
 
-  gridLines.innerHTML = "";
+  for(
+    let col = 0;
+    col <= cols;
+    col++
+  ){
+
+    const u =
+      col / cols;
 
 
-  const cellWidth =
-    100 / cols;
+    const top =
+      px(
+        bilinear(
+          u,
+          0
+        )
+      );
 
-  const cellHeight =
-    100 / rows;
+
+    const bottom =
+      px(
+        bilinear(
+          u,
+          1
+        )
+      );
+
+
+    svgLine(
+      top,
+      bottom,
+      col === 0 ||
+      col === cols
+      ? "grid-border"
+      : "grid-line"
+    );
+
+  }
 
 
   for(
     let row = 0;
-    row < rows;
+    row <= rows;
     row++
   ){
 
-    for(
-      let col = 0;
-      col < cols;
-      col++
-    ){
-
-      const cell =
-        document.createElement("div");
+    const v =
+      row / rows;
 
 
-      cell.className =
-        "grid-cell";
+    const left =
+      px(
+        bilinear(
+          0,
+          v
+        )
+      );
 
 
-      cell.style.left =
-        (col * cellWidth) + "%";
-
-      cell.style.top =
-        (row * cellHeight) + "%";
-
-      cell.style.width =
-        cellWidth + "%";
-
-      cell.style.height =
-        cellHeight + "%";
+    const right =
+      px(
+        bilinear(
+          1,
+          v
+        )
+      );
 
 
-      const number =
-        document.createElement("div");
-
-
-      number.className =
-        "grid-number";
-
-
-      number.textContent =
-        (row * cols) +
-        col +
-        1;
-
-
-      cell.appendChild(number);
-
-      gridLines.appendChild(cell);
-
-    }
+    svgLine(
+      left,
+      right,
+      row === 0 ||
+      row === rows
+      ? "grid-border"
+      : "grid-line"
+    );
 
   }
+
+
+  drawCorner(
+    "tl",
+    px(corners.tl)
+  );
+
+
+  drawCorner(
+    "tr",
+    px(corners.tr)
+  );
+
+
+  drawCorner(
+    "bl",
+    px(corners.bl)
+  );
+
+
+  drawCorner(
+    "br",
+    px(corners.br)
+  );
 
 
   document
@@ -1852,85 +2138,108 @@ function drawGrid(){
 }
 
 
-document
-  .getElementById("rowsInput")
-  .oninput =
-  drawGrid;
+function drawCorner(
+  name,
+  point
+){
+
+  const hit =
+    document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "circle"
+    );
 
 
-document
-  .getElementById("colsInput")
-  .oninput =
-  drawGrid;
+  hit.setAttribute(
+    "cx",
+    point.x
+  );
 
 
-function resetGrid(){
+  hit.setAttribute(
+    "cy",
+    point.y
+  );
 
-  gridOverlay.style.left =
-    "8%";
 
-  gridOverlay.style.top =
-    "8%";
+  hit.setAttribute(
+    "r",
+    22
+  );
 
-  gridOverlay.style.width =
-    "84%";
 
-  gridOverlay.style.height =
-    "84%";
+  hit.setAttribute(
+    "class",
+    "corner-hit"
+  );
+
+
+  hit.dataset.corner =
+    name;
+
+
+  gridSvg.appendChild(hit);
+
+
+  const dot =
+    document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "circle"
+    );
+
+
+  dot.setAttribute(
+    "cx",
+    point.x
+  );
+
+
+  dot.setAttribute(
+    "cy",
+    point.y
+  );
+
+
+  dot.setAttribute(
+    "r",
+    9
+  );
+
+
+  dot.setAttribute(
+    "class",
+    "corner-dot"
+  );
+
+
+  gridSvg.appendChild(dot);
 
 }
 
 
-document
-  .getElementById("resetGridBtn")
-  .onclick =
-  resetGrid;
-
-
-
-let dragging = false;
-let resizing = false;
-
-let startX = 0;
-let startY = 0;
-
-let startLeft = 0;
-let startTop = 0;
-
-let startWidth = 0;
-let startHeight = 0;
-
-
-gridOverlay
+gridSvg
   .addEventListener(
     "pointerdown",
     event => {
 
+      const target =
+        event.target;
+
+
       if(
-        event.target === resizeHandle
+        !target.classList.contains(
+          "corner-hit"
+        )
       ){
         return;
       }
 
 
-      dragging = true;
+      draggingCorner =
+        target.dataset.corner;
 
 
-      startX =
-        event.clientX;
-
-      startY =
-        event.clientY;
-
-
-      startLeft =
-        gridOverlay.offsetLeft;
-
-      startTop =
-        gridOverlay.offsetTop;
-
-
-      gridOverlay
+      gridSvg
         .setPointerCapture(
           event.pointerId
         );
@@ -1942,156 +2251,250 @@ gridOverlay
   );
 
 
-resizeHandle
-  .addEventListener(
-    "pointerdown",
-    event => {
-
-      resizing = true;
-
-
-      startX =
-        event.clientX;
-
-      startY =
-        event.clientY;
-
-
-      startWidth =
-        gridOverlay.offsetWidth;
-
-      startHeight =
-        gridOverlay.offsetHeight;
-
-
-      resizeHandle
-        .setPointerCapture(
-          event.pointerId
-        );
-
-
-      event.stopPropagation();
-      event.preventDefault();
-
-    }
-  );
-
-
-window
+gridSvg
   .addEventListener(
     "pointermove",
     event => {
 
-      if(dragging){
-
-        const dx =
-          event.clientX -
-          startX;
-
-        const dy =
-          event.clientY -
-          startY;
-
-
-        const maxLeft =
-          photoStage.clientWidth -
-          gridOverlay.offsetWidth;
-
-
-        const maxTop =
-          photoStage.clientHeight -
-          gridOverlay.offsetHeight;
-
-
-        let newLeft =
-          startLeft + dx;
-
-        let newTop =
-          startTop + dy;
-
-
-        newLeft =
-          Math.max(
-            0,
-            Math.min(
-              newLeft,
-              maxLeft
-            )
-          );
-
-
-        newTop =
-          Math.max(
-            0,
-            Math.min(
-              newTop,
-              maxTop
-            )
-          );
-
-
-        gridOverlay.style.left =
-          newLeft + "px";
-
-        gridOverlay.style.top =
-          newTop + "px";
-
+      if(
+        !draggingCorner
+      ){
+        return;
       }
 
 
-      if(resizing){
+      const rect =
+        gridSvg.getBoundingClientRect();
 
-        const dx =
+
+      let x =
+        (
           event.clientX -
-          startX;
+          rect.left
+        ) /
+        rect.width;
 
-        const dy =
+
+      let y =
+        (
           event.clientY -
-          startY;
+          rect.top
+        ) /
+        rect.height;
 
 
-        const maxWidth =
-          photoStage.clientWidth -
-          gridOverlay.offsetLeft;
+      x =
+        Math.max(
+          0,
+          Math.min(
+            1,
+            x
+          )
+        );
 
 
-        const maxHeight =
-          photoStage.clientHeight -
-          gridOverlay.offsetTop;
+      y =
+        Math.max(
+          0,
+          Math.min(
+            1,
+            y
+          )
+        );
 
 
-        let newWidth =
-          startWidth + dx;
+      corners[
+        draggingCorner
+      ] = {
+        x,
+        y
+      };
 
-        let newHeight =
-          startHeight + dy;
+
+      drawPerspectiveGrid();
+
+      event.preventDefault();
+
+    }
+  );
 
 
-        newWidth =
-          Math.max(
-            100,
-            Math.min(
-              newWidth,
-              maxWidth
-            )
+gridSvg
+  .addEventListener(
+    "pointerup",
+    event => {
+
+      draggingCorner =
+        null;
+
+
+      try{
+
+        gridSvg
+          .releasePointerCapture(
+            event.pointerId
           );
 
+      }catch(e){}
 
-        newHeight =
-          Math.max(
-            100,
-            Math.min(
-              newHeight,
-              maxHeight
-            )
-          );
+    }
+  );
 
 
-        gridOverlay.style.width =
-          newWidth + "px";
+gridSvg
+  .addEventListener(
+    "pointercancel",
+    () => {
 
-        gridOverlay.style.height =
-          newHeight + "px";
+      draggingCorner =
+        null;
+
+    }
+  );
+
+
+document
+  .getElementById("rowsInput")
+  .oninput =
+  drawPerspectiveGrid;
+
+
+document
+  .getElementById("colsInput")
+  .oninput =
+  drawPerspectiveGrid;
+
+
+document
+  .getElementById("resetGridBtn")
+  .onclick =
+  resetCorners;
+
+
+document
+  .getElementById("acceptGridBtn")
+  .onclick = () => {
+
+    const storage =
+      document
+        .getElementById("photoStorage")
+        .value;
+
+
+    if(!storage){
+
+      alert(
+        "Bitte zuerst einen Lagerort auswählen."
+      );
+
+      return;
+
+    }
+
+
+    gridProfiles[
+      storage
+    ] = {
+
+      rows:
+        Number(
+          document
+            .getElementById("rowsInput")
+            .value
+        ),
+
+      cols:
+        Number(
+          document
+            .getElementById("colsInput")
+            .value
+        ),
+
+      corners:
+        JSON.parse(
+          JSON.stringify(
+            corners
+          )
+        )
+
+    };
+
+
+    saveGridProfiles();
+
+
+    document
+      .getElementById("savedNote")
+      .classList
+      .add("show");
+
+  };
+
+
+function loadGridProfile(){
+
+  const storage =
+    document
+      .getElementById("photoStorage")
+      .value;
+
+
+  const profile =
+    gridProfiles[
+      storage
+    ];
+
+
+  if(profile){
+
+    document
+      .getElementById("rowsInput")
+      .value =
+      profile.rows;
+
+
+    document
+      .getElementById("colsInput")
+      .value =
+      profile.cols;
+
+
+    corners =
+      JSON.parse(
+        JSON.stringify(
+          profile.corners
+        )
+      );
+
+  }else{
+
+    resetCorners();
+
+  }
+
+
+  document
+    .getElementById("savedNote")
+    .classList
+    .remove("show");
+
+}
+
+
+document
+  .getElementById("photoStorage")
+  .addEventListener(
+    "change",
+    () => {
+
+      if(
+        preview.classList.contains(
+          "show"
+        )
+      ){
+
+        loadGridProfile();
+        drawPerspectiveGrid();
 
       }
 
@@ -2101,13 +2504,8 @@ window
 
 window
   .addEventListener(
-    "pointerup",
-    () => {
-
-      dragging = false;
-      resizing = false;
-
-    }
+    "resize",
+    drawPerspectiveGrid
   );
 
 
