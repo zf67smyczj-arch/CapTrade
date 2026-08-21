@@ -45,7 +45,7 @@ button{
 .app{
   max-width:720px;
   margin:auto;
-  padding-bottom:100px;
+  padding-bottom:105px;
 }
 
 .topbar{
@@ -130,7 +130,7 @@ main{
 }
 
 .summary-value{
-  font-size:24px;
+  font-size:25px;
   font-weight:850;
 }
 
@@ -144,9 +144,7 @@ main{
   margin-bottom:12px;
 }
 
-.search,
-.field input,
-.field select{
+.search{
   width:100%;
   border:1px solid var(--line);
   background:#0b2037;
@@ -165,7 +163,7 @@ main{
   background:#0b2037;
   color:white;
   border-radius:12px;
-  font-size:32px;
+  font-size:31px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -200,24 +198,34 @@ main{
 
 .cap-card{
   display:grid;
-  grid-template-columns:62px 1fr auto;
+  grid-template-columns:66px 1fr auto;
   gap:11px;
   align-items:center;
   background:rgba(14,36,61,.96);
   border:1px solid rgba(255,255,255,.07);
   border-radius:15px;
-  padding:10px;
+  padding:9px;
 }
 
 .cap-img{
-  width:62px;
-  height:62px;
+  width:66px;
+  height:66px;
   border-radius:12px;
   background:#1b3652;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:30px;
+  overflow:hidden;
+}
+
+.cap-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.placeholder{
+  font-size:28px;
 }
 
 .cap-number{
@@ -227,14 +235,14 @@ main{
 }
 
 .cap-name{
-  font-size:18px;
+  font-size:17px;
   font-weight:750;
   margin-top:2px;
 }
 
 .cap-sub{
   color:var(--muted);
-  font-size:13px;
+  font-size:12px;
   margin-top:3px;
 }
 
@@ -243,7 +251,8 @@ main{
   background:transparent;
   color:#dbe7f2;
   border-radius:10px;
-  padding:8px 10px;
+  padding:8px 9px;
+  font-size:13px;
   font-weight:700;
 }
 
@@ -253,37 +262,15 @@ main{
   background:rgba(38,149,79,.18);
 }
 
-.selection-header{
-  background:rgba(16,41,68,.9);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:16px;
-  padding:13px 14px;
-  margin-bottom:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.selection-count{
-  font-size:18px;
-  font-weight:800;
-}
-
-.clear-btn{
-  border:0;
-  background:none;
-  color:#ff7474;
-}
-
 .choice-card,
 .location-card{
   display:grid;
-  grid-template-columns:58px 1fr;
+  grid-template-columns:64px 1fr;
   gap:10px;
   background:rgba(14,36,61,.96);
   border:1px solid rgba(255,255,255,.07);
   border-radius:15px;
-  padding:10px;
+  padding:9px;
   margin-bottom:8px;
 }
 
@@ -318,6 +305,28 @@ main{
 
 .choice-btn.remove{
   color:#ff8181;
+}
+
+.selection-header{
+  background:rgba(16,41,68,.9);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;
+  padding:13px 14px;
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.selection-count{
+  font-size:18px;
+  font-weight:800;
+}
+
+.clear-btn{
+  border:0;
+  background:none;
+  color:#ff7474;
 }
 
 .group{
@@ -360,25 +369,25 @@ main{
 .manage-title{
   font-size:18px;
   font-weight:850;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
 
-.field{
-  margin-bottom:10px;
-}
-
-.field label{
-  display:block;
+.manage-text{
   color:var(--muted);
-  font-size:13px;
-  margin-bottom:5px;
+  font-size:14px;
+  line-height:1.45;
+  margin-bottom:12px;
+}
+
+#boardFInput{
+  display:none;
 }
 
 .primary-btn,
 .secondary-btn{
   width:100%;
   border-radius:11px;
-  padding:11px 13px;
+  padding:12px 13px;
   font-weight:800;
 }
 
@@ -394,176 +403,69 @@ main{
   color:white;
 }
 
-.success-btn{
-  width:100%;
-  border:0;
-  background:#23894d;
-  color:white;
-  border-radius:11px;
-  padding:12px 13px;
-  font-weight:800;
-  margin-top:10px;
-}
-
-.storage-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:rgba(14,36,61,.96);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:14px;
-  padding:11px 12px;
-  margin-bottom:8px;
-}
-
-.storage-name{
-  font-weight:800;
-}
-
-.storage-type{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:2px;
-}
-
-#photoInput{
-  display:none;
-}
-
-.photo-box{
-  border:1px dashed #3b5c78;
-  border-radius:14px;
-  padding:17px 12px;
-  text-align:center;
-  color:var(--muted);
-}
-
-.photo-icon{
-  font-size:30px;
-  margin-bottom:5px;
-}
-
-.preview{
+.progress{
   display:none;
   margin-top:12px;
-}
-
-.preview.show{
-  display:block;
-}
-
-.photo-stage{
-  position:relative;
-  width:100%;
-  overflow:hidden;
-  border-radius:14px;
+  padding:12px;
+  background:#0a2037;
   border:1px solid var(--line);
-  background:#071625;
-  touch-action:none;
-}
-
-#photoPreview{
-  display:block;
-  width:100%;
-  height:auto;
-  user-select:none;
-  pointer-events:none;
-}
-
-#gridSvg{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  overflow:visible;
-  touch-action:none;
-}
-
-.grid-line{
-  stroke:#36c96b;
-  stroke-width:1.5;
-  vector-effect:non-scaling-stroke;
-  opacity:.9;
-  pointer-events:none;
-}
-
-.grid-border{
-  fill:none;
-  stroke:#36c96b;
-  stroke-width:2.2;
-  vector-effect:non-scaling-stroke;
-  pointer-events:none;
-}
-
-.corner-hit{
-  fill:transparent;
-  stroke:transparent;
-  stroke-width:24;
-  cursor:grab;
-}
-
-.corner-dot{
-  fill:#36c96b;
-  stroke:white;
-  stroke-width:2.5;
-  vector-effect:non-scaling-stroke;
-  pointer-events:none;
-}
-
-.grid-settings{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:14px;
-}
-
-.grid-info{
-  margin-top:10px;
-  padding:11px 12px;
   border-radius:12px;
-  background:rgba(49,131,255,.11);
-  border:1px solid rgba(49,131,255,.3);
 }
 
-.grid-count{
-  font-size:20px;
-  font-weight:850;
-}
-
-.grid-sub{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:4px;
-  line-height:1.45;
-}
-
-.saved-note{
-  display:none;
-  margin-top:10px;
-  padding:10px 12px;
-  border-radius:11px;
-  background:rgba(54,201,107,.11);
-  border:1px solid rgba(54,201,107,.3);
-  color:#69df91;
-  font-size:14px;
-}
-
-.saved-note.show{
+.progress.show{
   display:block;
 }
 
-.import-card{
-  background:rgba(14,36,61,.96);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:16px;
-  padding:14px;
-  margin-bottom:12px;
+.progress-bar{
+  width:100%;
+  height:8px;
+  background:#071625;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:8px;
 }
 
-.import-info{
-  color:var(--muted);
+.progress-fill{
+  width:0%;
+  height:100%;
+  background:var(--blue);
+  transition:width .15s;
+}
+
+.success-box{
+  display:none;
+  margin-top:12px;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(54,201,107,.35);
+  background:rgba(54,201,107,.1);
+  color:#70df98;
   line-height:1.45;
-  font-size:14px;
+}
+
+.success-box.show{
+  display:block;
+}
+
+.warning-box{
+  padding:11px 12px;
+  border:1px solid rgba(240,180,41,.3);
+  background:rgba(240,180,41,.08);
+  border-radius:12px;
+  color:#eac967;
+  font-size:13px;
+  line-height:1.4;
+  margin-top:10px;
+}
+
+.danger-btn{
+  width:100%;
+  margin-top:10px;
+  border:1px solid rgba(239,87,87,.45);
+  background:transparent;
+  color:#ff8181;
+  border-radius:11px;
+  padding:11px;
 }
 
 .bottom-nav{
@@ -607,7 +509,7 @@ main{
 <header class="topbar">
   <div class="toprow">
     <div class="logo">Cap<span>Trade</span></div>
-    <div class="version">V0.8</div>
+    <div class="version">V0.9</div>
   </div>
 </header>
 
@@ -617,47 +519,38 @@ main{
 
   <div class="intro">
     <strong>So funktioniert's:</strong>
-    Wähle alle Kronkorken aus, die dich interessieren.
+    Tippe auf „Auswählen“, wenn dich ein Kronkorken interessiert.
     Deine Auswahl kannst du anschließend bearbeiten.
   </div>
 
   <div class="summary">
-
     <div class="summary-card">
-      <div class="summary-label">Alle Kronkorken</div>
+      <div class="summary-label">Kronkorken</div>
       <div id="totalCaps" class="summary-value">0</div>
     </div>
 
     <div class="summary-card">
       <div class="summary-label">Ausgewählt</div>
-      <div id="selectedCountHome" class="summary-value green">0</div>
+      <div id="selectedHome" class="summary-value green">0</div>
     </div>
-
   </div>
 
   <div class="search-row">
-
     <input
       id="searchInput"
       class="search"
       placeholder="Nach Nummer oder Brauerei suchen..."
     >
-
     <button class="search-btn">⌕</button>
-
   </div>
 
   <div class="toolbar">
-
-    <div class="toolbar-title">
-      Alle Kronkorken
-    </div>
+    <div class="toolbar-title">Alle Kronkorken</div>
 
     <select id="sortSelect" class="sort">
       <option value="number">Nummer</option>
       <option value="brewery">Brauerei</option>
     </select>
-
   </div>
 
   <div id="homeList" class="cap-list"></div>
@@ -669,20 +562,18 @@ main{
 
   <div class="intro">
     <strong>Tausch-Auswahl:</strong>
-    Entscheide, welche Kronkorken du sicher möchtest
-    und welche vielleicht.
+    Entscheide bei jedem ausgewählten Kronkorken:
+    sicher, vielleicht oder raus.
   </div>
 
   <div class="selection-header">
-
     <div class="selection-count">
-      <span id="selectedCountSelection">0</span> ausgewählt
+      <span id="selectionCount">0</span> ausgewählt
     </div>
 
-    <button id="clearSelectionBtn" class="clear-btn">
+    <button id="clearTrade" class="clear-btn">
       Auswahl leeren
     </button>
-
   </div>
 
   <div id="selectionList"></div>
@@ -699,7 +590,6 @@ main{
   </div>
 
   <div class="summary">
-
     <div class="summary-card">
       <div class="summary-label">Auf jeden Fall</div>
       <div id="safeCount" class="summary-value green">0</div>
@@ -709,7 +599,6 @@ main{
       <div class="summary-label">Vielleicht</div>
       <div id="maybeCount" class="summary-value yellow">0</div>
     </div>
-
   </div>
 
   <div class="group">
@@ -729,7 +618,8 @@ main{
 
   <div class="intro">
     <strong>Heraussuchen:</strong>
-    Hier siehst du später den tatsächlichen Lagerort deiner Auswahl.
+    Hier siehst du nur für dich, auf welchem Brett und
+    an welcher Position der Kronkorken liegt.
   </div>
 
   <div id="findList"></div>
@@ -741,196 +631,55 @@ main{
 
   <div class="intro">
     <strong>Verwalten:</strong>
-    Lege die vier grünen Eckpunkte auf die äußeren Kronkorken.
-    Das Raster passt sich automatisch an die Perspektive an.
+    Brett F wurde anhand deines Originalfotos vorbereitet.
+    Du musst hier kein Raster mehr einstellen.
   </div>
-
 
   <div class="manage-card">
 
     <div class="manage-title">
-      Neuen Lagerort anlegen
+      Brett F importieren
     </div>
 
-    <div class="field">
-
-      <label>Art</label>
-
-      <select id="storageType">
-        <option>A3-Brett</option>
-        <option>A4-Blatt</option>
-        <option>CD-Hülle</option>
-        <option>Sonstiges</option>
-      </select>
-
-    </div>
-
-    <div class="field">
-
-      <label>Name</label>
-
-      <input
-        id="storageName"
-        placeholder="z. B. Brett A oder CD 4"
-      >
-
-    </div>
-
-    <button id="addStorageBtn" class="primary-btn">
-      Lagerort anlegen
-    </button>
-
-  </div>
-
-
-  <div class="manage-card">
-
-    <div class="manage-title">
-      Foto ausrichten
-    </div>
-
-    <div class="field">
-
-      <label>Lagerort</label>
-
-      <select id="photoStorage"></select>
-
-    </div>
-
-    <div class="photo-box">
-
-      <div class="photo-icon">📷</div>
-
-      Foto auswählen und anschließend die vier grünen Punkte
-      an die Ecken der Kronkorkenfläche ziehen.
-
+    <div class="manage-text">
+      Wähle hier genau das Originalfoto von Brett F aus,
+      das du mir geschickt hast. CapTrade schneidet daraus
+      automatisch die 139 Kronkorken aus.
     </div>
 
     <input
-      id="photoInput"
+      id="boardFInput"
       type="file"
       accept="image/*"
     >
 
-    <button
-      id="choosePhotoBtn"
-      class="secondary-btn"
-      style="margin-top:10px"
-    >
-      Foto auswählen
+    <button id="boardFButton" class="primary-btn">
+      Originalfoto von Brett F auswählen
     </button>
 
+    <div id="progressBox" class="progress">
+      <strong id="progressText">Import wird vorbereitet …</strong>
 
-    <div id="preview" class="preview">
-
-      <div id="photoStage" class="photo-stage">
-
-        <img
-          id="photoPreview"
-          alt="Kronkorkenfoto"
-        >
-
-        <svg
-          id="gridSvg"
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="none"
-        ></svg>
-
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
       </div>
-
-
-      <div class="grid-settings">
-
-        <div class="field">
-
-          <label>Reihen</label>
-
-          <input
-            id="rowsInput"
-            type="number"
-            min="1"
-            max="40"
-            value="14"
-          >
-
-        </div>
-
-        <div class="field">
-
-          <label>Spalten</label>
-
-          <input
-            id="colsInput"
-            type="number"
-            min="1"
-            max="40"
-            value="10"
-          >
-
-        </div>
-
-      </div>
-
-
-      <div class="grid-info">
-
-        <div class="grid-count">
-          <span id="positionCount">140</span>
-          Positionen
-        </div>
-
-        <div class="grid-sub">
-          Beim Ausrichten werden bewusst keine Nummern angezeigt.
-          Ziehe einfach die vier grünen Punkte so, dass die Rasterlinien
-          möglichst mittig zwischen den Kronkorken verlaufen.
-        </div>
-
-      </div>
-
-      <button
-        id="resetGridBtn"
-        class="secondary-btn"
-        style="margin-top:10px"
-      >
-        Raster zurücksetzen
-      </button>
-
-      <button
-        id="acceptGridBtn"
-        class="success-btn"
-      >
-        ✓ Raster übernehmen
-      </button>
-
-      <div id="savedNote" class="saved-note">
-        ✓ Raster für diesen Lagerort gespeichert.
-      </div>
-
     </div>
 
-  </div>
-
-
-  <div class="import-card">
-
-    <div class="manage-title">
-      Vorbereiteter Import
+    <div id="successBox" class="success-box">
+      ✓ Brett F wurde importiert.<br>
+      <strong>139 Kronkorken</strong> sind jetzt in CapTrade gespeichert.
     </div>
 
-    <div class="import-info">
-      Hier können wir später die Kronkorken übernehmen,
-      die ich aus einem von dir hier hochgeladenen Foto
-      vorbereitet und zugeordnet habe.
+    <div class="warning-box">
+      Die Bilder werden nur auf deinem Gerät gespeichert.
+      Die Brauerei-Zuordnung machen wir anschließend separat.
     </div>
 
+    <button id="deleteBoardF" class="danger-btn">
+      Brett-F-Testdaten wieder löschen
+    </button>
+
   </div>
-
-
-  <div class="manage-title">
-    Deine Lagerorte
-  </div>
-
-  <div id="storageList"></div>
 
 </section>
 
@@ -971,48 +720,49 @@ main{
 
 <script>
 
-const caps = [
-  {
-    id:1,
-    brewery:"Paulaner",
-    image:"🍺",
-    storage:"TESTbrett A",
-    row:1,
-    position:1
-  },
-  {
-    id:2,
-    brewery:"Krombacher",
-    image:"🍺",
-    storage:"TESTbrett A",
-    row:1,
-    position:2
-  },
-  {
-    id:3,
-    brewery:"Erdinger",
-    image:"🍺",
-    storage:"TESTbrett A",
-    row:1,
-    position:3
-  },
-  {
-    id:4,
-    brewery:"Veltins",
-    image:"🍺",
-    storage:"TESTbrett A",
-    row:1,
-    position:4
-  },
-  {
-    id:5,
-    brewery:"Hasseröder",
-    image:"🍺",
-    storage:"TESTbrett A",
-    row:1,
-    position:5
-  }
+/*
+  Die Positionen wurden aus deinem Originalfoto
+  von Brett F (1152 × 1536) bestimmt.
+
+  Reihe 1 enthält 9 Kronkorken.
+  Reihen 2–14 enthalten jeweils 10.
+*/
+
+const boardFPoints = [
+[116,92],[218,95],[316,86],[418,85],[515,85],[616,85],[715,81],[814,87],[914,79],
+
+[110,182],[213,185],[311,189],[418,178],[520,182],[616,176],[717,179],[814,182],[921,176],[1023,176],
+
+[113,289],[212,287],[320,272],[417,273],[521,274],[621,271],[721,278],[819,275],[920,278],[1033,273],
+
+[121,380],[215,380],[317,375],[409,379],[518,371],[620,369],[723,375],[815,381],[921,375],[1030,371],
+
+[100,476],[209,484],[307,477],[409,476],[513,470],[617,470],[719,475],[821,475],[922,478],[1027,472],
+
+[105,577],[203,583],[304,571],[405,574],[509,571],[610,574],[712,571],[825,568],[922,577],[1028,579],
+
+[101,676],[206,680],[309,679],[407,683],[512,674],[607,674],[717,673],[823,676],[937,675],[1043,681],
+
+[93,775],[196,782],[295,781],[412,783],[506,781],[615,779],[724,770],[836,772],[928,778],[1033,781],
+
+[87,878],[188,884],[293,883],[398,877],[507,878],[619,881],[731,872],[826,896],[940,885],[1045,884],
+
+[92,983],[194,987],[291,987],[405,985],[506,985],[604,994],[718,994],[826,997],[938,993],[1058,993],
+
+[77,1084],[184,1091],[287,1089],[387,1102],[501,1097],[615,1097],[722,1107],[837,1107],[947,1105],[1063,1102],
+
+[75,1198],[181,1201],[286,1203],[394,1208],[501,1208],[611,1214],[731,1215],[842,1227],[951,1221],[1061,1223],
+
+[70,1316],[176,1316],[287,1315],[400,1321],[505,1322],[616,1333],[729,1328],[844,1334],[953,1340],[1067,1335],
+
+[71,1444],[171,1437],[283,1439],[401,1441],[509,1439],[627,1447],[746,1444],[859,1457],[968,1450],[1082,1475]
 ];
+
+
+let caps =
+  JSON.parse(
+    localStorage.getItem("captradeCaps")
+  ) || [];
 
 
 let trade =
@@ -1021,21 +771,14 @@ let trade =
   ) || {};
 
 
-let storages =
-  JSON.parse(
-    localStorage.getItem("captradeStorages")
-  ) || [
-    {
-      type:"A3-Brett",
-      name:"TESTbrett A"
-    }
-  ];
+function saveCaps(){
 
+  localStorage.setItem(
+    "captradeCaps",
+    JSON.stringify(caps)
+  );
 
-let gridProfiles =
-  JSON.parse(
-    localStorage.getItem("captradeGridProfiles")
-  ) || {};
+}
 
 
 function saveTrade(){
@@ -1048,29 +791,31 @@ function saveTrade(){
 }
 
 
-function saveStorages(){
-
-  localStorage.setItem(
-    "captradeStorages",
-    JSON.stringify(storages)
-  );
-
-}
-
-
-function saveGridProfiles(){
-
-  localStorage.setItem(
-    "captradeGridProfiles",
-    JSON.stringify(gridProfiles)
-  );
-
-}
-
-
 function selectedIds(){
 
   return Object.keys(trade).map(Number);
+
+}
+
+
+function capImage(cap){
+
+  if(cap.image){
+
+    return `
+      <img
+        src="${cap.image}"
+        alt="Kronkorken ${cap.id}"
+      >
+    `;
+
+  }
+
+  return `
+    <span class="placeholder">
+      ◯
+    </span>
+  `;
 
 }
 
@@ -1090,10 +835,16 @@ function renderHome(){
 
 
   let items =
-    [...caps].filter(c =>
-      c.brewery.toLowerCase().includes(query) ||
-      String(c.id).includes(query)
-    );
+    [...caps].filter(cap => {
+
+      return (
+        String(cap.id).includes(query) ||
+        cap.brewery
+          .toLowerCase()
+          .includes(query)
+      );
+
+    });
 
 
   if(
@@ -1120,33 +871,46 @@ function renderHome(){
   list.innerHTML = "";
 
 
-  items.forEach(c => {
+  if(!items.length){
 
-    const chosen =
-      trade[c.id] !== undefined;
+    list.innerHTML = `
+      <div class="empty">
+        Noch keine Kronkorken importiert.
+        Öffne unten „Verwalten“.
+      </div>
+    `;
+
+  }
 
 
-    const el =
+  items.forEach(cap => {
+
+    const selected =
+      trade[cap.id] !== undefined;
+
+
+    const card =
       document.createElement("div");
 
 
-    el.className =
+    card.className =
       "cap-card";
 
 
-    el.innerHTML = `
+    card.innerHTML = `
+
       <div class="cap-img">
-        ${c.image}
+        ${capImage(cap)}
       </div>
 
       <div>
 
         <div class="cap-number">
-          #${c.id}
+          #${cap.id}
         </div>
 
         <div class="cap-name">
-          ${c.brewery}
+          ${cap.brewery}
         </div>
 
         <div class="cap-sub">
@@ -1157,27 +921,31 @@ function renderHome(){
 
       <button
         class="select-btn
-        ${chosen ? "selected" : ""}"
+        ${selected ? "selected" : ""}"
       >
-        ${chosen ? "✓ Dabei" : "Auswählen"}
+        ${selected ? "✓ Dabei" : "Auswählen"}
       </button>
+
     `;
 
 
-    el
+    card
       .querySelector(".select-btn")
       .onclick = () => {
 
-        if(chosen){
+        if(
+          trade[cap.id] !== undefined
+        ){
 
-          delete trade[c.id];
+          delete trade[cap.id];
 
         }else{
 
-          trade[c.id] =
+          trade[cap.id] =
             "unrated";
 
         }
+
 
         saveTrade();
         renderAll();
@@ -1185,7 +953,7 @@ function renderHome(){
       };
 
 
-    list.appendChild(el);
+    list.appendChild(card);
 
   });
 
@@ -1197,7 +965,7 @@ function renderHome(){
 
 
   document
-    .getElementById("selectedCountHome")
+    .getElementById("selectedHome")
     .textContent =
     selectedIds().length;
 
@@ -1215,9 +983,12 @@ function renderSelection(){
 
 
   document
-    .getElementById("selectedCountSelection")
+    .getElementById("selectionCount")
     .textContent =
     ids.length;
+
+
+  box.innerHTML = "";
 
 
   if(!ids.length){
@@ -1233,41 +1004,39 @@ function renderSelection(){
   }
 
 
-  box.innerHTML = "";
-
-
   ids.forEach(id => {
 
-    const c =
+    const cap =
       caps.find(
-        x => x.id === id
+        c => c.id === id
       );
 
 
-    if(!c) return;
+    if(!cap) return;
 
 
-    const el =
+    const card =
       document.createElement("div");
 
 
-    el.className =
+    card.className =
       "choice-card";
 
 
-    el.innerHTML = `
+    card.innerHTML = `
+
       <div class="cap-img">
-        ${c.image}
+        ${capImage(cap)}
       </div>
 
       <div>
 
         <div class="cap-number">
-          #${c.id}
+          #${cap.id}
         </div>
 
         <div class="cap-name">
-          ${c.brewery}
+          ${cap.brewery}
         </div>
 
         <div class="choice-actions">
@@ -1295,10 +1064,12 @@ function renderSelection(){
         </div>
 
       </div>
+
     `;
 
 
-    el.querySelector(".safe")
+    card
+      .querySelector(".safe")
       .onclick = () => {
 
         trade[id] =
@@ -1310,7 +1081,8 @@ function renderSelection(){
       };
 
 
-    el.querySelector(".maybe")
+    card
+      .querySelector(".maybe")
       .onclick = () => {
 
         trade[id] =
@@ -1322,7 +1094,8 @@ function renderSelection(){
       };
 
 
-    el.querySelector(".remove")
+    card
+      .querySelector(".remove")
       .onclick = () => {
 
         delete trade[id];
@@ -1333,9 +1106,40 @@ function renderSelection(){
       };
 
 
-    box.appendChild(el);
+    box.appendChild(card);
 
   });
+
+}
+
+
+function simpleCapCard(cap){
+
+  return `
+
+    <div class="cap-card">
+
+      <div class="cap-img">
+        ${capImage(cap)}
+      </div>
+
+      <div>
+
+        <div class="cap-number">
+          #${cap.id}
+        </div>
+
+        <div class="cap-name">
+          ${cap.brewery}
+        </div>
+
+      </div>
+
+      <div></div>
+
+    </div>
+
+  `;
 
 }
 
@@ -1345,16 +1149,14 @@ function renderOverview(){
   const safe =
     selectedIds()
       .filter(
-        id =>
-          trade[id] === "safe"
+        id => trade[id] === "safe"
       );
 
 
   const maybe =
     selectedIds()
       .filter(
-        id =>
-          trade[id] === "maybe"
+        id => trade[id] === "maybe"
       );
 
 
@@ -1370,88 +1172,38 @@ function renderOverview(){
     maybe.length;
 
 
-  renderGroup(
-    "safeList",
-    safe
-  );
+  const safeList =
+    document.getElementById("safeList");
 
 
-  renderGroup(
-    "maybeList",
-    maybe
-  );
-
-}
+  const maybeList =
+    document.getElementById("maybeList");
 
 
-function renderGroup(
-  targetId,
-  ids
-){
-
-  const box =
-    document.getElementById(targetId);
-
-
-  if(!ids.length){
-
-    box.innerHTML = `
-      <div class="empty">
-        Keine Kronkorken
-      </div>
-    `;
-
-    return;
-
-  }
+  safeList.innerHTML =
+    safe.length
+    ? safe
+        .map(
+          id =>
+            caps.find(c => c.id === id)
+        )
+        .filter(Boolean)
+        .map(simpleCapCard)
+        .join("")
+    : `<div class="empty">Keine Kronkorken</div>`;
 
 
-  box.innerHTML = "";
-
-
-  ids.forEach(id => {
-
-    const c =
-      caps.find(
-        x => x.id === id
-      );
-
-
-    if(!c) return;
-
-
-    const el =
-      document.createElement("div");
-
-
-    el.className =
-      "cap-card";
-
-
-    el.innerHTML = `
-      <div class="cap-img">
-        ${c.image}
-      </div>
-
-      <div>
-
-        <div class="cap-number">
-          #${c.id}
-        </div>
-
-        <div class="cap-name">
-          ${c.brewery}
-        </div>
-
-      </div>
-
-      <div></div>
-    `;
-
-
-    box.appendChild(el);
-
-  });
+  maybeList.innerHTML =
+    maybe.length
+    ? maybe
+        .map(
+          id =>
+            caps.find(c => c.id === id)
+        )
+        .filter(Boolean)
+        .map(simpleCapCard)
+        .join("")
+    : `<div class="empty">Keine Kronkorken</div>`;
 
 }
 
@@ -1471,6 +1223,9 @@ function renderFind(){
       );
 
 
+  box.innerHTML = "";
+
+
   if(!ids.length){
 
     box.innerHTML = `
@@ -1484,41 +1239,39 @@ function renderFind(){
   }
 
 
-  box.innerHTML = "";
-
-
   ids.forEach(id => {
 
-    const c =
+    const cap =
       caps.find(
-        x => x.id === id
+        c => c.id === id
       );
 
 
-    if(!c) return;
+    if(!cap) return;
 
 
-    const el =
+    const card =
       document.createElement("div");
 
 
-    el.className =
+    card.className =
       "location-card";
 
 
-    el.innerHTML = `
+    card.innerHTML = `
+
       <div class="cap-img">
-        ${c.image}
+        ${capImage(cap)}
       </div>
 
       <div>
 
         <div class="cap-number">
-          #${c.id}
+          #${cap.id}
         </div>
 
         <div class="cap-name">
-          ${c.brewery}
+          ${cap.brewery}
         </div>
 
         <div class="location-line">
@@ -1535,88 +1288,20 @@ function renderFind(){
         <div class="location-line">
           Lagerort:
           <span class="location-highlight">
-            ${c.storage}
-            · Reihe ${c.row}
-            · Position ${c.position}
+            ${cap.storage}
+            · Reihe ${cap.row}
+            · Position ${cap.position}
           </span>
         </div>
 
       </div>
+
     `;
 
 
-    box.appendChild(el);
+    box.appendChild(card);
 
   });
-
-}
-
-
-function renderStorages(){
-
-  const list =
-    document.getElementById("storageList");
-
-
-  const select =
-    document.getElementById("photoStorage");
-
-
-  list.innerHTML = "";
-  select.innerHTML = "";
-
-
-  storages.forEach(
-    (storage,index) => {
-
-      const el =
-        document.createElement("div");
-
-
-      el.className =
-        "storage-item";
-
-
-      el.innerHTML = `
-        <div>
-
-          <div class="storage-name">
-            ${storage.name}
-          </div>
-
-          <div class="storage-type">
-            ${storage.type}
-          </div>
-
-        </div>
-
-        <div>
-          #${index + 1}
-        </div>
-      `;
-
-
-      list.appendChild(el);
-
-
-      const option =
-        document.createElement("option");
-
-
-      option.value =
-        storage.name;
-
-
-      option.textContent =
-        storage.name +
-        " · " +
-        storage.type;
-
-
-      select.appendChild(option);
-
-    }
-  );
 
 }
 
@@ -1627,7 +1312,6 @@ function renderAll(){
   renderSelection();
   renderOverview();
   renderFind();
-  renderStorages();
 
 }
 
@@ -1640,15 +1324,17 @@ document
 
       document
         .querySelectorAll(".page")
-        .forEach(page =>
-          page.classList.remove("active")
+        .forEach(
+          page =>
+            page.classList.remove("active")
         );
 
 
       document
         .querySelectorAll(".nav-btn")
-        .forEach(nav =>
-          nav.classList.remove("active")
+        .forEach(
+          nav =>
+            nav.classList.remove("active")
         );
 
 
@@ -1687,7 +1373,7 @@ document
 
 
 document
-  .getElementById("clearSelectionBtn")
+  .getElementById("clearTrade")
   .onclick = () => {
 
     if(
@@ -1706,102 +1392,20 @@ document
   };
 
 
+const boardFInput =
+  document.getElementById("boardFInput");
+
+
 document
-  .getElementById("addStorageBtn")
+  .getElementById("boardFButton")
   .onclick = () => {
 
-    const type =
-      document
-        .getElementById("storageType")
-        .value;
-
-
-    const name =
-      document
-        .getElementById("storageName")
-        .value
-        .trim();
-
-
-    if(!name){
-
-      alert(
-        "Bitte einen Namen eingeben."
-      );
-
-      return;
-
-    }
-
-
-    storages.push({
-      type,
-      name
-    });
-
-
-    saveStorages();
-
-
-    document
-      .getElementById("storageName")
-      .value = "";
-
-
-    renderStorages();
+    boardFInput.click();
 
   };
 
 
-const photoInput =
-  document.getElementById("photoInput");
-
-const photoPreview =
-  document.getElementById("photoPreview");
-
-const preview =
-  document.getElementById("preview");
-
-const photoStage =
-  document.getElementById("photoStage");
-
-const gridSvg =
-  document.getElementById("gridSvg");
-
-
-let corners = {
-
-  tl:{x:.06,y:.06},
-  tr:{x:.94,y:.06},
-  bl:{x:.06,y:.94},
-  br:{x:.94,y:.94}
-
-};
-
-
-let draggingCorner = null;
-
-
-document
-  .getElementById("choosePhotoBtn")
-  .onclick = () => {
-
-    if(!storages.length){
-
-      alert(
-        "Bitte zuerst einen Lagerort anlegen."
-      );
-
-      return;
-
-    }
-
-    photoInput.click();
-
-  };
-
-
-photoInput.onchange = event => {
+boardFInput.onchange = event => {
 
   const file =
     event.target.files[0];
@@ -1816,22 +1420,19 @@ photoInput.onchange = event => {
 
   reader.onload = e => {
 
-    photoPreview.src =
-      e.target.result;
+    const img =
+      new Image();
 
 
-    photoPreview.onload = () => {
+    img.onload = async () => {
 
-      preview
-        .classList
-        .add("show");
-
-
-      loadGridProfile();
-
-      drawPerspectiveGrid();
+      await importBoardF(img);
 
     };
+
+
+    img.src =
+      e.target.result;
 
   };
 
@@ -1841,672 +1442,342 @@ photoInput.onchange = event => {
 };
 
 
-function resetCorners(){
+async function importBoardF(img){
 
-  corners = {
-
-    tl:{x:.06,y:.06},
-    tr:{x:.94,y:.06},
-    bl:{x:.06,y:.94},
-    br:{x:.94,y:.94}
-
-  };
+  const progressBox =
+    document.getElementById("progressBox");
 
 
-  drawPerspectiveGrid();
-
-}
-
-
-function bilinear(
-  u,
-  v
-){
-
-  const topX =
-    corners.tl.x +
-    (
-      corners.tr.x -
-      corners.tl.x
-    ) * u;
+  const progressText =
+    document.getElementById("progressText");
 
 
-  const topY =
-    corners.tl.y +
-    (
-      corners.tr.y -
-      corners.tl.y
-    ) * u;
+  const progressFill =
+    document.getElementById("progressFill");
 
 
-  const bottomX =
-    corners.bl.x +
-    (
-      corners.br.x -
-      corners.bl.x
-    ) * u;
+  const successBox =
+    document.getElementById("successBox");
 
 
-  const bottomY =
-    corners.bl.y +
-    (
-      corners.br.y -
-      corners.bl.y
-    ) * u;
+  progressBox.classList.add("show");
+  successBox.classList.remove("show");
 
 
-  return {
+  /*
+    Koordinaten stammen vom Originalbild
+    1152 × 1536.
 
-    x:
-      topX +
-      (
-        bottomX -
-        topX
-      ) * v,
+    Sollte iOS das Bild in anderer Auflösung
+    laden, werden sie automatisch skaliert.
+  */
 
-    y:
-      topY +
-      (
-        bottomY -
-        topY
-      ) * v
-
-  };
-
-}
+  const scaleX =
+    img.naturalWidth /
+    1152;
 
 
-function svgLine(
-  a,
-  b,
-  className
-){
+  const scaleY =
+    img.naturalHeight /
+    1536;
 
-  const line =
-    document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "line"
+
+  const cropHalf =
+    56;
+
+
+  const imported = [];
+
+
+  let currentRow = 1;
+  let positionInRow = 0;
+
+
+  for(
+    let i = 0;
+    i < boardFPoints.length;
+    i++
+  ){
+
+    if(i === 0){
+
+      currentRow = 1;
+      positionInRow = 1;
+
+    }else if(i < 9){
+
+      positionInRow++;
+
+    }else{
+
+      const afterFirst =
+        i - 9;
+
+
+      currentRow =
+        2 +
+        Math.floor(
+          afterFirst / 10
+        );
+
+
+      positionInRow =
+        1 +
+        (
+          afterFirst % 10
+        );
+
+    }
+
+
+    const point =
+      boardFPoints[i];
+
+
+    const centerX =
+      point[0] *
+      scaleX;
+
+
+    const centerY =
+      point[1] *
+      scaleY;
+
+
+    const halfX =
+      cropHalf *
+      scaleX;
+
+
+    const halfY =
+      cropHalf *
+      scaleY;
+
+
+    const sourceX =
+      Math.max(
+        0,
+        centerX -
+        halfX
+      );
+
+
+    const sourceY =
+      Math.max(
+        0,
+        centerY -
+        halfY
+      );
+
+
+    const sourceW =
+      Math.min(
+        halfX * 2,
+        img.naturalWidth -
+        sourceX
+      );
+
+
+    const sourceH =
+      Math.min(
+        halfY * 2,
+        img.naturalHeight -
+        sourceY
+      );
+
+
+    const canvas =
+      document.createElement("canvas");
+
+
+    canvas.width =
+      110;
+
+
+    canvas.height =
+      110;
+
+
+    const ctx =
+      canvas.getContext("2d");
+
+
+    ctx.fillStyle =
+      "#ffffff";
+
+
+    ctx.fillRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
     );
 
 
-  line.setAttribute(
-    "x1",
-    a.x
-  );
-
-  line.setAttribute(
-    "y1",
-    a.y
-  );
-
-  line.setAttribute(
-    "x2",
-    b.x
-  );
-
-  line.setAttribute(
-    "y2",
-    b.y
-  );
+    ctx.drawImage(
+      img,
+      sourceX,
+      sourceY,
+      sourceW,
+      sourceH,
+      0,
+      0,
+      110,
+      110
+    );
 
 
-  line.setAttribute(
-    "class",
-    className
-  );
+    const image =
+      canvas.toDataURL(
+        "image/jpeg",
+        .72
+      );
 
 
-  gridSvg.appendChild(line);
+    imported.push({
 
-}
+      id:
+        i + 1,
+
+      brewery:
+        "Zuordnung prüfen",
+
+      image,
+
+      storage:
+        "Brett F",
+
+      row:
+        currentRow,
+
+      position:
+        positionInRow,
+
+      available:
+        true
+
+    });
 
 
-function drawPerspectiveGrid(){
+    const percent =
+      Math.round(
+        (
+          (i + 1) /
+          boardFPoints.length
+        ) * 100
+      );
 
-  if(
-    !photoStage.clientWidth ||
-    !photoStage.clientHeight
-  ){
+
+    progressFill.style.width =
+      percent + "%";
+
+
+    progressText.textContent =
+      `Kronkorken ${i + 1} von 139 wird vorbereitet …`;
+
+
+    if(
+      i % 10 === 0
+    ){
+
+      await new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            20
+          )
+      );
+
+    }
+
+  }
+
+
+  caps =
+    imported;
+
+
+  try{
+
+    saveCaps();
+
+  }catch(error){
+
+    alert(
+      "Die Bilder sind für den lokalen Speicher zu groß. " +
+      "Sag mir Bescheid – dann stellen wir den Bildspeicher um."
+    );
+
+    progressBox.classList.remove("show");
+
     return;
-  }
-
-
-  const width =
-    photoStage.clientWidth;
-
-
-  const height =
-    photoStage.clientHeight;
-
-
-  gridSvg.setAttribute(
-    "viewBox",
-    `0 0 ${width} ${height}`
-  );
-
-
-  gridSvg.innerHTML =
-    "";
-
-
-  const rows =
-    Math.max(
-      1,
-      Number(
-        document
-          .getElementById("rowsInput")
-          .value
-      ) || 1
-    );
-
-
-  const cols =
-    Math.max(
-      1,
-      Number(
-        document
-          .getElementById("colsInput")
-          .value
-      ) || 1
-    );
-
-
-  function px(point){
-
-    return {
-      x:
-        point.x *
-        width,
-
-      y:
-        point.y *
-        height
-    };
 
   }
 
 
-  for(
-    let col = 0;
-    col <= cols;
-    col++
-  ){
+  trade = {};
 
-    const u =
-      col / cols;
+  saveTrade();
 
 
-    const top =
-      px(
-        bilinear(
-          u,
-          0
-        )
-      );
+  progressText.textContent =
+    "Import abgeschlossen";
 
 
-    const bottom =
-      px(
-        bilinear(
-          u,
-          1
-        )
-      );
+  progressFill.style.width =
+    "100%";
 
 
-    svgLine(
-      top,
-      bottom,
-      col === 0 ||
-      col === cols
-      ? "grid-border"
-      : "grid-line"
-    );
-
-  }
+  successBox.classList.add("show");
 
 
-  for(
-    let row = 0;
-    row <= rows;
-    row++
-  ){
-
-    const v =
-      row / rows;
-
-
-    const left =
-      px(
-        bilinear(
-          0,
-          v
-        )
-      );
-
-
-    const right =
-      px(
-        bilinear(
-          1,
-          v
-        )
-      );
-
-
-    svgLine(
-      left,
-      right,
-      row === 0 ||
-      row === rows
-      ? "grid-border"
-      : "grid-line"
-    );
-
-  }
-
-
-  drawCorner(
-    "tl",
-    px(corners.tl)
-  );
-
-
-  drawCorner(
-    "tr",
-    px(corners.tr)
-  );
-
-
-  drawCorner(
-    "bl",
-    px(corners.bl)
-  );
-
-
-  drawCorner(
-    "br",
-    px(corners.br)
-  );
-
-
-  document
-    .getElementById("positionCount")
-    .textContent =
-    rows * cols;
+  renderAll();
 
 }
 
 
-function drawCorner(
-  name,
-  point
-){
-
-  const hit =
-    document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "circle"
-    );
-
-
-  hit.setAttribute(
-    "cx",
-    point.x
-  );
-
-
-  hit.setAttribute(
-    "cy",
-    point.y
-  );
-
-
-  hit.setAttribute(
-    "r",
-    22
-  );
-
-
-  hit.setAttribute(
-    "class",
-    "corner-hit"
-  );
-
-
-  hit.dataset.corner =
-    name;
-
-
-  gridSvg.appendChild(hit);
-
-
-  const dot =
-    document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "circle"
-    );
-
-
-  dot.setAttribute(
-    "cx",
-    point.x
-  );
-
-
-  dot.setAttribute(
-    "cy",
-    point.y
-  );
-
-
-  dot.setAttribute(
-    "r",
-    9
-  );
-
-
-  dot.setAttribute(
-    "class",
-    "corner-dot"
-  );
-
-
-  gridSvg.appendChild(dot);
-
-}
-
-
-gridSvg
-  .addEventListener(
-    "pointerdown",
-    event => {
-
-      const target =
-        event.target;
-
-
-      if(
-        !target.classList.contains(
-          "corner-hit"
-        )
-      ){
-        return;
-      }
-
-
-      draggingCorner =
-        target.dataset.corner;
-
-
-      gridSvg
-        .setPointerCapture(
-          event.pointerId
-        );
-
-
-      event.preventDefault();
-
-    }
-  );
-
-
-gridSvg
-  .addEventListener(
-    "pointermove",
-    event => {
-
-      if(
-        !draggingCorner
-      ){
-        return;
-      }
-
-
-      const rect =
-        gridSvg.getBoundingClientRect();
-
-
-      let x =
-        (
-          event.clientX -
-          rect.left
-        ) /
-        rect.width;
-
-
-      let y =
-        (
-          event.clientY -
-          rect.top
-        ) /
-        rect.height;
-
-
-      x =
-        Math.max(
-          0,
-          Math.min(
-            1,
-            x
-          )
-        );
-
-
-      y =
-        Math.max(
-          0,
-          Math.min(
-            1,
-            y
-          )
-        );
-
-
-      corners[
-        draggingCorner
-      ] = {
-        x,
-        y
-      };
-
-
-      drawPerspectiveGrid();
-
-      event.preventDefault();
-
-    }
-  );
-
-
-gridSvg
-  .addEventListener(
-    "pointerup",
-    event => {
-
-      draggingCorner =
-        null;
-
-
-      try{
-
-        gridSvg
-          .releasePointerCapture(
-            event.pointerId
-          );
-
-      }catch(e){}
-
-    }
-  );
-
-
-gridSvg
-  .addEventListener(
-    "pointercancel",
-    () => {
-
-      draggingCorner =
-        null;
-
-    }
-  );
-
-
 document
-  .getElementById("rowsInput")
-  .oninput =
-  drawPerspectiveGrid;
-
-
-document
-  .getElementById("colsInput")
-  .oninput =
-  drawPerspectiveGrid;
-
-
-document
-  .getElementById("resetGridBtn")
-  .onclick =
-  resetCorners;
-
-
-document
-  .getElementById("acceptGridBtn")
+  .getElementById("deleteBoardF")
   .onclick = () => {
 
-    const storage =
-      document
-        .getElementById("photoStorage")
-        .value;
-
-
-    if(!storage){
-
-      alert(
-        "Bitte zuerst einen Lagerort auswählen."
-      );
-
+    if(
+      !confirm(
+        "Brett F wirklich aus CapTrade löschen?"
+      )
+    ){
       return;
-
     }
 
 
-    gridProfiles[
-      storage
-    ] = {
-
-      rows:
-        Number(
-          document
-            .getElementById("rowsInput")
-            .value
-        ),
-
-      cols:
-        Number(
-          document
-            .getElementById("colsInput")
-            .value
-        ),
-
-      corners:
-        JSON.parse(
-          JSON.stringify(
-            corners
-          )
-        )
-
-    };
+    caps = [];
+    trade = {};
 
 
-    saveGridProfiles();
+    localStorage.removeItem(
+      "captradeCaps"
+    );
+
+
+    localStorage.removeItem(
+      "captradeSelection"
+    );
 
 
     document
-      .getElementById("savedNote")
+      .getElementById("successBox")
       .classList
-      .add("show");
+      .remove("show");
+
+
+    document
+      .getElementById("progressBox")
+      .classList
+      .remove("show");
+
+
+    renderAll();
 
   };
-
-
-function loadGridProfile(){
-
-  const storage =
-    document
-      .getElementById("photoStorage")
-      .value;
-
-
-  const profile =
-    gridProfiles[
-      storage
-    ];
-
-
-  if(profile){
-
-    document
-      .getElementById("rowsInput")
-      .value =
-      profile.rows;
-
-
-    document
-      .getElementById("colsInput")
-      .value =
-      profile.cols;
-
-
-    corners =
-      JSON.parse(
-        JSON.stringify(
-          profile.corners
-        )
-      );
-
-  }else{
-
-    resetCorners();
-
-  }
-
-
-  document
-    .getElementById("savedNote")
-    .classList
-    .remove("show");
-
-}
-
-
-document
-  .getElementById("photoStorage")
-  .addEventListener(
-    "change",
-    () => {
-
-      if(
-        preview.classList.contains(
-          "show"
-        )
-      ){
-
-        loadGridProfile();
-        drawPerspectiveGrid();
-
-      }
-
-    }
-  );
-
-
-window
-  .addEventListener(
-    "resize",
-    drawPerspectiveGrid
-  );
 
 
 renderAll();
