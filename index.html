@@ -1,1478 +1,1294 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#06182c">
-  <title>CapTrade</title>
-
-  <style>
-    :root {
-      --bg: #06182c;
-      --card: #102944;
-      --line: #27425e;
-      --text: #f5f7fa;
-      --muted: #a8b4c2;
-      --blue: #3183ff;
-      --green: #36c96b;
-      --yellow: #f0b429;
-      --red: #ef4e4e;
-    }
-
-    * { box-sizing: border-box; }
-
-    html, body {
-      margin: 0;
-      min-height: 100%;
-      background:
-        radial-gradient(circle at top, #0d2a4b 0%, #06182c 52%, #04111f 100%);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    button, input, select { font: inherit; }
-    button { cursor: pointer; }
-
-    .app {
-      max-width: 720px;
-      margin: 0 auto;
-      min-height: 100vh;
-      padding-bottom: 95px;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: rgba(6,24,44,.92);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      padding: 14px 16px 12px;
-    }
-
-    .topbar-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .logo {
-      font-size: 30px;
-      font-weight: 800;
-    }
-
-    .logo span { color: #ed3131; }
-
-    .version {
-      border: 1px solid #d9a514;
-      color: #f2c23b;
-      border-radius: 9px;
-      padding: 5px 8px;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .content { padding: 14px; }
-
-    .page { display: none; }
-    .page.active { display: block; }
-
-    .intro {
-      background: rgba(18,41,68,.75);
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 16px;
-      padding: 12px 14px;
-      margin-bottom: 14px;
-      color: var(--muted);
-      line-height: 1.45;
-      font-size: 14px;
-    }
-
-    .intro strong { color: var(--text); }
-
-    .summary {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 9px;
-      margin-bottom: 15px;
-    }
-
-    .summary-card {
-      background: rgba(17,42,70,.9);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 16px;
-      padding: 13px 14px;
-    }
-
-    .summary-label {
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 5px;
-    }
-
-    .summary-value {
-      font-size: 24px;
-      font-weight: 800;
-    }
-
-    .green { color: var(--green); }
-    .yellow { color: var(--yellow); }
-
-    .search-row {
-      display: grid;
-      grid-template-columns: 1fr 56px;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .search {
-      width: 100%;
-      border: 1px solid var(--line);
-      background: #0b2037;
-      color: var(--text);
-      border-radius: 12px;
-      padding: 12px 13px;
-      outline: none;
-    }
-
-    .search::placeholder { color: #7f90a2; }
-
-    .search-btn {
-      border: 1px solid var(--line);
-      background: #0b2037;
-      color: white;
-      border-radius: 12px;
-      font-size: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin: 6px 0 10px;
-    }
-
-    .toolbar-title {
-      font-size: 21px;
-      font-weight: 800;
-    }
-
-    .sort {
-      border: 1px solid var(--line);
-      background: #0c233c;
-      color: var(--text);
-      border-radius: 10px;
-      padding: 9px 10px;
-    }
-
-    .cap-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .cap-card {
-      display: grid;
-      grid-template-columns: 62px 1fr auto;
-      gap: 11px;
-      align-items: center;
-      background: rgba(14,36,61,.96);
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 15px;
-      padding: 10px;
-    }
-
-    .cap-img {
-      width: 62px;
-      height: 62px;
-      border-radius: 12px;
-      background: #1b3652;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-    }
-
-    .cap-number {
-      font-size: 14px;
-      font-weight: 800;
-      color: #d6dfeb;
-      margin-bottom: 2px;
-    }
-
-    .cap-name {
-      font-size: 18px;
-      font-weight: 750;
-    }
-
-    .cap-sub {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 3px;
-    }
-
-    .select-btn {
-      border: 1px solid #31526f;
-      background: transparent;
-      color: #dbe7f2;
-      border-radius: 10px;
-      padding: 8px 11px;
-      font-weight: 700;
-    }
-
-    .select-btn.selected {
-      border-color: #25864b;
-      background: rgba(38,149,79,.18);
-      color: #66df8b;
-    }
-
-    .selection-header {
-      background: rgba(16,41,68,.9);
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 16px;
-      padding: 13px 14px;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .selection-count {
-      font-weight: 800;
-      font-size: 18px;
-    }
-
-    .clear-btn {
-      border: 0;
-      background: transparent;
-      color: #ff7373;
-    }
-
-    .choice-card,
-    .location-card {
-      background: rgba(14,36,61,.96);
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 15px;
-      padding: 10px;
-      display: grid;
-      grid-template-columns: 58px 1fr;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .choice-card .cap-img,
-    .location-card .cap-img {
-      width: 58px;
-      height: 58px;
-    }
-
-    .choice-actions {
-      display: flex;
-      gap: 6px;
-      margin-top: 9px;
-      flex-wrap: wrap;
-    }
-
-    .choice-btn {
-      border: 1px solid #36526d;
-      background: #0c223a;
-      color: #d9e3ec;
-      border-radius: 9px;
-      padding: 7px 9px;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .choice-btn.safe.active {
-      border-color: #2db65c;
-      color: #61db88;
-      background: rgba(45,182,92,.15);
-    }
-
-    .choice-btn.maybe.active {
-      border-color: #d69b11;
-      color: #f6c448;
-      background: rgba(214,155,17,.15);
-    }
-
-    .choice-btn.remove { color: #ff8181; }
-
-    .group { margin-top: 16px; }
-
-    .group-title {
-      font-size: 17px;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-
-    .empty {
-      padding: 20px 10px;
-      text-align: center;
-      color: var(--muted);
-      border: 1px dashed #294660;
-      border-radius: 14px;
-    }
-
-    .location-line {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 4px;
-    }
-
-    .location-highlight {
-      color: var(--text);
-      font-weight: 700;
-    }
-
-    .manage-card {
-      background: rgba(14,36,61,.96);
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-
-    .manage-title {
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-
-    .field { margin-bottom: 10px; }
-
-    .field label {
-      display: block;
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 5px;
-    }
-
-    .field input,
-    .field select {
-      width: 100%;
-      border: 1px solid var(--line);
-      background: #0b2037;
-      color: var(--text);
-      border-radius: 11px;
-      padding: 11px 12px;
-      outline: none;
-    }
-
-    .primary-btn,
-    .secondary-btn {
-      width: 100%;
-      border-radius: 11px;
-      padding: 11px 13px;
-      font-weight: 800;
-    }
-
-    .primary-btn {
-      border: 0;
-      background: var(--blue);
-      color: white;
-    }
-
-    .secondary-btn {
-      border: 1px solid #36526d;
-      background: #0c223a;
-      color: #dce7f2;
-    }
-
-    .storage-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(14,36,61,.96);
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 14px;
-      padding: 11px 12px;
-      margin-bottom: 8px;
-    }
-
-    .storage-name { font-weight: 800; }
-
-    .storage-type {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 2px;
-    }
-
-    #photoInput { display: none; }
-
-    .photo-box {
-      border: 1px dashed #3b5c78;
-      border-radius: 14px;
-      padding: 18px 12px;
-      text-align: center;
-      color: var(--muted);
-      margin-top: 10px;
-    }
-
-    .photo-icon {
-      font-size: 30px;
-      margin-bottom: 6px;
-    }
-
-    .preview-wrap {
-      display: none;
-      margin-top: 12px;
-    }
-
-    .preview-wrap.show {
-      display: block;
-    }
-
-    .preview-image {
-      display: block;
-      width: 100%;
-      max-height: 430px;
-      object-fit: contain;
-      background: #07192b;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-    }
-
-    .preview-info {
-      margin-top: 9px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .preview-info strong {
-      color: white;
-    }
-
-    .success-box {
-      margin-top: 10px;
-      padding: 10px 12px;
-      border: 1px solid rgba(54,201,107,.35);
-      background: rgba(54,201,107,.1);
-      color: #72df98;
-      border-radius: 11px;
-      font-size: 14px;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 30;
-      background: rgba(5,20,36,.96);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(255,255,255,.08);
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
-    }
-
-    .nav-btn {
-      flex: 1;
-      border: 0;
-      background: transparent;
-      color: #8e9baa;
-      font-size: 11px;
-      padding: 3px 1px;
-    }
-
-    .nav-btn.active { color: var(--blue); }
-
-    .nav-icon {
-      display: block;
-      font-size: 20px;
-      margin-bottom: 2px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06182c">
+<title>CapTrade</title>
+
+<style>
+:root{
+  --bg:#06182c;
+  --card:#102944;
+  --line:#27425e;
+  --text:#f5f7fa;
+  --muted:#9eacba;
+  --blue:#3183ff;
+  --green:#36c96b;
+  --yellow:#f0b429;
+  --red:#ef5757;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(circle at top,#0d2a4b 0%,#06182c 52%,#04111f 100%);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{
+  max-width:720px;
+  margin:auto;
+  padding-bottom:100px;
+}
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:30;
+  padding:14px 16px 12px;
+  background:rgba(6,24,44,.94);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.toprow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.logo{
+  font-size:30px;
+  font-weight:850;
+}
+.logo span{color:#ed3131}
+.version{
+  font-size:13px;
+  font-weight:700;
+  border:1px solid #cda324;
+  color:#f0c33d;
+  border-radius:9px;
+  padding:5px 8px;
+}
+main{padding:14px}
+.page{display:none}
+.page.active{display:block}
+
+.intro{
+  background:rgba(17,42,70,.78);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;
+  padding:12px 14px;
+  margin-bottom:14px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.45;
+}
+.intro strong{color:white}
+
+.summary{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-bottom:14px;
+}
+.summary-card{
+  background:rgba(17,42,70,.9);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:16px;
+  padding:13px 14px;
+}
+.summary-label{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:5px;
+}
+.summary-value{
+  font-size:24px;
+  font-weight:850;
+}
+.green{color:var(--green)}
+.yellow{color:var(--yellow)}
+
+.search-row{
+  display:grid;
+  grid-template-columns:1fr 58px;
+  gap:8px;
+  margin-bottom:12px;
+}
+.search,.field input,.field select{
+  width:100%;
+  border:1px solid var(--line);
+  background:#0b2037;
+  color:white;
+  border-radius:12px;
+  padding:12px;
+  outline:none;
+}
+.search::placeholder{color:#7e8f9f}
+.search-btn{
+  border:1px solid var(--line);
+  background:#0b2037;
+  color:white;
+  border-radius:12px;
+  font-size:31px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:6px 0 10px;
+  gap:10px;
+}
+.toolbar-title{
+  font-size:21px;
+  font-weight:850;
+}
+.sort{
+  border:1px solid var(--line);
+  background:#0c233c;
+  color:white;
+  border-radius:10px;
+  padding:9px;
+}
+
+.cap-list{display:flex;flex-direction:column;gap:8px}
+.cap-card{
+  display:grid;
+  grid-template-columns:62px 1fr auto;
+  gap:11px;
+  align-items:center;
+  background:rgba(14,36,61,.96);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:15px;
+  padding:10px;
+}
+.cap-img{
+  width:62px;
+  height:62px;
+  border-radius:12px;
+  background:#1b3652;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  overflow:hidden;
+}
+.cap-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.cap-number{
+  font-size:14px;
+  font-weight:800;
+  color:#d5deea;
+}
+.cap-name{
+  font-size:18px;
+  font-weight:750;
+  margin-top:2px;
+}
+.cap-sub{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:3px;
+}
+.select-btn{
+  border:1px solid #31526f;
+  background:transparent;
+  color:#dbe7f2;
+  border-radius:10px;
+  padding:8px 10px;
+  font-weight:700;
+}
+.select-btn.selected{
+  color:#67df8d;
+  border-color:#26864b;
+  background:rgba(38,149,79,.18);
+}
+
+.selection-header{
+  background:rgba(16,41,68,.9);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;
+  padding:13px 14px;
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.selection-count{font-size:18px;font-weight:800}
+.clear-btn{border:0;background:none;color:#ff7474}
+
+.choice-card,.location-card{
+  display:grid;
+  grid-template-columns:58px 1fr;
+  gap:10px;
+  background:rgba(14,36,61,.96);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:15px;
+  padding:10px;
+  margin-bottom:8px;
+}
+.choice-card .cap-img,.location-card .cap-img{
+  width:58px;height:58px
+}
+.choice-actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+.choice-btn{
+  border:1px solid #36526d;
+  background:#0c223a;
+  color:#d9e3ec;
+  border-radius:9px;
+  padding:7px 9px;
+  font-size:13px;
+  font-weight:700;
+}
+.choice-btn.safe.active{
+  border-color:#2db65c;
+  color:#61db88;
+  background:rgba(45,182,92,.15);
+}
+.choice-btn.maybe.active{
+  border-color:#d69b11;
+  color:#f6c448;
+  background:rgba(214,155,17,.15);
+}
+.choice-btn.remove{color:#ff8181}
+
+.group{margin-top:16px}
+.group-title{
+  font-size:17px;
+  font-weight:800;
+  margin-bottom:8px;
+}
+.empty{
+  padding:20px 10px;
+  text-align:center;
+  color:var(--muted);
+  border:1px dashed #294660;
+  border-radius:14px;
+}
+.location-line{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:4px;
+}
+.location-highlight{
+  color:white;
+  font-weight:700;
+}
+
+.manage-card{
+  background:rgba(14,36,61,.96);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:12px;
+}
+.manage-title{
+  font-size:18px;
+  font-weight:850;
+  margin-bottom:10px;
+}
+.field{margin-bottom:10px}
+.field label{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:5px;
+}
+
+.primary-btn,.secondary-btn{
+  width:100%;
+  border-radius:11px;
+  padding:11px 13px;
+  font-weight:800;
+}
+.primary-btn{
+  border:0;
+  background:var(--blue);
+  color:white;
+}
+.secondary-btn{
+  border:1px solid #36526d;
+  background:#0c223a;
+  color:white;
+}
+.detect-btn{
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  border:0;
+  background:#286fda;
+  color:white;
+  border-radius:11px;
+  font-weight:800;
+}
+.detect-btn:disabled{
+  opacity:.45;
+  cursor:default;
+}
+
+.storage-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(14,36,61,.96);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;
+  padding:11px 12px;
+  margin-bottom:8px;
+}
+.storage-name{font-weight:800}
+.storage-type{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:2px;
+}
+
+#photoInput{display:none}
+
+.photo-box{
+  border:1px dashed #3b5c78;
+  border-radius:14px;
+  padding:17px 12px;
+  text-align:center;
+  color:var(--muted);
+}
+.photo-icon{
+  font-size:30px;
+  margin-bottom:5px;
+}
+
+.preview{
+  display:none;
+  margin-top:12px;
+}
+.preview.show{display:block}
+
+.canvas-wrap{
+  position:relative;
+  background:#071625;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid var(--line);
+}
+#detectCanvas{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.detect-result{
+  display:none;
+  margin-top:10px;
+  padding:11px 12px;
+  border-radius:12px;
+  background:rgba(49,131,255,.11);
+  border:1px solid rgba(49,131,255,.3);
+}
+.detect-result.show{display:block}
+.detect-number{
+  font-size:21px;
+  font-weight:850;
+}
+.detect-sub{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:3px;
+}
+
+.slider-wrap{
+  margin-top:12px;
+  background:#0a2037;
+  border-radius:12px;
+  padding:11px 12px;
+}
+.slider-top{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:7px;
+}
+#sensitivity{width:100%}
+
+.cv-status{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:8px;
+  text-align:center;
+}
+
+.bottom-nav{
+  position:fixed;
+  left:0;right:0;bottom:0;
+  z-index:40;
+  display:flex;
+  background:rgba(5,20,36,.97);
+  backdrop-filter:blur(16px);
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:8px 3px calc(8px + env(safe-area-inset-bottom));
+}
+.nav-btn{
+  flex:1;
+  border:0;
+  background:none;
+  color:#8e9baa;
+  font-size:11px;
+  padding:3px 1px;
+}
+.nav-btn.active{color:var(--blue)}
+.nav-icon{
+  display:block;
+  font-size:20px;
+  margin-bottom:2px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <header class="topbar">
-    <div class="topbar-row">
-      <div class="logo">Cap<span>Trade</span></div>
-      <div class="version">V0.4</div>
+<header class="topbar">
+  <div class="toprow">
+    <div class="logo">Cap<span>Trade</span></div>
+    <div class="version">V0.5</div>
+  </div>
+</header>
+
+<main>
+
+<section id="home" class="page active">
+
+  <div class="intro">
+    <strong>So funktioniert's:</strong>
+    Wähle alle Kronkorken aus, die dich interessieren.
+    Deine Auswahl kannst du anschließend bearbeiten.
+  </div>
+
+  <div class="summary">
+    <div class="summary-card">
+      <div class="summary-label">Alle Kronkorken</div>
+      <div id="totalCaps" class="summary-value">0</div>
     </div>
-  </header>
 
-  <main class="content">
+    <div class="summary-card">
+      <div class="summary-label">Ausgewählt</div>
+      <div id="selectedCountHome" class="summary-value green">0</div>
+    </div>
+  </div>
 
-    <section id="home" class="page active">
+  <div class="search-row">
+    <input id="searchInput" class="search"
+      placeholder="Nach Nummer oder Brauerei suchen...">
+    <button class="search-btn">⌕</button>
+  </div>
 
-      <div class="intro">
-        <strong>So funktioniert's:</strong>
-        Tippe auf „Auswählen“, wenn dich ein Kronkorken interessiert.
-        Deine Auswahl kannst du anschließend bearbeiten.
+  <div class="toolbar">
+    <div class="toolbar-title">Alle Kronkorken</div>
+
+    <select id="sortSelect" class="sort">
+      <option value="number">Nummer</option>
+      <option value="brewery">Brauerei</option>
+    </select>
+  </div>
+
+  <div id="homeList" class="cap-list"></div>
+
+</section>
+
+
+<section id="selection" class="page">
+
+  <div class="intro">
+    <strong>Tausch-Auswahl:</strong>
+    Entscheide, welche Kronkorken du sicher möchtest
+    und welche vielleicht.
+  </div>
+
+  <div class="selection-header">
+    <div class="selection-count">
+      <span id="selectedCountSelection">0</span> ausgewählt
+    </div>
+
+    <button id="clearSelectionBtn" class="clear-btn">
+      Auswahl leeren
+    </button>
+  </div>
+
+  <div id="selectionList"></div>
+
+</section>
+
+
+<section id="overview" class="page">
+
+  <div class="intro">
+    <strong>Übersicht:</strong>
+    Grün möchtest du auf jeden Fall.
+    Gelb sind deine Vielleicht-Kronkorken.
+  </div>
+
+  <div class="summary">
+    <div class="summary-card">
+      <div class="summary-label">Auf jeden Fall</div>
+      <div id="safeCount" class="summary-value green">0</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">Vielleicht</div>
+      <div id="maybeCount" class="summary-value yellow">0</div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-title green">Auf jeden Fall</div>
+    <div id="safeList"></div>
+  </div>
+
+  <div class="group">
+    <div class="group-title yellow">Vielleicht</div>
+    <div id="maybeList"></div>
+  </div>
+
+</section>
+
+
+<section id="find" class="page">
+
+  <div class="intro">
+    <strong>Heraussuchen:</strong>
+    Hier siehst du, wo die ausgewählten Kronkorken tatsächlich liegen.
+  </div>
+
+  <div id="findList"></div>
+
+</section>
+
+
+<section id="manage" class="page">
+
+  <div class="intro">
+    <strong>Verwalten:</strong>
+    Wähle einen Lagerort und fotografiere anschließend
+    das komplette Brett, Blatt oder die CD-Hülle.
+  </div>
+
+  <div class="manage-card">
+
+    <div class="manage-title">Neuen Lagerort anlegen</div>
+
+    <div class="field">
+      <label>Art</label>
+      <select id="storageType">
+        <option>A3-Brett</option>
+        <option>A4-Blatt</option>
+        <option>CD-Hülle</option>
+        <option>Sonstiges</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Name</label>
+      <input id="storageName"
+        placeholder="z. B. Brett A oder CD 4">
+    </div>
+
+    <button id="addStorageBtn" class="primary-btn">
+      Lagerort anlegen
+    </button>
+
+  </div>
+
+
+  <div class="manage-card">
+
+    <div class="manage-title">Kronkorken erkennen</div>
+
+    <div class="field">
+      <label>Lagerort</label>
+      <select id="photoStorage"></select>
+    </div>
+
+    <div class="photo-box">
+      <div class="photo-icon">📷</div>
+      Möglichst gerade von oben fotografieren.
+      Alle Kronkorken sollten vollständig sichtbar sein.
+    </div>
+
+    <input id="photoInput" type="file" accept="image/*">
+
+    <button id="choosePhotoBtn"
+      class="secondary-btn"
+      style="margin-top:10px">
+      Foto auswählen
+    </button>
+
+
+    <div id="preview" class="preview">
+
+      <div class="canvas-wrap">
+        <canvas id="detectCanvas"></canvas>
       </div>
 
-      <div class="summary">
-        <div class="summary-card">
-          <div class="summary-label">Alle Kronkorken</div>
-          <div class="summary-value" id="totalCaps">0</div>
+      <div class="slider-wrap">
+
+        <div class="slider-top">
+          <span>Empfindlichkeit</span>
+          <strong id="sensitivityValue">50</strong>
         </div>
 
-        <div class="summary-card">
-          <div class="summary-label">Ausgewählt</div>
-          <div class="summary-value green" id="selectedCountHome">0</div>
-        </div>
+        <input id="sensitivity"
+          type="range"
+          min="20"
+          max="80"
+          value="50">
+
       </div>
 
-      <div class="search-row">
-        <input
-          id="searchInput"
-          class="search"
-          type="search"
-          placeholder="Nach Nummer oder Brauerei suchen..."
-        >
-        <button class="search-btn">⌕</button>
-      </div>
+      <button id="detectBtn"
+        class="detect-btn"
+        disabled>
+        Kronkorken erkennen
+      </button>
 
-      <div class="toolbar">
-        <div class="toolbar-title">Alle Kronkorken</div>
+      <div id="detectResult" class="detect-result">
 
-        <select id="sortSelect" class="sort">
-          <option value="number">Nummer</option>
-          <option value="brewery">Brauerei</option>
-        </select>
-      </div>
-
-      <div id="homeList" class="cap-list"></div>
-
-    </section>
-
-    <section id="selection" class="page">
-
-      <div class="intro">
-        <strong>Tausch-Auswahl:</strong>
-        Entscheide, welche Kronkorken du sicher möchtest und welche vielleicht.
-      </div>
-
-      <div class="selection-header">
-        <div class="selection-count">
-          <span id="selectedCountSelection">0</span> ausgewählt
+        <div class="detect-number">
+          <span id="circleCount">0</span>
+          Kronkorken erkannt
         </div>
 
-        <button id="clearSelectionBtn" class="clear-btn">
-          Auswahl leeren
-        </button>
-      </div>
-
-      <div id="selectionList"></div>
-
-    </section>
-
-    <section id="overview" class="page">
-
-      <div class="intro">
-        <strong>Übersicht:</strong>
-        Grün sind deine sicheren Wünsche, Gelb deine Vielleicht-Auswahl.
-      </div>
-
-      <div class="summary">
-        <div class="summary-card">
-          <div class="summary-label">Auf jeden Fall</div>
-          <div class="summary-value green" id="safeCount">0</div>
-        </div>
-
-        <div class="summary-card">
-          <div class="summary-label">Vielleicht</div>
-          <div class="summary-value yellow" id="maybeCount">0</div>
-        </div>
-      </div>
-
-      <div class="group">
-        <div class="group-title green">Auf jeden Fall</div>
-        <div id="safeList"></div>
-      </div>
-
-      <div class="group">
-        <div class="group-title yellow">Vielleicht</div>
-        <div id="maybeList"></div>
-      </div>
-
-    </section>
-
-    <section id="find" class="page">
-
-      <div class="intro">
-        <strong>Heraussuchen:</strong>
-        Hier findest du den tatsächlichen Lagerort der ausgewählten Kronkorken.
-      </div>
-
-      <div id="findList"></div>
-
-    </section>
-
-    <section id="manage" class="page">
-
-      <div class="intro">
-        <strong>Verwalten:</strong>
-        Lege einen Lagerort an und lade anschließend das passende Foto hoch.
-      </div>
-
-      <div class="manage-card">
-
-        <div class="manage-title">
-          Neuen Lagerort anlegen
-        </div>
-
-        <div class="field">
-          <label>Art</label>
-
-          <select id="storageType">
-            <option value="A3-Brett">A3-Brett</option>
-            <option value="A4-Blatt">A4-Blatt</option>
-            <option value="CD-Hülle">CD-Hülle</option>
-            <option value="Sonstiges">Sonstiges</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Name</label>
-
-          <input
-            id="storageName"
-            type="text"
-            placeholder="z. B. Brett A oder CD 4"
-          >
-        </div>
-
-        <button id="addStorageBtn" class="primary-btn">
-          Lagerort anlegen
-        </button>
-
-      </div>
-
-      <div class="manage-card">
-
-        <div class="manage-title">
-          Foto einlesen
-        </div>
-
-        <div class="field">
-          <label>Lagerort auswählen</label>
-          <select id="photoStorage"></select>
-        </div>
-
-        <div class="photo-box">
-          <div class="photo-icon">📷</div>
-          Fotografiere dein Brett, A4-Blatt oder deine CD-Hülle
-          oder wähle ein vorhandenes Foto aus.
-        </div>
-
-        <input
-          id="photoInput"
-          type="file"
-          accept="image/*"
-        >
-
-        <button
-          id="choosePhotoBtn"
-          class="secondary-btn"
-          style="margin-top:10px;"
-        >
-          Foto auswählen
-        </button>
-
-        <div id="previewWrap" class="preview-wrap">
-
-          <img
-            id="photoPreview"
-            class="preview-image"
-            alt="Vorschau"
-          >
-
-          <div class="preview-info">
-            Lagerort:
-            <strong id="previewStorage"></strong>
-          </div>
-
-          <div class="success-box">
-            ✓ Foto ausgewählt. Im nächsten Schritt lassen wir
-            CapTrade die einzelnen Kronkorken darauf erkennen.
-          </div>
-
+        <div class="detect-sub">
+          Prüfe kurz, ob alle Kronkorken markiert wurden.
+          Falls nicht, ändere die Empfindlichkeit und starte erneut.
         </div>
 
       </div>
 
-      <div class="manage-title">
-        Deine Lagerorte
+      <div id="cvStatus" class="cv-status">
+        Bilderkennung wird geladen …
       </div>
 
-      <div id="storageList"></div>
+    </div>
 
-    </section>
+  </div>
 
-  </main>
+
+  <div class="manage-title">Deine Lagerorte</div>
+  <div id="storageList"></div>
+
+</section>
+
+</main>
 </div>
+
 
 <nav class="bottom-nav">
 
-  <button class="nav-btn active" data-page="home">
-    <span class="nav-icon">⌂</span>
-    Start
-  </button>
+<button class="nav-btn active" data-page="home">
+  <span class="nav-icon">⌂</span>
+  Start
+</button>
 
-  <button class="nav-btn" data-page="selection">
-    <span class="nav-icon">✓</span>
-    Auswahl
-  </button>
+<button class="nav-btn" data-page="selection">
+  <span class="nav-icon">✓</span>
+  Auswahl
+</button>
 
-  <button class="nav-btn" data-page="overview">
-    <span class="nav-icon">◉</span>
-    Übersicht
-  </button>
+<button class="nav-btn" data-page="overview">
+  <span class="nav-icon">◉</span>
+  Übersicht
+</button>
 
-  <button class="nav-btn" data-page="find">
-    <span class="nav-icon">▣</span>
-    Finden
-  </button>
+<button class="nav-btn" data-page="find">
+  <span class="nav-icon">▣</span>
+  Finden
+</button>
 
-  <button class="nav-btn" data-page="manage">
-    <span class="nav-icon">⚙</span>
-    Verwalten
-  </button>
+<button class="nav-btn" data-page="manage">
+  <span class="nav-icon">⚙</span>
+  Verwalten
+</button>
 
 </nav>
 
+
 <script>
 
-  const caps = [
-    {
-      id: 1,
-      brewery: "Paulaner",
-      image: "🍺",
-      storage: "TESTbrett A",
-      row: 1,
-      position: 1
-    },
-    {
-      id: 2,
-      brewery: "Krombacher",
-      image: "🍺",
-      storage: "TESTbrett A",
-      row: 1,
-      position: 2
-    },
-    {
-      id: 3,
-      brewery: "Erdinger",
-      image: "🍺",
-      storage: "TESTbrett A",
-      row: 1,
-      position: 3
-    },
-    {
-      id: 4,
-      brewery: "Veltins",
-      image: "🍺",
-      storage: "TESTbrett A",
-      row: 1,
-      position: 4
-    },
-    {
-      id: 5,
-      brewery: "Hasseröder",
-      image: "🍺",
-      storage: "TESTbrett A",
-      row: 1,
-      position: 5
-    }
-  ];
-
-  let trade =
-    JSON.parse(localStorage.getItem("captradeSelection")) || {};
-
-  let storages =
-    JSON.parse(localStorage.getItem("captradeStorages")) || [
-      {
-        type: "A3-Brett",
-        name: "TESTbrett A"
-      }
-    ];
-
-  function saveTrade() {
-    localStorage.setItem(
-      "captradeSelection",
-      JSON.stringify(trade)
-    );
-  }
-
-  function saveStorages() {
-    localStorage.setItem(
-      "captradeStorages",
-      JSON.stringify(storages)
-    );
-  }
-
-  function getSelectedIds() {
-    return Object.keys(trade).map(Number);
-  }
-
-  function formatNumber(id) {
-    return "#" + id;
-  }
-
-  function renderHome() {
-
-    const list =
-      document.getElementById("homeList");
-
-    const query =
-      document
-      .getElementById("searchInput")
-      .value
-      .toLowerCase()
-      .trim();
-
-    const sort =
-      document.getElementById("sortSelect").value;
-
-    let filtered =
-      [...caps].filter(cap =>
-        cap.brewery.toLowerCase().includes(query) ||
-        String(cap.id).includes(query)
-      );
-
-    if (sort === "brewery") {
-      filtered.sort(
-        (a,b) =>
-          a.brewery.localeCompare(b.brewery)
-      );
-    } else {
-      filtered.sort(
-        (a,b) => a.id - b.id
-      );
-    }
+const caps=[
+{id:1,brewery:"Paulaner",image:"🍺",storage:"TESTbrett A",row:1,position:1},
+{id:2,brewery:"Krombacher",image:"🍺",storage:"TESTbrett A",row:1,position:2},
+{id:3,brewery:"Erdinger",image:"🍺",storage:"TESTbrett A",row:1,position:3},
+{id:4,brewery:"Veltins",image:"🍺",storage:"TESTbrett A",row:1,position:4},
+{id:5,brewery:"Hasseröder",image:"🍺",storage:"TESTbrett A",row:1,position:5}
+];
 
-    list.innerHTML = "";
+let trade=
+JSON.parse(localStorage.getItem("captradeSelection"))||{};
+
+let storages=
+JSON.parse(localStorage.getItem("captradeStorages"))||
+[{type:"A3-Brett",name:"TESTbrett A"}];
+
+let cvReady=false;
+let currentImage=null;
+let detectedCircles=[];
+
+function saveTrade(){
+localStorage.setItem("captradeSelection",JSON.stringify(trade));
+}
+
+function saveStorages(){
+localStorage.setItem("captradeStorages",JSON.stringify(storages));
+}
+
+function selectedIds(){
+return Object.keys(trade).map(Number);
+}
+
+function renderHome(){
+
+const list=document.getElementById("homeList");
+const query=document.getElementById("searchInput")
+.value.toLowerCase().trim();
+
+let items=[...caps].filter(c=>
+c.brewery.toLowerCase().includes(query)||
+String(c.id).includes(query)
+);
+
+if(document.getElementById("sortSelect").value==="brewery"){
+items.sort((a,b)=>a.brewery.localeCompare(b.brewery));
+}else{
+items.sort((a,b)=>a.id-b.id);
+}
 
-    filtered.forEach(cap => {
+list.innerHTML="";
+
+items.forEach(c=>{
 
-      const selected =
-        trade[cap.id] !== undefined;
+const chosen=trade[c.id]!==undefined;
+const el=document.createElement("div");
+el.className="cap-card";
 
-      const card =
-        document.createElement("div");
+el.innerHTML=`
+<div class="cap-img">${c.image}</div>
+<div>
+<div class="cap-number">#${c.id}</div>
+<div class="cap-name">${c.brewery}</div>
+<div class="cap-sub">Verfügbar</div>
+</div>
+<button class="select-btn ${chosen?"selected":""}">
+${chosen?"✓ Dabei":"Auswählen"}
+</button>
+`;
 
-      card.className = "cap-card";
+el.querySelector("button").onclick=()=>{
+if(chosen) delete trade[c.id];
+else trade[c.id]="unrated";
+saveTrade();
+renderAll();
+};
 
-      card.innerHTML = `
-        <div class="cap-img">
-          ${cap.image}
-        </div>
+list.appendChild(el);
+});
 
-        <div>
-          <div class="cap-number">
-            ${formatNumber(cap.id)}
-          </div>
+document.getElementById("totalCaps").textContent=caps.length;
+document.getElementById("selectedCountHome")
+.textContent=selectedIds().length;
+}
 
-          <div class="cap-name">
-            ${cap.brewery}
-          </div>
 
-          <div class="cap-sub">
-            Verfügbar
-          </div>
-        </div>
+function renderSelection(){
 
-        <button
-          class="select-btn
-          ${selected ? "selected" : ""}"
-        >
-          ${selected ? "✓ Dabei" : "Auswählen"}
-        </button>
-      `;
+const box=document.getElementById("selectionList");
+const ids=selectedIds();
 
-      card
-        .querySelector(".select-btn")
-        .addEventListener("click", () => {
+document.getElementById("selectedCountSelection")
+.textContent=ids.length;
 
-          if (trade[cap.id] !== undefined) {
-            delete trade[cap.id];
-          } else {
-            trade[cap.id] = "unrated";
-          }
+if(!ids.length){
+box.innerHTML='<div class="empty">Noch keine Kronkorken ausgewählt.</div>';
+return;
+}
 
-          saveTrade();
-          renderAll();
-        });
+box.innerHTML="";
 
-      list.appendChild(card);
+ids.forEach(id=>{
 
-    });
+const c=caps.find(x=>x.id===id);
+if(!c)return;
 
-    document
-      .getElementById("totalCaps")
-      .textContent = caps.length;
+const el=document.createElement("div");
+el.className="choice-card";
 
-    document
-      .getElementById("selectedCountHome")
-      .textContent = getSelectedIds().length;
-  }
+el.innerHTML=`
+<div class="cap-img">${c.image}</div>
+<div>
+<div class="cap-number">#${c.id}</div>
+<div class="cap-name">${c.brewery}</div>
 
-  function renderSelection() {
+<div class="choice-actions">
 
-    const container =
-      document.getElementById("selectionList");
+<button class="choice-btn safe
+${trade[id]==="safe"?"active":""}">
+✓ Sicher
+</button>
 
-    const ids =
-      getSelectedIds();
+<button class="choice-btn maybe
+${trade[id]==="maybe"?"active":""}">
+? Vielleicht
+</button>
 
-    document
-      .getElementById("selectedCountSelection")
-      .textContent = ids.length;
+<button class="choice-btn remove">
+× Raus
+</button>
 
-    if (ids.length === 0) {
+</div>
+</div>
+`;
 
-      container.innerHTML = `
-        <div class="empty">
-          Noch keine Kronkorken ausgewählt.
-        </div>
-      `;
+el.querySelector(".safe").onclick=()=>{
+trade[id]="safe";saveTrade();renderAll();
+};
 
-      return;
-    }
+el.querySelector(".maybe").onclick=()=>{
+trade[id]="maybe";saveTrade();renderAll();
+};
 
-    container.innerHTML = "";
+el.querySelector(".remove").onclick=()=>{
+delete trade[id];saveTrade();renderAll();
+};
 
-    ids.forEach(id => {
+box.appendChild(el);
 
-      const cap =
-        caps.find(c => c.id === id);
+});
+}
 
-      if (!cap) return;
 
-      const status =
-        trade[id];
+function renderOverview(){
 
-      const card =
-        document.createElement("div");
+const safe=selectedIds().filter(x=>trade[x]==="safe");
+const maybe=selectedIds().filter(x=>trade[x]==="maybe");
 
-      card.className =
-        "choice-card";
+document.getElementById("safeCount").textContent=safe.length;
+document.getElementById("maybeCount").textContent=maybe.length;
 
-      card.innerHTML = `
-        <div class="cap-img">
-          ${cap.image}
-        </div>
+renderGroup("safeList",safe);
+renderGroup("maybeList",maybe);
+}
 
-        <div>
 
-          <div class="cap-number">
-            ${formatNumber(cap.id)}
-          </div>
+function renderGroup(id,items){
 
-          <div class="cap-name">
-            ${cap.brewery}
-          </div>
+const box=document.getElementById(id);
 
-          <div class="choice-actions">
+if(!items.length){
+box.innerHTML='<div class="empty">Keine Kronkorken</div>';
+return;
+}
 
-            <button
-              class="choice-btn safe
-              ${status === "safe" ? "active" : ""}"
-            >
-              ✓ Sicher
-            </button>
+box.innerHTML="";
 
-            <button
-              class="choice-btn maybe
-              ${status === "maybe" ? "active" : ""}"
-            >
-              ? Vielleicht
-            </button>
+items.forEach(id=>{
 
-            <button
-              class="choice-btn remove"
-            >
-              × Raus
-            </button>
+const c=caps.find(x=>x.id===id);
+if(!c)return;
 
-          </div>
+const el=document.createElement("div");
+el.className="cap-card";
 
-        </div>
-      `;
+el.innerHTML=`
+<div class="cap-img">${c.image}</div>
+<div>
+<div class="cap-number">#${c.id}</div>
+<div class="cap-name">${c.brewery}</div>
+</div>
+<div></div>
+`;
 
-      card
-        .querySelector(".safe")
-        .addEventListener("click", () => {
+box.appendChild(el);
 
-          trade[id] = "safe";
+});
+}
 
-          saveTrade();
-          renderAll();
 
-        });
+function renderFind(){
 
-      card
-        .querySelector(".maybe")
-        .addEventListener("click", () => {
+const box=document.getElementById("findList");
 
-          trade[id] = "maybe";
+const ids=selectedIds().filter(id=>
+trade[id]==="safe"||trade[id]==="maybe"
+);
 
-          saveTrade();
-          renderAll();
+if(!ids.length){
+box.innerHTML='<div class="empty">Noch keine Kronkorken zum Heraussuchen.</div>';
+return;
+}
 
-        });
+box.innerHTML="";
 
-      card
-        .querySelector(".remove")
-        .addEventListener("click", () => {
+ids.forEach(id=>{
 
-          delete trade[id];
+const c=caps.find(x=>x.id===id);
+if(!c)return;
 
-          saveTrade();
-          renderAll();
+const el=document.createElement("div");
+el.className="location-card";
 
-        });
+el.innerHTML=`
+<div class="cap-img">${c.image}</div>
+<div>
+<div class="cap-number">#${c.id}</div>
+<div class="cap-name">${c.brewery}</div>
 
-      container.appendChild(card);
+<div class="location-line">
+Status:
+<span class="location-highlight">
+${trade[id]==="safe"?"Auf jeden Fall":"Vielleicht"}
+</span>
+</div>
 
-    });
-  }
+<div class="location-line">
+Lagerort:
+<span class="location-highlight">
+${c.storage} · Reihe ${c.row} · Position ${c.position}
+</span>
+</div>
 
-  function renderOverview() {
+</div>
+`;
 
-    const safeIds =
-      getSelectedIds()
-      .filter(
-        id => trade[id] === "safe"
-      );
+box.appendChild(el);
 
-    const maybeIds =
-      getSelectedIds()
-      .filter(
-        id => trade[id] === "maybe"
-      );
+});
+}
 
-    document
-      .getElementById("safeCount")
-      .textContent = safeIds.length;
 
-    document
-      .getElementById("maybeCount")
-      .textContent = maybeIds.length;
+function renderStorages(){
 
-    renderOverviewGroup(
-      "safeList",
-      safeIds
-    );
+const list=document.getElementById("storageList");
+const select=document.getElementById("photoStorage");
 
-    renderOverviewGroup(
-      "maybeList",
-      maybeIds
-    );
-  }
+list.innerHTML="";
+select.innerHTML="";
 
-  function renderOverviewGroup(targetId, ids) {
+storages.forEach((s,i)=>{
 
-    const target =
-      document.getElementById(targetId);
+const el=document.createElement("div");
+el.className="storage-item";
 
-    if (ids.length === 0) {
+el.innerHTML=`
+<div>
+<div class="storage-name">${s.name}</div>
+<div class="storage-type">${s.type}</div>
+</div>
+<div>#${i+1}</div>
+`;
 
-      target.innerHTML = `
-        <div class="empty">
-          Keine Kronkorken
-        </div>
-      `;
+list.appendChild(el);
 
-      return;
-    }
+const option=document.createElement("option");
+option.value=s.name;
+option.textContent=s.name+" · "+s.type;
+select.appendChild(option);
 
-    target.innerHTML = "";
+});
+}
 
-    ids.forEach(id => {
 
-      const cap =
-        caps.find(c => c.id === id);
+function renderAll(){
+renderHome();
+renderSelection();
+renderOverview();
+renderFind();
+renderStorages();
+}
 
-      if (!cap) return;
 
-      const card =
-        document.createElement("div");
+document.querySelectorAll(".nav-btn").forEach(btn=>{
 
-      card.className =
-        "cap-card";
+btn.onclick=()=>{
 
-      card.innerHTML = `
-        <div class="cap-img">
-          ${cap.image}
-        </div>
+document.querySelectorAll(".page")
+.forEach(x=>x.classList.remove("active"));
 
-        <div>
-          <div class="cap-number">
-            ${formatNumber(cap.id)}
-          </div>
+document.querySelectorAll(".nav-btn")
+.forEach(x=>x.classList.remove("active"));
 
-          <div class="cap-name">
-            ${cap.brewery}
-          </div>
-        </div>
+document.getElementById(btn.dataset.page)
+.classList.add("active");
 
-        <div></div>
-      `;
+btn.classList.add("active");
 
-      target.appendChild(card);
+window.scrollTo({top:0,behavior:"smooth"});
+};
 
-    });
-  }
+});
 
-  function renderFind() {
 
-    const target =
-      document.getElementById("findList");
+document.getElementById("searchInput").oninput=renderHome;
+document.getElementById("sortSelect").onchange=renderHome;
 
-    const ids =
-      getSelectedIds()
-      .filter(
-        id =>
-          trade[id] === "safe" ||
-          trade[id] === "maybe"
-      );
 
-    if (ids.length === 0) {
+document.getElementById("clearSelectionBtn").onclick=()=>{
 
-      target.innerHTML = `
-        <div class="empty">
-          Noch keine Kronkorken
-          zum Heraussuchen vorhanden.
-        </div>
-      `;
+if(confirm("Komplette Tauschauswahl leeren?")){
+trade={};
+saveTrade();
+renderAll();
+}
 
-      return;
-    }
+};
 
-    target.innerHTML = "";
 
-    ids.forEach(id => {
+document.getElementById("addStorageBtn").onclick=()=>{
 
-      const cap =
-        caps.find(c => c.id === id);
+const type=document.getElementById("storageType").value;
+const name=document.getElementById("storageName").value.trim();
 
-      if (!cap) return;
+if(!name){
+alert("Bitte einen Namen eingeben.");
+return;
+}
 
-      const status =
-        trade[id] === "safe"
-        ? "Auf jeden Fall"
-        : "Vielleicht";
+storages.push({type,name});
+saveStorages();
 
-      const card =
-        document.createElement("div");
+document.getElementById("storageName").value="";
+renderStorages();
 
-      card.className =
-        "location-card";
+};
 
-      card.innerHTML = `
-        <div class="cap-img">
-          ${cap.image}
-        </div>
 
-        <div>
+const photoInput=document.getElementById("photoInput");
 
-          <div class="cap-number">
-            ${formatNumber(cap.id)}
-          </div>
+document.getElementById("choosePhotoBtn").onclick=()=>{
 
-          <div class="cap-name">
-            ${cap.brewery}
-          </div>
+if(!storages.length){
+alert("Bitte zuerst einen Lagerort anlegen.");
+return;
+}
 
-          <div class="location-line">
-            Status:
-            <span class="location-highlight">
-              ${status}
-            </span>
-          </div>
+photoInput.click();
 
-          <div class="location-line">
-            Lagerort:
-            <span class="location-highlight">
-              ${cap.storage}
-              · Reihe ${cap.row}
-              · Position ${cap.position}
-            </span>
-          </div>
+};
 
-        </div>
-      `;
 
-      target.appendChild(card);
+photoInput.onchange=e=>{
 
-    });
-  }
+const file=e.target.files[0];
+if(!file)return;
 
-  function renderStorages() {
+const reader=new FileReader();
 
-    const list =
-      document.getElementById("storageList");
+reader.onload=ev=>{
 
-    const select =
-      document.getElementById("photoStorage");
+const img=new Image();
 
-    list.innerHTML = "";
-    select.innerHTML = "";
+img.onload=()=>{
 
-    storages.forEach(
-      (storage,index) => {
+currentImage=img;
 
-        const item =
-          document.createElement("div");
+drawOriginalImage();
 
-        item.className =
-          "storage-item";
+document.getElementById("preview")
+.classList.add("show");
 
-        item.innerHTML = `
-          <div>
-            <div class="storage-name">
-              ${storage.name}
-            </div>
+document.getElementById("detectResult")
+.classList.remove("show");
 
-            <div class="storage-type">
-              ${storage.type}
-            </div>
-          </div>
+detectedCircles=[];
 
-          <div>
-            #${index + 1}
-          </div>
-        `;
+document.getElementById("detectBtn").disabled=!cvReady;
 
-        list.appendChild(item);
+};
 
-        const option =
-          document.createElement("option");
+img.src=ev.target.result;
 
-        option.value =
-          storage.name;
+};
 
-        option.textContent =
-          `${storage.name} · ${storage.type}`;
+reader.readAsDataURL(file);
 
-        select.appendChild(option);
+};
 
-      }
-    );
-  }
 
-  function renderAll() {
-    renderHome();
-    renderSelection();
-    renderOverview();
-    renderFind();
-    renderStorages();
-  }
+function drawOriginalImage(){
 
-  function switchPage(pageId) {
+if(!currentImage)return;
 
-    document
-      .querySelectorAll(".page")
-      .forEach(page =>
-        page.classList.remove("active")
-      );
+const canvas=document.getElementById("detectCanvas");
+const ctx=canvas.getContext("2d");
 
-    document
-      .querySelectorAll(".nav-btn")
-      .forEach(btn =>
-        btn.classList.remove("active")
-      );
+const maxWidth=1000;
+const scale=Math.min(1,maxWidth/currentImage.width);
 
-    document
-      .getElementById(pageId)
-      .classList.add("active");
+canvas.width=Math.round(currentImage.width*scale);
+canvas.height=Math.round(currentImage.height*scale);
 
-    document
-      .querySelector(
-        `.nav-btn[data-page="${pageId}"]`
-      )
-      .classList.add("active");
+ctx.drawImage(
+currentImage,
+0,0,
+canvas.width,
+canvas.height
+);
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  }
+}
 
-  document
-    .querySelectorAll(".nav-btn")
-    .forEach(btn => {
 
-      btn.addEventListener(
-        "click",
-        () => {
+document.getElementById("sensitivity").oninput=e=>{
+document.getElementById("sensitivityValue")
+.textContent=e.target.value;
+};
 
-          switchPage(
-            btn.dataset.page
-          );
 
-        }
-      );
+document.getElementById("detectBtn").onclick=detectCaps;
 
-    });
 
-  document
-    .getElementById("searchInput")
-    .addEventListener(
-      "input",
-      renderHome
-    );
+function detectCaps(){
 
-  document
-    .getElementById("sortSelect")
-    .addEventListener(
-      "change",
-      renderHome
-    );
+if(!cvReady||!currentImage){
+alert("Die Bilderkennung ist noch nicht bereit.");
+return;
+}
 
-  document
-    .getElementById("clearSelectionBtn")
-    .addEventListener(
-      "click",
-      () => {
+drawOriginalImage();
 
-        if (
-          confirm(
-            "Möchtest du die komplette Tauschauswahl leeren?"
-          )
-        ) {
+const canvas=document.getElementById("detectCanvas");
 
-          trade = {};
+let src=cv.imread(canvas);
+let gray=new cv.Mat();
 
-          saveTrade();
-          renderAll();
+cv.cvtColor(src,gray,cv.COLOR_RGBA2GRAY);
+cv.medianBlur(gray,gray,7);
 
-        }
-      }
-    );
+let circles=new cv.Mat();
 
-  document
-    .getElementById("addStorageBtn")
-    .addEventListener(
-      "click",
-      () => {
+const sensitivity=
+Number(document.getElementById("sensitivity").value);
 
-        const type =
-          document
-          .getElementById("storageType")
-          .value;
+const minSide=Math.min(src.cols,src.rows);
 
-        const name =
-          document
-          .getElementById("storageName")
-          .value
-          .trim();
+const minRadius=Math.max(
+8,
+Math.round(minSide*0.012)
+);
 
-        if (!name) {
+const maxRadius=Math.round(
+minSide*0.11
+);
 
-          alert(
-            "Bitte einen Namen eingeben."
-          );
+const minDistance=Math.max(
+20,
+Math.round(minSide*0.045)
+);
 
-          return;
-        }
+const param2=
+Math.round(48-(sensitivity*0.35));
 
-        storages.push({
-          type,
-          name
-        });
+cv.HoughCircles(
+gray,
+circles,
+cv.HOUGH_GRADIENT,
+1.2,
+minDistance,
+100,
+param2,
+minRadius,
+maxRadius
+);
 
-        saveStorages();
+detectedCircles=[];
 
-        document
-          .getElementById("storageName")
-          .value = "";
+for(let i=0;i<circles.cols;i++){
 
-        renderStorages();
+const x=circles.data32F[i*3];
+const y=circles.data32F[i*3+1];
+const r=circles.data32F[i*3+2];
 
-      }
-    );
+detectedCircles.push({x,y,r});
 
-  const choosePhotoBtn =
-    document.getElementById(
-      "choosePhotoBtn"
-    );
+}
 
-  const photoInput =
-    document.getElementById(
-      "photoInput"
-    );
+src.delete();
+gray.delete();
+circles.delete();
 
-  choosePhotoBtn
-    .addEventListener(
-      "click",
-      () => {
+drawDetection();
 
-        if (storages.length === 0) {
+document.getElementById("circleCount")
+.textContent=detectedCircles.length;
 
-          alert(
-            "Bitte zuerst einen Lagerort anlegen."
-          );
+document.getElementById("detectResult")
+.classList.add("show");
 
-          return;
-        }
+}
 
-        photoInput.click();
 
-      }
-    );
+function drawDetection(){
 
-  photoInput
-    .addEventListener(
-      "change",
-      event => {
+drawOriginalImage();
 
-        const file =
-          event.target.files[0];
+const canvas=document.getElementById("detectCanvas");
+const ctx=canvas.getContext("2d");
 
-        if (!file) return;
+ctx.lineWidth=Math.max(3,canvas.width/300);
+ctx.strokeStyle="#36c96b";
+ctx.fillStyle="#36c96b";
+ctx.font=`bold ${Math.max(16,canvas.width/45)}px sans-serif`;
 
-        if (!file.type.startsWith("image/")) {
+detectedCircles.forEach((circle,index)=>{
 
-          alert(
-            "Bitte ein Bild auswählen."
-          );
+ctx.beginPath();
+ctx.arc(
+circle.x,
+circle.y,
+circle.r,
+0,
+Math.PI*2
+);
+ctx.stroke();
 
-          return;
-        }
+ctx.fillText(
+String(index+1),
+circle.x-circle.r*.25,
+circle.y+circle.r*.15
+);
 
-        const selectedStorage =
-          document
-          .getElementById("photoStorage")
-          .value;
+});
 
-        const imageURL =
-          URL.createObjectURL(file);
+}
 
-        const preview =
-          document
-          .getElementById("photoPreview");
 
-        preview.src =
-          imageURL;
+function opencvReady(){
 
-        document
-          .getElementById("previewStorage")
-          .textContent =
-          selectedStorage;
+cvReady=true;
 
-        document
-          .getElementById("previewWrap")
-          .classList
-          .add("show");
+document.getElementById("cvStatus")
+.textContent="✓ Bilderkennung bereit";
 
-      }
-    );
+if(currentImage){
+document.getElementById("detectBtn").disabled=false;
+}
 
-  renderAll();
+}
 
+
+renderAll();
+
+</script>
+
+
+<script async
+src="https://docs.opencv.org/4.x/opencv.js"
+onload="
+cv.onRuntimeInitialized=()=>{
+opencvReady();
+};
+">
 </script>
 
 </body>
