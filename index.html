@@ -3,214 +3,466 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#06284a">
+  <meta name="theme-color" content="#06182c">
   <title>CapTrade</title>
 
   <style>
+    :root {
+      --bg: #06182c;
+      --bg2: #0b223d;
+      --card: #102944;
+      --card2: #0d243d;
+      --line: #27425e;
+      --text: #f5f7fa;
+      --muted: #a8b4c2;
+      --blue: #3183ff;
+      --green: #36c96b;
+      --yellow: #f0b429;
+      --red: #ef4e4e;
+      --white: #ffffff;
+    }
+
     * {
       box-sizing: border-box;
     }
 
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top, #0d2a4b 0%, #06182c 50%, #04111f 100%);
+      color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f5f7fa;
-      color: #10243e;
     }
 
-    header {
-      background: #06284a;
-      color: white;
-      padding: 18px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    .logo {
-      font-size: 32px;
-      font-weight: 800;
-    }
-
-    .logo span {
-      color: #e5242a;
-    }
-
-    main {
-      max-width: 700px;
-      margin: auto;
-      padding: 16px 14px 110px;
-    }
-
-    .help {
-      background: white;
-      border-radius: 16px;
-      padding: 15px;
-      margin-bottom: 14px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.07);
-    }
-
-    .help strong {
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .selection {
-      background: white;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.07);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .selection-number {
-      font-size: 20px;
-      font-weight: 750;
+    button, input, select {
+      font: inherit;
     }
 
     button {
-      font: inherit;
       cursor: pointer;
     }
 
-    .show-selection {
-      border: 0;
-      background: #1262c4;
-      color: white;
-      border-radius: 12px;
-      padding: 13px 15px;
+    .app {
+      max-width: 720px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding-bottom: 92px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: rgba(6, 24, 44, .9);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      padding: 14px 16px 12px;
+    }
+
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .logo {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+    }
+
+    .logo span {
+      color: #ed3131;
+    }
+
+    .version {
+      border: 1px solid #e1a900;
+      color: #f5c33c;
+      border-radius: 10px;
+      padding: 5px 8px;
       font-weight: 700;
+      font-size: 13px;
+    }
+
+    .content {
+      padding: 14px;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .section-title {
+      font-size: 23px;
+      font-weight: 800;
+      margin: 5px 0 12px;
+    }
+
+    .intro {
+      background: rgba(18, 41, 68, .72);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    .intro strong {
+      color: var(--text);
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      margin-bottom: 12px;
     }
 
     .search {
       width: 100%;
-      padding: 14px;
-      border: 1px solid #ccd4dd;
-      border-radius: 13px;
-      background: white;
-      font-size: 17px;
-      margin-bottom: 14px;
+      border: 1px solid var(--line);
+      background: #0b2037;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 13px;
+      outline: none;
     }
 
-    .headline {
+    .search::placeholder {
+      color: #7f90a2;
+    }
+
+    .icon-btn {
+      min-width: 44px;
+      border: 1px solid var(--line);
+      background: #0b2037;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 0 12px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-bottom: 15px;
+    }
+
+    .summary-card {
+      background: rgba(17, 42, 70, .88);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 16px;
+      padding: 13px 14px;
+    }
+
+    .summary-label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .summary-value {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .summary-value.green {
+      color: var(--green);
+    }
+
+    .summary-value.yellow {
+      color: var(--yellow);
+    }
+
+    .summary-value.red {
+      color: var(--red);
+    }
+
+    .toolbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 8px 2px 10px;
-    }
-
-    .headline h2 {
-      font-size: 20px;
-      margin: 0;
-    }
-
-    .cap {
-      background: white;
-      border-radius: 15px;
-      padding: 10px 12px;
-      margin-bottom: 9px;
-      display: grid;
-      grid-template-columns: 65px 72px 1fr 52px;
       gap: 10px;
-      align-items: center;
-      box-shadow: 0 1px 5px rgba(0,0,0,.06);
+      margin: 6px 0 10px;
     }
 
-    .number {
+    .toolbar-title {
+      font-size: 21px;
       font-weight: 800;
-      font-size: 17px;
     }
 
-    .cap-image {
+    .sort {
+      border: 1px solid var(--line);
+      background: #0c233c;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 9px 10px;
+    }
+
+    .cap-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cap-card {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      gap: 11px;
+      align-items: center;
+      background: rgba(14, 36, 61, .95);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 15px;
+      padding: 10px;
+    }
+
+    .cap-img {
       width: 64px;
       height: 64px;
       border-radius: 12px;
-      background: #e8edf2;
+      background: #1b3652;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       font-size: 30px;
+      overflow: hidden;
     }
 
-    .brewery {
+    .cap-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cap-info {
+      min-width: 0;
+    }
+
+    .cap-number {
+      font-size: 14px;
+      font-weight: 800;
+      color: #d6dfeb;
+      margin-bottom: 2px;
+    }
+
+    .cap-name {
       font-size: 18px;
+      font-weight: 750;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cap-sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    .select-btn {
+      border: 1px solid #31526f;
+      background: transparent;
+      color: #dbe7f2;
+      border-radius: 10px;
+      padding: 8px 11px;
+      font-weight: 700;
+      min-width: 78px;
+    }
+
+    .select-btn.selected {
+      border-color: #25864b;
+      background: rgba(38, 149, 79, .18);
+      color: #66df8b;
+    }
+
+    .selection-header {
+      background: rgba(16, 41, 68, .9);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px;
+      padding: 13px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .selection-count {
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .clear-btn {
+      border: 0;
+      background: transparent;
+      color: #ff7373;
+      font-size: 14px;
+    }
+
+    .choice-card {
+      background: rgba(14, 36, 61, .95);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 15px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .choice-card .cap-img {
+      width: 58px;
+      height: 58px;
+    }
+
+    .choice-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 9px;
+      flex-wrap: wrap;
+    }
+
+    .choice-btn {
+      border: 1px solid #36526d;
+      background: #0c223a;
+      color: #d9e3ec;
+      border-radius: 9px;
+      padding: 7px 9px;
+      font-size: 13px;
       font-weight: 700;
     }
 
-    .add {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      border: 2px solid #12365c;
-      background: white;
-      color: #12365c;
-      font-size: 29px;
-      line-height: 1;
+    .choice-btn.safe.active {
+      border-color: #2db65c;
+      color: #61db88;
+      background: rgba(45, 182, 92, .15);
     }
 
-    .add.selected {
-      background: #2fa844;
-      border-color: #2fa844;
-      color: white;
+    .choice-btn.maybe.active {
+      border-color: #d69b11;
+      color: #f6c448;
+      background: rgba(214, 155, 17, .15);
     }
 
-    .bottom {
+    .choice-btn.remove {
+      color: #ff8181;
+    }
+
+    .group {
+      margin-top: 16px;
+    }
+
+    .group-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .group-title.green {
+      color: var(--green);
+    }
+
+    .group-title.yellow {
+      color: var(--yellow);
+    }
+
+    .empty {
+      padding: 20px 10px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed #294660;
+      border-radius: 14px;
+    }
+
+    .location-card {
+      background: rgba(14, 36, 61, .95);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 15px;
+      padding: 11px;
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .location-line {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .location-highlight {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .bottom-nav {
       position: fixed;
       left: 0;
       right: 0;
       bottom: 0;
-      background: white;
-      border-top: 1px solid #ddd;
+      z-index: 30;
+      background: rgba(5, 20, 36, .96);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255,255,255,.08);
       display: flex;
       justify-content: space-around;
-      padding: 10px 4px 20px;
+      padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
     }
 
-    .nav {
+    .nav-btn {
+      flex: 1;
       border: 0;
-      background: none;
-      color: #66717e;
-      font-size: 13px;
-      text-align: center;
+      background: transparent;
+      color: #8e9baa;
+      font-size: 11px;
+      padding: 3px 2px;
     }
 
-    .nav.active {
-      color: #1262c4;
-      font-weight: 700;
+    .nav-btn.active {
+      color: var(--blue);
     }
 
     .nav-icon {
       display: block;
-      font-size: 23px;
-      margin-bottom: 3px;
+      font-size: 20px;
+      margin-bottom: 2px;
     }
 
-    @media (max-width: 480px) {
-      .selection {
-        align-items: stretch;
-        flex-direction: column;
+    @media (max-width: 430px) {
+      .logo {
+        font-size: 28px;
       }
 
-      .show-selection {
-        width: 100%;
+      .summary {
+        grid-template-columns: 1fr 1fr;
       }
 
-      .cap {
-        grid-template-columns: 56px 62px 1fr 48px;
-        gap: 8px;
+      .cap-card {
+        grid-template-columns: 58px 1fr auto;
       }
 
-      .cap-image {
-        width: 56px;
-        height: 56px;
+      .cap-img {
+        width: 58px;
+        height: 58px;
       }
 
-      .brewery {
-        font-size: 16px;
+      .cap-name {
+        font-size: 17px;
+      }
+
+      .select-btn {
+        min-width: 66px;
+        padding: 7px 9px;
       }
     }
   </style>
@@ -218,64 +470,133 @@
 
 <body>
 
-<header>
-  <div class="logo">Cap<span>Trade</span></div>
-</header>
+<div class="app">
 
-<main>
-
-  <div class="help">
-    <strong>ⓘ So funktioniert's:</strong>
-    Tippe auf einen Kronkorken, um ihn für den Tausch auszuwählen.
-    Deine Auswahl kannst du später bearbeiten.
-  </div>
-
-  <div class="selection">
-    <div>
-      <div class="selection-number">
-        <span id="count">0</span> Kronkorken ausgewählt
-      </div>
-      <small>Deine Auswahl kannst du anschließend sortieren.</small>
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="logo">Cap<span>Trade</span></div>
+      <div class="version">V0.2</div>
     </div>
+  </header>
 
-    <button class="show-selection">
-      Auswahl ansehen
-    </button>
-  </div>
+  <main class="content">
 
-  <input
-    id="search"
-    class="search"
-    type="search"
-    placeholder="🔍 Nach Nummer oder Brauerei suchen..."
-  >
+    <section id="home" class="page active">
+      <div class="intro">
+        <strong>So funktioniert's:</strong>
+        Tippe auf „Auswählen“, wenn dich ein Kronkorken interessiert.
+        Deine Auswahl kannst du anschließend in Ruhe bearbeiten.
+      </div>
 
-  <div class="headline">
-    <h2>Alle Kronkorken</h2>
-    <span>Nach Nummer ↓</span>
-  </div>
+      <div class="summary">
+        <div class="summary-card">
+          <div class="summary-label">Alle Kronkorken</div>
+          <div class="summary-value" id="totalCaps">0</div>
+        </div>
 
-  <div id="caps"></div>
+        <div class="summary-card">
+          <div class="summary-label">Ausgewählt</div>
+          <div class="summary-value green" id="selectedCountHome">0</div>
+        </div>
+      </div>
 
-</main>
+      <div class="search-row">
+        <input
+          id="searchInput"
+          class="search"
+          type="search"
+          placeholder="Nach Nummer oder Brauerei suchen..."
+        >
+        <button class="icon-btn">⌕</button>
+      </div>
 
-<nav class="bottom">
-  <button class="nav active">
+      <div class="toolbar">
+        <div class="toolbar-title">Alle Kronkorken</div>
+
+        <select id="sortSelect" class="sort">
+          <option value="number">Nummer</option>
+          <option value="brewery">Brauerei</option>
+        </select>
+      </div>
+
+      <div id="homeList" class="cap-list"></div>
+    </section>
+
+    <section id="selection" class="page">
+      <div class="intro">
+        <strong>Tausch-Auswahl:</strong>
+        Entscheide jetzt, welche Kronkorken du sicher möchtest und welche vielleicht.
+      </div>
+
+      <div class="selection-header">
+        <div class="selection-count">
+          <span id="selectedCountSelection">0</span> ausgewählt
+        </div>
+        <button id="clearSelectionBtn" class="clear-btn">Auswahl leeren</button>
+      </div>
+
+      <div id="selectionList"></div>
+    </section>
+
+    <section id="overview" class="page">
+      <div class="intro">
+        <strong>Übersicht:</strong>
+        Grün sind deine sicheren Wünsche, Gelb die Kronkorken, bei denen du noch überlegst.
+      </div>
+
+      <div class="summary">
+        <div class="summary-card">
+          <div class="summary-label">Auf jeden Fall</div>
+          <div class="summary-value green" id="safeCount">0</div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">Vielleicht</div>
+          <div class="summary-value yellow" id="maybeCount">0</div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title green">Auf jeden Fall</div>
+        <div id="safeList"></div>
+      </div>
+
+      <div class="group">
+        <div class="group-title yellow">Vielleicht</div>
+        <div id="maybeList"></div>
+      </div>
+    </section>
+
+    <section id="find" class="page">
+      <div class="intro">
+        <strong>Heraussuchen:</strong>
+        Hier siehst du, wo die ausgewählten Kronkorken tatsächlich liegen.
+        Diese Angaben braucht nur derjenige, der die Kronkorken heraussucht.
+      </div>
+
+      <div id="findList"></div>
+    </section>
+
+  </main>
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav-btn active" data-page="home">
     <span class="nav-icon">⌂</span>
-    Startseite
+    Start
   </button>
 
-  <button class="nav">
+  <button class="nav-btn" data-page="selection">
     <span class="nav-icon">✓</span>
-    Tausch-Auswahl
+    Auswahl
   </button>
 
-  <button class="nav">
+  <button class="nav-btn" data-page="overview">
     <span class="nav-icon">◉</span>
     Übersicht
   </button>
 
-  <button class="nav">
+  <button class="nav-btn" data-page="find">
     <span class="nav-icon">▣</span>
     Heraussuchen
   </button>
@@ -283,74 +604,348 @@
 
 <script>
   const caps = [
-    { id: 123, brewery: "Paulaner" },
-    { id: 124, brewery: "Krombacher" },
-    { id: 125, brewery: "Jever" },
-    { id: 126, brewery: "Stiegl" },
-    { id: 127, brewery: "Guinness" },
-    { id: 128, brewery: "Veltins" }
+    {
+      id: 1,
+      brewery: "Paulaner",
+      image: "🍺",
+      storage: "TESTbrett A",
+      row: 1,
+      position: 1
+    },
+    {
+      id: 2,
+      brewery: "Krombacher",
+      image: "🍺",
+      storage: "TESTbrett A",
+      row: 1,
+      position: 2
+    },
+    {
+      id: 3,
+      brewery: "Erdinger",
+      image: "🍺",
+      storage: "TESTbrett A",
+      row: 1,
+      position: 3
+    },
+    {
+      id: 4,
+      brewery: "Veltins",
+      image: "🍺",
+      storage: "TESTbrett A",
+      row: 1,
+      position: 4
+    },
+    {
+      id: 5,
+      brewery: "Hasseröder",
+      image: "🍺",
+      storage: "TESTbrett A",
+      row: 1,
+      position: 5
+    },
+    {
+      id: 6,
+      brewery: "Guinness",
+      image: "🍺",
+      storage: "CD 1",
+      row: 1,
+      position: 1
+    },
+    {
+      id: 7,
+      brewery: "Beck's",
+      image: "🍺",
+      storage: "A4-Blatt 1",
+      row: 1,
+      position: 2
+    }
   ];
 
-  const selected = new Set();
+  let trade = JSON.parse(localStorage.getItem("captradeSelection")) || {};
 
-  function formatNumber(number) {
-    return String(number).padStart(5, "0");
+  function saveTrade() {
+    localStorage.setItem("captradeSelection", JSON.stringify(trade));
   }
 
-  function render() {
-    const container = document.getElementById("caps");
-    const search = document
-      .getElementById("search")
-      .value
-      .toLowerCase()
-      .trim();
+  function formatNumber(id) {
+    return "#" + id;
+  }
+
+  function getSelectedIds() {
+    return Object.keys(trade).map(Number);
+  }
+
+  function renderHome() {
+    const list = document.getElementById("homeList");
+    const query = document.getElementById("searchInput").value.toLowerCase().trim();
+    const sort = document.getElementById("sortSelect").value;
+
+    let filtered = [...caps].filter(cap =>
+      cap.brewery.toLowerCase().includes(query) ||
+      String(cap.id).includes(query)
+    );
+
+    if (sort === "brewery") {
+      filtered.sort((a, b) => a.brewery.localeCompare(b.brewery));
+    } else {
+      filtered.sort((a, b) => a.id - b.id);
+    }
+
+    list.innerHTML = "";
+
+    filtered.forEach(cap => {
+      const selected = trade[cap.id] !== undefined;
+
+      const card = document.createElement("div");
+      card.className = "cap-card";
+
+      card.innerHTML = `
+        <div class="cap-img">${cap.image}</div>
+
+        <div class="cap-info">
+          <div class="cap-number">${formatNumber(cap.id)}</div>
+          <div class="cap-name">${cap.brewery}</div>
+          <div class="cap-sub">Verfügbar</div>
+        </div>
+
+        <button class="select-btn ${selected ? "selected" : ""}">
+          ${selected ? "✓ Dabei" : "Auswählen"}
+        </button>
+      `;
+
+      card.querySelector(".select-btn").addEventListener("click", () => {
+        if (trade[cap.id] !== undefined) {
+          delete trade[cap.id];
+        } else {
+          trade[cap.id] = "unrated";
+        }
+
+        saveTrade();
+        renderAll();
+      });
+
+      list.appendChild(card);
+    });
+
+    document.getElementById("totalCaps").textContent = caps.length;
+    document.getElementById("selectedCountHome").textContent = getSelectedIds().length;
+  }
+
+  function renderSelection() {
+    const container = document.getElementById("selectionList");
+    const selectedIds = getSelectedIds();
+
+    document.getElementById("selectedCountSelection").textContent = selectedIds.length;
+
+    if (selectedIds.length === 0) {
+      container.innerHTML = `
+        <div class="empty">
+          Noch keine Kronkorken ausgewählt.
+        </div>
+      `;
+      return;
+    }
 
     container.innerHTML = "";
 
-    caps
-      .filter(cap =>
-        cap.brewery.toLowerCase().includes(search) ||
-        formatNumber(cap.id).includes(search)
-      )
-      .forEach(cap => {
+    selectedIds.forEach(id => {
+      const cap = caps.find(c => c.id === id);
+      if (!cap) return;
 
-        const row = document.createElement("div");
-        row.className = "cap";
+      const status = trade[id];
 
-        row.innerHTML = `
-          <div class="number">${formatNumber(cap.id)}</div>
+      const card = document.createElement("div");
+      card.className = "choice-card";
 
-          <div class="cap-image">🍺</div>
+      card.innerHTML = `
+        <div class="cap-img">${cap.image}</div>
 
-          <div class="brewery">${cap.brewery}</div>
+        <div>
+          <div class="cap-number">${formatNumber(cap.id)}</div>
+          <div class="cap-name">${cap.brewery}</div>
 
-          <button
-            class="add ${selected.has(cap.id) ? "selected" : ""}"
-            aria-label="Kronkorken auswählen"
-          >
-            ${selected.has(cap.id) ? "✓" : "+"}
-          </button>
-        `;
+          <div class="choice-actions">
+            <button class="choice-btn safe ${status === "safe" ? "active" : ""}">
+              ✓ Sicher
+            </button>
 
-        row.querySelector(".add").addEventListener("click", () => {
-          if (selected.has(cap.id)) {
-            selected.delete(cap.id);
-          } else {
-            selected.add(cap.id);
-          }
+            <button class="choice-btn maybe ${status === "maybe" ? "active" : ""}">
+              ? Vielleicht
+            </button>
 
-          render();
-        });
+            <button class="choice-btn remove">
+              × Raus
+            </button>
+          </div>
+        </div>
+      `;
 
-        container.appendChild(row);
+      card.querySelector(".safe").addEventListener("click", () => {
+        trade[id] = "safe";
+        saveTrade();
+        renderAll();
       });
 
-    document.getElementById("count").textContent = selected.size;
+      card.querySelector(".maybe").addEventListener("click", () => {
+        trade[id] = "maybe";
+        saveTrade();
+        renderAll();
+      });
+
+      card.querySelector(".remove").addEventListener("click", () => {
+        delete trade[id];
+        saveTrade();
+        renderAll();
+      });
+
+      container.appendChild(card);
+    });
   }
 
-  document.getElementById("search").addEventListener("input", render);
+  function renderOverview() {
+    const safeIds = getSelectedIds().filter(id => trade[id] === "safe");
+    const maybeIds = getSelectedIds().filter(id => trade[id] === "maybe");
 
-  render();
+    document.getElementById("safeCount").textContent = safeIds.length;
+    document.getElementById("maybeCount").textContent = maybeIds.length;
+
+    renderOverviewGroup("safeList", safeIds);
+    renderOverviewGroup("maybeList", maybeIds);
+  }
+
+  function renderOverviewGroup(targetId, ids) {
+    const target = document.getElementById(targetId);
+
+    if (ids.length === 0) {
+      target.innerHTML = `<div class="empty">Keine Kronkorken</div>`;
+      return;
+    }
+
+    target.innerHTML = "";
+
+    ids.forEach(id => {
+      const cap = caps.find(c => c.id === id);
+      if (!cap) return;
+
+      const card = document.createElement("div");
+      card.className = "cap-card";
+
+      card.innerHTML = `
+        <div class="cap-img">${cap.image}</div>
+
+        <div class="cap-info">
+          <div class="cap-number">${formatNumber(cap.id)}</div>
+          <div class="cap-name">${cap.brewery}</div>
+        </div>
+
+        <div></div>
+      `;
+
+      target.appendChild(card);
+    });
+  }
+
+  function renderFind() {
+    const target = document.getElementById("findList");
+
+    const finalIds = getSelectedIds().filter(
+      id => trade[id] === "safe" || trade[id] === "maybe"
+    );
+
+    if (finalIds.length === 0) {
+      target.innerHTML = `
+        <div class="empty">
+          Noch keine Kronkorken zum Heraussuchen vorhanden.
+        </div>
+      `;
+      return;
+    }
+
+    target.innerHTML = "";
+
+    finalIds.forEach(id => {
+      const cap = caps.find(c => c.id === id);
+      if (!cap) return;
+
+      const statusText = trade[id] === "safe"
+        ? "Auf jeden Fall"
+        : "Vielleicht";
+
+      const card = document.createElement("div");
+      card.className = "location-card";
+
+      card.innerHTML = `
+        <div class="cap-img">${cap.image}</div>
+
+        <div>
+          <div class="cap-number">${formatNumber(cap.id)}</div>
+          <div class="cap-name">${cap.brewery}</div>
+
+          <div class="location-line">
+            Status:
+            <span class="location-highlight">${statusText}</span>
+          </div>
+
+          <div class="location-line">
+            Lagerort:
+            <span class="location-highlight">
+              ${cap.storage} · Reihe ${cap.row} · Position ${cap.position}
+            </span>
+          </div>
+        </div>
+      `;
+
+      target.appendChild(card);
+    });
+  }
+
+  function renderAll() {
+    renderHome();
+    renderSelection();
+    renderOverview();
+    renderFind();
+  }
+
+  function switchPage(pageId) {
+    document.querySelectorAll(".page").forEach(page => {
+      page.classList.remove("active");
+    });
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    document.getElementById(pageId).classList.add("active");
+
+    document
+      .querySelector(`.nav-btn[data-page="${pageId}"]`)
+      .classList.add("active");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      switchPage(btn.dataset.page);
+    });
+  });
+
+  document.getElementById("searchInput").addEventListener("input", renderHome);
+  document.getElementById("sortSelect").addEventListener("change", renderHome);
+
+  document.getElementById("clearSelectionBtn").addEventListener("click", () => {
+    if (confirm("Möchtest du die komplette Tauschauswahl leeren?")) {
+      trade = {};
+      saveTrade();
+      renderAll();
+    }
+  });
+
+  renderAll();
 </script>
 
 </body>
