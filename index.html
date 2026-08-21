@@ -19,6 +19,7 @@
   --red:#ef5757;
 }
 *{box-sizing:border-box}
+
 body{
   margin:0;
   min-height:100vh;
@@ -26,13 +27,16 @@ body{
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
+
 button,input,select{font:inherit}
 button{cursor:pointer}
+
 .app{
   max-width:720px;
   margin:auto;
   padding-bottom:100px;
 }
+
 .topbar{
   position:sticky;
   top:0;
@@ -42,16 +46,20 @@ button{cursor:pointer}
   backdrop-filter:blur(15px);
   border-bottom:1px solid rgba(255,255,255,.06);
 }
+
 .toprow{
   display:flex;
   justify-content:space-between;
   align-items:center;
 }
+
 .logo{
   font-size:30px;
   font-weight:850;
 }
+
 .logo span{color:#ed3131}
+
 .version{
   font-size:13px;
   font-weight:700;
@@ -60,6 +68,7 @@ button{cursor:pointer}
   border-radius:9px;
   padding:5px 8px;
 }
+
 main{padding:14px}
 .page{display:none}
 .page.active{display:block}
@@ -74,6 +83,7 @@ main{padding:14px}
   font-size:14px;
   line-height:1.45;
 }
+
 .intro strong{color:white}
 
 .summary{
@@ -82,21 +92,25 @@ main{padding:14px}
   gap:9px;
   margin-bottom:14px;
 }
+
 .summary-card{
   background:rgba(17,42,70,.9);
   border:1px solid rgba(255,255,255,.06);
   border-radius:16px;
   padding:13px 14px;
 }
+
 .summary-label{
   color:var(--muted);
   font-size:13px;
   margin-bottom:5px;
 }
+
 .summary-value{
   font-size:24px;
   font-weight:850;
 }
+
 .green{color:var(--green)}
 .yellow{color:var(--yellow)}
 
@@ -106,6 +120,7 @@ main{padding:14px}
   gap:8px;
   margin-bottom:12px;
 }
+
 .search,.field input,.field select{
   width:100%;
   border:1px solid var(--line);
@@ -115,13 +130,15 @@ main{padding:14px}
   padding:12px;
   outline:none;
 }
+
 .search::placeholder{color:#7e8f9f}
+
 .search-btn{
   border:1px solid var(--line);
   background:#0b2037;
   color:white;
   border-radius:12px;
-  font-size:31px;
+  font-size:32px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -134,10 +151,12 @@ main{padding:14px}
   margin:6px 0 10px;
   gap:10px;
 }
+
 .toolbar-title{
   font-size:21px;
   font-weight:850;
 }
+
 .sort{
   border:1px solid var(--line);
   background:#0c233c;
@@ -146,7 +165,12 @@ main{padding:14px}
   padding:9px;
 }
 
-.cap-list{display:flex;flex-direction:column;gap:8px}
+.cap-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
 .cap-card{
   display:grid;
   grid-template-columns:62px 1fr auto;
@@ -157,6 +181,7 @@ main{padding:14px}
   border-radius:15px;
   padding:10px;
 }
+
 .cap-img{
   width:62px;
   height:62px;
@@ -168,26 +193,25 @@ main{padding:14px}
   font-size:30px;
   overflow:hidden;
 }
-.cap-img img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+
 .cap-number{
   font-size:14px;
   font-weight:800;
   color:#d5deea;
 }
+
 .cap-name{
   font-size:18px;
   font-weight:750;
   margin-top:2px;
 }
+
 .cap-sub{
   font-size:13px;
   color:var(--muted);
   margin-top:3px;
 }
+
 .select-btn{
   border:1px solid #31526f;
   background:transparent;
@@ -196,6 +220,7 @@ main{padding:14px}
   padding:8px 10px;
   font-weight:700;
 }
+
 .select-btn.selected{
   color:#67df8d;
   border-color:#26864b;
@@ -212,8 +237,17 @@ main{padding:14px}
   justify-content:space-between;
   align-items:center;
 }
-.selection-count{font-size:18px;font-weight:800}
-.clear-btn{border:0;background:none;color:#ff7474}
+
+.selection-count{
+  font-size:18px;
+  font-weight:800;
+}
+
+.clear-btn{
+  border:0;
+  background:none;
+  color:#ff7474;
+}
 
 .choice-card,.location-card{
   display:grid;
@@ -225,15 +259,20 @@ main{padding:14px}
   padding:10px;
   margin-bottom:8px;
 }
-.choice-card .cap-img,.location-card .cap-img{
-  width:58px;height:58px
+
+.choice-card .cap-img,
+.location-card .cap-img{
+  width:58px;
+  height:58px;
 }
+
 .choice-actions{
   display:flex;
   gap:6px;
   flex-wrap:wrap;
   margin-top:8px;
 }
+
 .choice-btn{
   border:1px solid #36526d;
   background:#0c223a;
@@ -243,24 +282,29 @@ main{padding:14px}
   font-size:13px;
   font-weight:700;
 }
+
 .choice-btn.safe.active{
   border-color:#2db65c;
   color:#61db88;
   background:rgba(45,182,92,.15);
 }
+
 .choice-btn.maybe.active{
   border-color:#d69b11;
   color:#f6c448;
   background:rgba(214,155,17,.15);
 }
+
 .choice-btn.remove{color:#ff8181}
 
 .group{margin-top:16px}
+
 .group-title{
   font-size:17px;
   font-weight:800;
   margin-bottom:8px;
 }
+
 .empty{
   padding:20px 10px;
   text-align:center;
@@ -268,11 +312,13 @@ main{padding:14px}
   border:1px dashed #294660;
   border-radius:14px;
 }
+
 .location-line{
   color:var(--muted);
   font-size:13px;
   margin-top:4px;
 }
+
 .location-highlight{
   color:white;
   font-weight:700;
@@ -285,12 +331,15 @@ main{padding:14px}
   padding:14px;
   margin-bottom:12px;
 }
+
 .manage-title{
   font-size:18px;
   font-weight:850;
   margin-bottom:10px;
 }
+
 .field{margin-bottom:10px}
+
 .field label{
   display:block;
   color:var(--muted);
@@ -304,29 +353,17 @@ main{padding:14px}
   padding:11px 13px;
   font-weight:800;
 }
+
 .primary-btn{
   border:0;
   background:var(--blue);
   color:white;
 }
+
 .secondary-btn{
   border:1px solid #36526d;
   background:#0c223a;
   color:white;
-}
-.detect-btn{
-  width:100%;
-  margin-top:10px;
-  padding:12px;
-  border:0;
-  background:#286fda;
-  color:white;
-  border-radius:11px;
-  font-weight:800;
-}
-.detect-btn:disabled{
-  opacity:.45;
-  cursor:default;
 }
 
 .storage-item{
@@ -339,7 +376,9 @@ main{padding:14px}
   padding:11px 12px;
   margin-bottom:8px;
 }
+
 .storage-name{font-weight:800}
+
 .storage-type{
   color:var(--muted);
   font-size:13px;
@@ -355,6 +394,7 @@ main{padding:14px}
   text-align:center;
   color:var(--muted);
 }
+
 .photo-icon{
   font-size:30px;
   margin-bottom:5px;
@@ -364,65 +404,53 @@ main{padding:14px}
   display:none;
   margin-top:12px;
 }
+
 .preview.show{display:block}
 
 .canvas-wrap{
-  position:relative;
   background:#071625;
   border-radius:14px;
   overflow:hidden;
   border:1px solid var(--line);
 }
-#detectCanvas{
+
+#gridCanvas{
   display:block;
   width:100%;
   height:auto;
 }
 
-.detect-result{
-  display:none;
+.grid-settings{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+
+.grid-info{
   margin-top:10px;
   padding:11px 12px;
   border-radius:12px;
   background:rgba(49,131,255,.11);
   border:1px solid rgba(49,131,255,.3);
 }
-.detect-result.show{display:block}
-.detect-number{
-  font-size:21px;
+
+.grid-count{
+  font-size:20px;
   font-weight:850;
 }
-.detect-sub{
+
+.grid-sub{
   color:var(--muted);
   font-size:13px;
   margin-top:3px;
 }
 
-.slider-wrap{
-  margin-top:12px;
-  background:#0a2037;
-  border-radius:12px;
-  padding:11px 12px;
-}
-.slider-top{
-  display:flex;
-  justify-content:space-between;
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:7px;
-}
-#sensitivity{width:100%}
-
-.cv-status{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:8px;
-  text-align:center;
-}
-
 .bottom-nav{
   position:fixed;
-  left:0;right:0;bottom:0;
+  left:0;
+  right:0;
+  bottom:0;
   z-index:40;
   display:flex;
   background:rgba(5,20,36,.97);
@@ -430,6 +458,7 @@ main{padding:14px}
   border-top:1px solid rgba(255,255,255,.08);
   padding:8px 3px calc(8px + env(safe-area-inset-bottom));
 }
+
 .nav-btn{
   flex:1;
   border:0;
@@ -438,7 +467,9 @@ main{padding:14px}
   font-size:11px;
   padding:3px 1px;
 }
+
 .nav-btn.active{color:var(--blue)}
+
 .nav-icon{
   display:block;
   font-size:20px;
@@ -454,7 +485,7 @@ main{padding:14px}
 <header class="topbar">
   <div class="toprow">
     <div class="logo">Cap<span>Trade</span></div>
-    <div class="version">V0.5</div>
+    <div class="version">V0.6</div>
   </div>
 </header>
 
@@ -499,7 +530,6 @@ main{padding:14px}
 
 </section>
 
-
 <section id="selection" class="page">
 
   <div class="intro">
@@ -521,7 +551,6 @@ main{padding:14px}
   <div id="selectionList"></div>
 
 </section>
-
 
 <section id="overview" class="page">
 
@@ -555,7 +584,6 @@ main{padding:14px}
 
 </section>
 
-
 <section id="find" class="page">
 
   <div class="intro">
@@ -567,13 +595,11 @@ main{padding:14px}
 
 </section>
 
-
 <section id="manage" class="page">
 
   <div class="intro">
     <strong>Verwalten:</strong>
-    Wähle einen Lagerort und fotografiere anschließend
-    das komplette Brett, Blatt oder die CD-Hülle.
+    Wähle einen Lagerort, lade ein Foto hoch und passe das Raster an.
   </div>
 
   <div class="manage-card">
@@ -602,10 +628,9 @@ main{padding:14px}
 
   </div>
 
-
   <div class="manage-card">
 
-    <div class="manage-title">Kronkorken erkennen</div>
+    <div class="manage-title">Foto vorbereiten</div>
 
     <div class="field">
       <label>Lagerort</label>
@@ -615,7 +640,7 @@ main{padding:14px}
     <div class="photo-box">
       <div class="photo-icon">📷</div>
       Möglichst gerade von oben fotografieren.
-      Alle Kronkorken sollten vollständig sichtbar sein.
+      Danach stellst du Reihen und Spalten passend ein.
     </div>
 
     <input id="photoInput" type="file" accept="image/*">
@@ -626,56 +651,48 @@ main{padding:14px}
       Foto auswählen
     </button>
 
-
     <div id="preview" class="preview">
 
       <div class="canvas-wrap">
-        <canvas id="detectCanvas"></canvas>
+        <canvas id="gridCanvas"></canvas>
       </div>
 
-      <div class="slider-wrap">
+      <div class="grid-settings">
 
-        <div class="slider-top">
-          <span>Empfindlichkeit</span>
-          <strong id="sensitivityValue">50</strong>
+        <div class="field">
+          <label>Reihen</label>
+          <input id="rowsInput"
+            type="number"
+            min="1"
+            max="30"
+            value="10">
         </div>
 
-        <input id="sensitivity"
-          type="range"
-          min="20"
-          max="80"
-          value="50">
-
-      </div>
-
-      <button id="detectBtn"
-        class="detect-btn"
-        disabled>
-        Kronkorken erkennen
-      </button>
-
-      <div id="detectResult" class="detect-result">
-
-        <div class="detect-number">
-          <span id="circleCount">0</span>
-          Kronkorken erkannt
-        </div>
-
-        <div class="detect-sub">
-          Prüfe kurz, ob alle Kronkorken markiert wurden.
-          Falls nicht, ändere die Empfindlichkeit und starte erneut.
+        <div class="field">
+          <label>Spalten</label>
+          <input id="colsInput"
+            type="number"
+            min="1"
+            max="30"
+            value="10">
         </div>
 
       </div>
 
-      <div id="cvStatus" class="cv-status">
-        Bilderkennung wird geladen …
+      <div class="grid-info">
+        <div class="grid-count">
+          <span id="positionCount">100</span> Positionen
+        </div>
+
+        <div class="grid-sub">
+          Passe Reihen und Spalten an, bis jede Rasterzelle
+          genau einem Kronkorken entspricht.
+        </div>
       </div>
 
     </div>
 
   </div>
-
 
   <div class="manage-title">Deine Lagerorte</div>
   <div id="storageList"></div>
@@ -684,7 +701,6 @@ main{padding:14px}
 
 </main>
 </div>
-
 
 <nav class="bottom-nav">
 
@@ -715,7 +731,6 @@ main{padding:14px}
 
 </nav>
 
-
 <script>
 
 const caps=[
@@ -733,9 +748,7 @@ let storages=
 JSON.parse(localStorage.getItem("captradeStorages"))||
 [{type:"A3-Brett",name:"TESTbrett A"}];
 
-let cvReady=false;
 let currentImage=null;
-let detectedCircles=[];
 
 function saveTrade(){
 localStorage.setItem("captradeSelection",JSON.stringify(trade));
@@ -752,6 +765,7 @@ return Object.keys(trade).map(Number);
 function renderHome(){
 
 const list=document.getElementById("homeList");
+
 const query=document.getElementById("searchInput")
 .value.toLowerCase().trim();
 
@@ -771,6 +785,7 @@ list.innerHTML="";
 items.forEach(c=>{
 
 const chosen=trade[c.id]!==undefined;
+
 const el=document.createElement("div");
 el.className="cap-card";
 
@@ -794,13 +809,14 @@ renderAll();
 };
 
 list.appendChild(el);
+
 });
 
 document.getElementById("totalCaps").textContent=caps.length;
 document.getElementById("selectedCountHome")
 .textContent=selectedIds().length;
-}
 
+}
 
 function renderSelection(){
 
@@ -852,22 +868,28 @@ ${trade[id]==="maybe"?"active":""}">
 `;
 
 el.querySelector(".safe").onclick=()=>{
-trade[id]="safe";saveTrade();renderAll();
+trade[id]="safe";
+saveTrade();
+renderAll();
 };
 
 el.querySelector(".maybe").onclick=()=>{
-trade[id]="maybe";saveTrade();renderAll();
+trade[id]="maybe";
+saveTrade();
+renderAll();
 };
 
 el.querySelector(".remove").onclick=()=>{
-delete trade[id];saveTrade();renderAll();
+delete trade[id];
+saveTrade();
+renderAll();
 };
 
 box.appendChild(el);
 
 });
-}
 
+}
 
 function renderOverview(){
 
@@ -879,8 +901,8 @@ document.getElementById("maybeCount").textContent=maybe.length;
 
 renderGroup("safeList",safe);
 renderGroup("maybeList",maybe);
-}
 
+}
 
 function renderGroup(id,items){
 
@@ -913,8 +935,8 @@ el.innerHTML=`
 box.appendChild(el);
 
 });
-}
 
+}
 
 function renderFind(){
 
@@ -941,7 +963,9 @@ el.className="location-card";
 
 el.innerHTML=`
 <div class="cap-img">${c.image}</div>
+
 <div>
+
 <div class="cap-number">#${c.id}</div>
 <div class="cap-name">${c.brewery}</div>
 
@@ -965,8 +989,8 @@ ${c.storage} · Reihe ${c.row} · Position ${c.position}
 box.appendChild(el);
 
 });
-}
 
+}
 
 function renderStorages(){
 
@@ -994,11 +1018,12 @@ list.appendChild(el);
 const option=document.createElement("option");
 option.value=s.name;
 option.textContent=s.name+" · "+s.type;
+
 select.appendChild(option);
 
 });
-}
 
+}
 
 function renderAll(){
 renderHome();
@@ -1007,7 +1032,6 @@ renderOverview();
 renderFind();
 renderStorages();
 }
-
 
 document.querySelectorAll(".nav-btn").forEach(btn=>{
 
@@ -1025,14 +1049,13 @@ document.getElementById(btn.dataset.page)
 btn.classList.add("active");
 
 window.scrollTo({top:0,behavior:"smooth"});
+
 };
 
 });
 
-
 document.getElementById("searchInput").oninput=renderHome;
 document.getElementById("sortSelect").onchange=renderHome;
-
 
 document.getElementById("clearSelectionBtn").onclick=()=>{
 
@@ -1043,7 +1066,6 @@ renderAll();
 }
 
 };
-
 
 document.getElementById("addStorageBtn").onclick=()=>{
 
@@ -1063,7 +1085,6 @@ renderStorages();
 
 };
 
-
 const photoInput=document.getElementById("photoInput");
 
 document.getElementById("choosePhotoBtn").onclick=()=>{
@@ -1076,7 +1097,6 @@ return;
 photoInput.click();
 
 };
-
 
 photoInput.onchange=e=>{
 
@@ -1093,17 +1113,10 @@ img.onload=()=>{
 
 currentImage=img;
 
-drawOriginalImage();
-
 document.getElementById("preview")
 .classList.add("show");
 
-document.getElementById("detectResult")
-.classList.remove("show");
-
-detectedCircles=[];
-
-document.getElementById("detectBtn").disabled=!cvReady;
+drawGrid();
 
 };
 
@@ -1115,12 +1128,24 @@ reader.readAsDataURL(file);
 
 };
 
+document.getElementById("rowsInput").oninput=drawGrid;
+document.getElementById("colsInput").oninput=drawGrid;
 
-function drawOriginalImage(){
+function drawGrid(){
 
 if(!currentImage)return;
 
-const canvas=document.getElementById("detectCanvas");
+const rows=Math.max(
+1,
+Number(document.getElementById("rowsInput").value)||1
+);
+
+const cols=Math.max(
+1,
+Number(document.getElementById("colsInput").value)||1
+);
+
+const canvas=document.getElementById("gridCanvas");
 const ctx=canvas.getContext("2d");
 
 const maxWidth=1000;
@@ -1131,164 +1156,54 @@ canvas.height=Math.round(currentImage.height*scale);
 
 ctx.drawImage(
 currentImage,
-0,0,
+0,
+0,
 canvas.width,
 canvas.height
 );
 
-}
+const cellW=canvas.width/cols;
+const cellH=canvas.height/rows;
 
-
-document.getElementById("sensitivity").oninput=e=>{
-document.getElementById("sensitivityValue")
-.textContent=e.target.value;
-};
-
-
-document.getElementById("detectBtn").onclick=detectCaps;
-
-
-function detectCaps(){
-
-if(!cvReady||!currentImage){
-alert("Die Bilderkennung ist noch nicht bereit.");
-return;
-}
-
-drawOriginalImage();
-
-const canvas=document.getElementById("detectCanvas");
-
-let src=cv.imread(canvas);
-let gray=new cv.Mat();
-
-cv.cvtColor(src,gray,cv.COLOR_RGBA2GRAY);
-cv.medianBlur(gray,gray,7);
-
-let circles=new cv.Mat();
-
-const sensitivity=
-Number(document.getElementById("sensitivity").value);
-
-const minSide=Math.min(src.cols,src.rows);
-
-const minRadius=Math.max(
-8,
-Math.round(minSide*0.012)
-);
-
-const maxRadius=Math.round(
-minSide*0.11
-);
-
-const minDistance=Math.max(
-20,
-Math.round(minSide*0.045)
-);
-
-const param2=
-Math.round(48-(sensitivity*0.35));
-
-cv.HoughCircles(
-gray,
-circles,
-cv.HOUGH_GRADIENT,
-1.2,
-minDistance,
-100,
-param2,
-minRadius,
-maxRadius
-);
-
-detectedCircles=[];
-
-for(let i=0;i<circles.cols;i++){
-
-const x=circles.data32F[i*3];
-const y=circles.data32F[i*3+1];
-const r=circles.data32F[i*3+2];
-
-detectedCircles.push({x,y,r});
-
-}
-
-src.delete();
-gray.delete();
-circles.delete();
-
-drawDetection();
-
-document.getElementById("circleCount")
-.textContent=detectedCircles.length;
-
-document.getElementById("detectResult")
-.classList.add("show");
-
-}
-
-
-function drawDetection(){
-
-drawOriginalImage();
-
-const canvas=document.getElementById("detectCanvas");
-const ctx=canvas.getContext("2d");
-
-ctx.lineWidth=Math.max(3,canvas.width/300);
 ctx.strokeStyle="#36c96b";
+ctx.lineWidth=Math.max(2,canvas.width/500);
+
+ctx.font=`bold ${Math.max(14,canvas.width/55)}px sans-serif`;
 ctx.fillStyle="#36c96b";
-ctx.font=`bold ${Math.max(16,canvas.width/45)}px sans-serif`;
 
-detectedCircles.forEach((circle,index)=>{
+for(let r=0;r<rows;r++){
 
-ctx.beginPath();
-ctx.arc(
-circle.x,
-circle.y,
-circle.r,
-0,
-Math.PI*2
+for(let c=0;c<cols;c++){
+
+const x=c*cellW;
+const y=r*cellH;
+
+ctx.strokeRect(
+x,
+y,
+cellW,
+cellH
 );
-ctx.stroke();
+
+const number=(r*cols)+c+1;
 
 ctx.fillText(
-String(index+1),
-circle.x-circle.r*.25,
-circle.y+circle.r*.15
+String(number),
+x+6,
+y+Math.max(18,cellH*.18)
 );
 
-});
-
-}
-
-
-function opencvReady(){
-
-cvReady=true;
-
-document.getElementById("cvStatus")
-.textContent="✓ Bilderkennung bereit";
-
-if(currentImage){
-document.getElementById("detectBtn").disabled=false;
 }
 
 }
 
+document.getElementById("positionCount")
+.textContent=rows*cols;
+
+}
 
 renderAll();
 
-</script>
-
-
-<script async
-src="https://docs.opencv.org/4.x/opencv.js"
-onload="
-cv.onRuntimeInitialized=()=>{
-opencvReady();
-};
-">
 </script>
 
 </body>
