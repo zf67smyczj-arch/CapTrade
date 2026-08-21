@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#06284a">
+  <title>CapTrade</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fa;
+      color: #10243e;
+    }
+
+    header {
+      background: #06284a;
+      color: white;
+      padding: 18px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .logo span {
+      color: #e5242a;
+    }
+
+    main {
+      max-width: 700px;
+      margin: auto;
+      padding: 16px 14px 110px;
+    }
+
+    .help {
+      background: white;
+      border-radius: 16px;
+      padding: 15px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    }
+
+    .help strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .selection {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .selection-number {
+      font-size: 20px;
+      font-weight: 750;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .show-selection {
+      border: 0;
+      background: #1262c4;
+      color: white;
+      border-radius: 12px;
+      padding: 13px 15px;
+      font-weight: 700;
+    }
+
+    .search {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ccd4dd;
+      border-radius: 13px;
+      background: white;
+      font-size: 17px;
+      margin-bottom: 14px;
+    }
+
+    .headline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 8px 2px 10px;
+    }
+
+    .headline h2 {
+      font-size: 20px;
+      margin: 0;
+    }
+
+    .cap {
+      background: white;
+      border-radius: 15px;
+      padding: 10px 12px;
+      margin-bottom: 9px;
+      display: grid;
+      grid-template-columns: 65px 72px 1fr 52px;
+      gap: 10px;
+      align-items: center;
+      box-shadow: 0 1px 5px rgba(0,0,0,.06);
+    }
+
+    .number {
+      font-weight: 800;
+      font-size: 17px;
+    }
+
+    .cap-image {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      background: #e8edf2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+    }
+
+    .brewery {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .add {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px solid #12365c;
+      background: white;
+      color: #12365c;
+      font-size: 29px;
+      line-height: 1;
+    }
+
+    .add.selected {
+      background: #2fa844;
+      border-color: #2fa844;
+      color: white;
+    }
+
+    .bottom {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: white;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 4px 20px;
+    }
+
+    .nav {
+      border: 0;
+      background: none;
+      color: #66717e;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .nav.active {
+      color: #1262c4;
+      font-weight: 700;
+    }
+
+    .nav-icon {
+      display: block;
+      font-size: 23px;
+      margin-bottom: 3px;
+    }
+
+    @media (max-width: 480px) {
+      .selection {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .show-selection {
+        width: 100%;
+      }
+
+      .cap {
+        grid-template-columns: 56px 62px 1fr 48px;
+        gap: 8px;
+      }
+
+      .cap-image {
+        width: 56px;
+        height: 56px;
+      }
+
+      .brewery {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Cap<span>Trade</span></div>
+</header>
+
+<main>
+
+  <div class="help">
+    <strong>ⓘ So funktioniert's:</strong>
+    Tippe auf einen Kronkorken, um ihn für den Tausch auszuwählen.
+    Deine Auswahl kannst du später bearbeiten.
+  </div>
+
+  <div class="selection">
+    <div>
+      <div class="selection-number">
+        <span id="count">0</span> Kronkorken ausgewählt
+      </div>
+      <small>Deine Auswahl kannst du anschließend sortieren.</small>
+    </div>
+
+    <button class="show-selection">
+      Auswahl ansehen
+    </button>
+  </div>
+
+  <input
+    id="search"
+    class="search"
+    type="search"
+    placeholder="🔍 Nach Nummer oder Brauerei suchen..."
+  >
+
+  <div class="headline">
+    <h2>Alle Kronkorken</h2>
+    <span>Nach Nummer ↓</span>
+  </div>
+
+  <div id="caps"></div>
+
+</main>
+
+<nav class="bottom">
+  <button class="nav active">
+    <span class="nav-icon">⌂</span>
+    Startseite
+  </button>
+
+  <button class="nav">
+    <span class="nav-icon">✓</span>
+    Tausch-Auswahl
+  </button>
+
+  <button class="nav">
+    <span class="nav-icon">◉</span>
+    Übersicht
+  </button>
+
+  <button class="nav">
+    <span class="nav-icon">▣</span>
+    Heraussuchen
+  </button>
+</nav>
+
+<script>
+  const caps = [
+    { id: 123, brewery: "Paulaner" },
+    { id: 124, brewery: "Krombacher" },
+    { id: 125, brewery: "Jever" },
+    { id: 126, brewery: "Stiegl" },
+    { id: 127, brewery: "Guinness" },
+    { id: 128, brewery: "Veltins" }
+  ];
+
+  const selected = new Set();
+
+  function formatNumber(number) {
+    return String(number).padStart(5, "0");
+  }
+
+  function render() {
+    const container = document.getElementById("caps");
+    const search = document
+      .getElementById("search")
+      .value
+      .toLowerCase()
+      .trim();
+
+    container.innerHTML = "";
+
+    caps
+      .filter(cap =>
+        cap.brewery.toLowerCase().includes(search) ||
+        formatNumber(cap.id).includes(search)
+      )
+      .forEach(cap => {
+
+        const row = document.createElement("div");
+        row.className = "cap";
+
+        row.innerHTML = `
+          <div class="number">${formatNumber(cap.id)}</div>
+
+          <div class="cap-image">🍺</div>
+
+          <div class="brewery">${cap.brewery}</div>
+
+          <button
+            class="add ${selected.has(cap.id) ? "selected" : ""}"
+            aria-label="Kronkorken auswählen"
+          >
+            ${selected.has(cap.id) ? "✓" : "+"}
+          </button>
+        `;
+
+        row.querySelector(".add").addEventListener("click", () => {
+          if (selected.has(cap.id)) {
+            selected.delete(cap.id);
+          } else {
+            selected.add(cap.id);
+          }
+
+          render();
+        });
+
+        container.appendChild(row);
+      });
+
+    document.getElementById("count").textContent = selected.size;
+  }
+
+  document.getElementById("search").addEventListener("input", render);
+
+  render();
+</script>
+
+</body>
+</html>
