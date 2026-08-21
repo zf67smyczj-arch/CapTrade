@@ -18,18 +18,28 @@
   --yellow:#f0b429;
   --red:#ef5757;
 }
-*{box-sizing:border-box}
 
-body{
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
   margin:0;
-  min-height:100vh;
-  background:radial-gradient(circle at top,#0d2a4b 0%,#06182c 52%,#04111f 100%);
+  min-height:100%;
+  background:
+    radial-gradient(circle at top,#0d2a4b 0%,#06182c 52%,#04111f 100%);
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
-button,input,select{font:inherit}
-button{cursor:pointer}
+button,input,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
 
 .app{
   max-width:720px;
@@ -58,7 +68,9 @@ button{cursor:pointer}
   font-weight:850;
 }
 
-.logo span{color:#ed3131}
+.logo span{
+  color:#ed3131;
+}
 
 .version{
   font-size:13px;
@@ -69,9 +81,17 @@ button{cursor:pointer}
   padding:5px 8px;
 }
 
-main{padding:14px}
-.page{display:none}
-.page.active{display:block}
+main{
+  padding:14px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
 
 .intro{
   background:rgba(17,42,70,.78);
@@ -84,7 +104,9 @@ main{padding:14px}
   line-height:1.45;
 }
 
-.intro strong{color:white}
+.intro strong{
+  color:white;
+}
 
 .summary{
   display:grid;
@@ -121,7 +143,9 @@ main{padding:14px}
   margin-bottom:12px;
 }
 
-.search,.field input,.field select{
+.search,
+.field input,
+.field select{
   width:100%;
   border:1px solid var(--line);
   background:#0b2037;
@@ -131,7 +155,9 @@ main{padding:14px}
   outline:none;
 }
 
-.search::placeholder{color:#7e8f9f}
+.search::placeholder{
+  color:#7e8f9f;
+}
 
 .search-btn{
   border:1px solid var(--line);
@@ -148,8 +174,8 @@ main{padding:14px}
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin:6px 0 10px;
   gap:10px;
+  margin:6px 0 10px;
 }
 
 .toolbar-title{
@@ -191,7 +217,6 @@ main{padding:14px}
   align-items:center;
   justify-content:center;
   font-size:30px;
-  overflow:hidden;
 }
 
 .cap-number{
@@ -249,7 +274,8 @@ main{padding:14px}
   color:#ff7474;
 }
 
-.choice-card,.location-card{
+.choice-card,
+.location-card{
   display:grid;
   grid-template-columns:58px 1fr;
   gap:10px;
@@ -258,12 +284,6 @@ main{padding:14px}
   border-radius:15px;
   padding:10px;
   margin-bottom:8px;
-}
-
-.choice-card .cap-img,
-.location-card .cap-img{
-  width:58px;
-  height:58px;
 }
 
 .choice-actions{
@@ -295,9 +315,13 @@ main{padding:14px}
   background:rgba(214,155,17,.15);
 }
 
-.choice-btn.remove{color:#ff8181}
+.choice-btn.remove{
+  color:#ff8181;
+}
 
-.group{margin-top:16px}
+.group{
+  margin-top:16px;
+}
 
 .group-title{
   font-size:17px;
@@ -338,7 +362,9 @@ main{padding:14px}
   margin-bottom:10px;
 }
 
-.field{margin-bottom:10px}
+.field{
+  margin-bottom:10px;
+}
 
 .field label{
   display:block;
@@ -347,7 +373,8 @@ main{padding:14px}
   margin-bottom:5px;
 }
 
-.primary-btn,.secondary-btn{
+.primary-btn,
+.secondary-btn{
   width:100%;
   border-radius:11px;
   padding:11px 13px;
@@ -377,7 +404,9 @@ main{padding:14px}
   margin-bottom:8px;
 }
 
-.storage-name{font-weight:800}
+.storage-name{
+  font-weight:800;
+}
 
 .storage-type{
   color:var(--muted);
@@ -385,7 +414,9 @@ main{padding:14px}
   margin-top:2px;
 }
 
-#photoInput{display:none}
+#photoInput{
+  display:none;
+}
 
 .photo-box{
   border:1px dashed #3b5c78;
@@ -405,26 +436,93 @@ main{padding:14px}
   margin-top:12px;
 }
 
-.preview.show{display:block}
-
-.canvas-wrap{
-  background:#071625;
-  border-radius:14px;
-  overflow:hidden;
-  border:1px solid var(--line);
+.preview.show{
+  display:block;
 }
 
-#gridCanvas{
-  display:block;
+.photo-stage{
+  position:relative;
   width:100%;
-  height:auto;
+  overflow:hidden;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#071625;
+  touch-action:none;
+}
+
+#photoPreview{
+  width:100%;
+  display:block;
+  pointer-events:none;
+  user-select:none;
+}
+
+.grid-overlay{
+  position:absolute;
+  left:8%;
+  top:8%;
+  width:84%;
+  height:84%;
+  border:2px solid var(--green);
+  touch-action:none;
+}
+
+.grid-lines{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+.grid-cell{
+  position:absolute;
+  border-right:1px solid rgba(54,201,107,.85);
+  border-bottom:1px solid rgba(54,201,107,.85);
+}
+
+.grid-number{
+  position:absolute;
+  left:4px;
+  top:3px;
+  color:white;
+  background:rgba(0,0,0,.58);
+  border-radius:5px;
+  padding:2px 4px;
+  font-size:10px;
+  font-weight:800;
+}
+
+.drag-label{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  background:rgba(0,0,0,.65);
+  color:white;
+  border-radius:8px;
+  padding:6px 9px;
+  font-size:12px;
+  font-weight:700;
+  pointer-events:none;
+}
+
+.resize-handle{
+  position:absolute;
+  width:26px;
+  height:26px;
+  background:var(--green);
+  border:3px solid white;
+  border-radius:50%;
+  right:-13px;
+  bottom:-13px;
+  z-index:5;
+  touch-action:none;
 }
 
 .grid-settings{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
-  margin-top:12px;
+  margin-top:14px;
 }
 
 .grid-info{
@@ -443,7 +541,12 @@ main{padding:14px}
 .grid-sub{
   color:var(--muted);
   font-size:13px;
-  margin-top:3px;
+  margin-top:4px;
+  line-height:1.4;
+}
+
+.reset-btn{
+  margin-top:10px;
 }
 
 .bottom-nav{
@@ -468,7 +571,9 @@ main{padding:14px}
   padding:3px 1px;
 }
 
-.nav-btn.active{color:var(--blue)}
+.nav-btn.active{
+  color:var(--blue);
+}
 
 .nav-icon{
   display:block;
@@ -485,7 +590,7 @@ main{padding:14px}
 <header class="topbar">
   <div class="toprow">
     <div class="logo">Cap<span>Trade</span></div>
-    <div class="version">V0.6</div>
+    <div class="version">V0.7</div>
   </div>
 </header>
 
@@ -500,6 +605,7 @@ main{padding:14px}
   </div>
 
   <div class="summary">
+
     <div class="summary-card">
       <div class="summary-label">Alle Kronkorken</div>
       <div id="totalCaps" class="summary-value">0</div>
@@ -509,26 +615,38 @@ main{padding:14px}
       <div class="summary-label">Ausgewählt</div>
       <div id="selectedCountHome" class="summary-value green">0</div>
     </div>
+
   </div>
 
   <div class="search-row">
-    <input id="searchInput" class="search"
-      placeholder="Nach Nummer oder Brauerei suchen...">
+
+    <input
+      id="searchInput"
+      class="search"
+      placeholder="Nach Nummer oder Brauerei suchen..."
+    >
+
     <button class="search-btn">⌕</button>
+
   </div>
 
   <div class="toolbar">
-    <div class="toolbar-title">Alle Kronkorken</div>
+
+    <div class="toolbar-title">
+      Alle Kronkorken
+    </div>
 
     <select id="sortSelect" class="sort">
       <option value="number">Nummer</option>
       <option value="brewery">Brauerei</option>
     </select>
+
   </div>
 
   <div id="homeList" class="cap-list"></div>
 
 </section>
+
 
 <section id="selection" class="page">
 
@@ -539,6 +657,7 @@ main{padding:14px}
   </div>
 
   <div class="selection-header">
+
     <div class="selection-count">
       <span id="selectedCountSelection">0</span> ausgewählt
     </div>
@@ -546,11 +665,13 @@ main{padding:14px}
     <button id="clearSelectionBtn" class="clear-btn">
       Auswahl leeren
     </button>
+
   </div>
 
   <div id="selectionList"></div>
 
 </section>
+
 
 <section id="overview" class="page">
 
@@ -561,6 +682,7 @@ main{padding:14px}
   </div>
 
   <div class="summary">
+
     <div class="summary-card">
       <div class="summary-label">Auf jeden Fall</div>
       <div id="safeCount" class="summary-value green">0</div>
@@ -570,6 +692,7 @@ main{padding:14px}
       <div class="summary-label">Vielleicht</div>
       <div id="maybeCount" class="summary-value yellow">0</div>
     </div>
+
   </div>
 
   <div class="group">
@@ -584,42 +707,56 @@ main{padding:14px}
 
 </section>
 
+
 <section id="find" class="page">
 
   <div class="intro">
     <strong>Heraussuchen:</strong>
-    Hier siehst du, wo die ausgewählten Kronkorken tatsächlich liegen.
+    Hier siehst du später genau, wo deine ausgewählten Kronkorken liegen.
   </div>
 
   <div id="findList"></div>
 
 </section>
 
+
 <section id="manage" class="page">
 
   <div class="intro">
     <strong>Verwalten:</strong>
-    Wähle einen Lagerort, lade ein Foto hoch und passe das Raster an.
+    Foto auswählen, Reihen und Spalten einstellen und das grüne Raster
+    direkt mit dem Finger über die Kronkorken schieben.
   </div>
+
 
   <div class="manage-card">
 
-    <div class="manage-title">Neuen Lagerort anlegen</div>
+    <div class="manage-title">
+      Neuen Lagerort anlegen
+    </div>
 
     <div class="field">
+
       <label>Art</label>
+
       <select id="storageType">
         <option>A3-Brett</option>
         <option>A4-Blatt</option>
         <option>CD-Hülle</option>
         <option>Sonstiges</option>
       </select>
+
     </div>
 
     <div class="field">
+
       <label>Name</label>
-      <input id="storageName"
-        placeholder="z. B. Brett A oder CD 4">
+
+      <input
+        id="storageName"
+        placeholder="z. B. Brett A oder CD 4"
+      >
+
     </div>
 
     <button id="addStorageBtn" class="primary-btn">
@@ -628,79 +765,145 @@ main{padding:14px}
 
   </div>
 
+
   <div class="manage-card">
 
-    <div class="manage-title">Foto vorbereiten</div>
+    <div class="manage-title">
+      Foto vorbereiten
+    </div>
 
     <div class="field">
+
       <label>Lagerort</label>
+
       <select id="photoStorage"></select>
+
     </div>
 
     <div class="photo-box">
+
       <div class="photo-icon">📷</div>
-      Möglichst gerade von oben fotografieren.
-      Danach stellst du Reihen und Spalten passend ein.
+
+      Foto möglichst gerade aufnehmen.
+      Danach kannst du das Raster selbst passend ausrichten.
+
     </div>
 
-    <input id="photoInput" type="file" accept="image/*">
+    <input
+      id="photoInput"
+      type="file"
+      accept="image/*"
+    >
 
-    <button id="choosePhotoBtn"
+    <button
+      id="choosePhotoBtn"
       class="secondary-btn"
-      style="margin-top:10px">
+      style="margin-top:10px"
+    >
       Foto auswählen
     </button>
 
+
     <div id="preview" class="preview">
 
-      <div class="canvas-wrap">
-        <canvas id="gridCanvas"></canvas>
+      <div id="photoStage" class="photo-stage">
+
+        <img
+          id="photoPreview"
+          alt="Kronkorkenfoto"
+        >
+
+        <div id="gridOverlay" class="grid-overlay">
+
+          <div id="gridLines" class="grid-lines"></div>
+
+          <div class="drag-label">
+            Verschieben
+          </div>
+
+          <div
+            id="resizeHandle"
+            class="resize-handle"
+          ></div>
+
+        </div>
+
       </div>
+
 
       <div class="grid-settings">
 
         <div class="field">
+
           <label>Reihen</label>
-          <input id="rowsInput"
+
+          <input
+            id="rowsInput"
             type="number"
             min="1"
             max="30"
-            value="10">
+            value="10"
+          >
+
         </div>
 
         <div class="field">
+
           <label>Spalten</label>
-          <input id="colsInput"
+
+          <input
+            id="colsInput"
             type="number"
             min="1"
             max="30"
-            value="10">
+            value="10"
+          >
+
         </div>
 
       </div>
 
+
       <div class="grid-info">
+
         <div class="grid-count">
-          <span id="positionCount">100</span> Positionen
+          <span id="positionCount">100</span>
+          Positionen
         </div>
 
         <div class="grid-sub">
-          Passe Reihen und Spalten an, bis jede Rasterzelle
-          genau einem Kronkorken entspricht.
+          Finger auf das Raster legen und verschieben.
+          Am grünen Punkt unten rechts kannst du das Raster größer
+          oder kleiner ziehen.
         </div>
+
       </div>
+
+
+      <button
+        id="resetGridBtn"
+        class="secondary-btn reset-btn"
+      >
+        Raster zurücksetzen
+      </button>
 
     </div>
 
   </div>
 
-  <div class="manage-title">Deine Lagerorte</div>
+
+  <div class="manage-title">
+    Deine Lagerorte
+  </div>
+
   <div id="storageList"></div>
 
 </section>
 
 </main>
+
 </div>
+
 
 <nav class="bottom-nav">
 
@@ -731,476 +934,1182 @@ main{padding:14px}
 
 </nav>
 
+
 <script>
 
-const caps=[
-{id:1,brewery:"Paulaner",image:"🍺",storage:"TESTbrett A",row:1,position:1},
-{id:2,brewery:"Krombacher",image:"🍺",storage:"TESTbrett A",row:1,position:2},
-{id:3,brewery:"Erdinger",image:"🍺",storage:"TESTbrett A",row:1,position:3},
-{id:4,brewery:"Veltins",image:"🍺",storage:"TESTbrett A",row:1,position:4},
-{id:5,brewery:"Hasseröder",image:"🍺",storage:"TESTbrett A",row:1,position:5}
+const caps = [
+  {
+    id:1,
+    brewery:"Paulaner",
+    image:"🍺",
+    storage:"TESTbrett A",
+    row:1,
+    position:1
+  },
+  {
+    id:2,
+    brewery:"Krombacher",
+    image:"🍺",
+    storage:"TESTbrett A",
+    row:1,
+    position:2
+  },
+  {
+    id:3,
+    brewery:"Erdinger",
+    image:"🍺",
+    storage:"TESTbrett A",
+    row:1,
+    position:3
+  },
+  {
+    id:4,
+    brewery:"Veltins",
+    image:"🍺",
+    storage:"TESTbrett A",
+    row:1,
+    position:4
+  },
+  {
+    id:5,
+    brewery:"Hasseröder",
+    image:"🍺",
+    storage:"TESTbrett A",
+    row:1,
+    position:5
+  }
 ];
 
-let trade=
-JSON.parse(localStorage.getItem("captradeSelection"))||{};
+let trade =
+  JSON.parse(
+    localStorage.getItem("captradeSelection")
+  ) || {};
 
-let storages=
-JSON.parse(localStorage.getItem("captradeStorages"))||
-[{type:"A3-Brett",name:"TESTbrett A"}];
+let storages =
+  JSON.parse(
+    localStorage.getItem("captradeStorages")
+  ) || [
+    {
+      type:"A3-Brett",
+      name:"TESTbrett A"
+    }
+  ];
 
-let currentImage=null;
 
 function saveTrade(){
-localStorage.setItem("captradeSelection",JSON.stringify(trade));
+
+  localStorage.setItem(
+    "captradeSelection",
+    JSON.stringify(trade)
+  );
+
 }
+
 
 function saveStorages(){
-localStorage.setItem("captradeStorages",JSON.stringify(storages));
+
+  localStorage.setItem(
+    "captradeStorages",
+    JSON.stringify(storages)
+  );
+
 }
 
+
 function selectedIds(){
-return Object.keys(trade).map(Number);
+
+  return Object.keys(trade).map(Number);
+
 }
+
 
 function renderHome(){
 
-const list=document.getElementById("homeList");
+  const list =
+    document.getElementById("homeList");
 
-const query=document.getElementById("searchInput")
-.value.toLowerCase().trim();
+  const query =
+    document
+      .getElementById("searchInput")
+      .value
+      .toLowerCase()
+      .trim();
 
-let items=[...caps].filter(c=>
-c.brewery.toLowerCase().includes(query)||
-String(c.id).includes(query)
-);
+  let items =
+    [...caps].filter(c =>
+      c.brewery.toLowerCase().includes(query) ||
+      String(c.id).includes(query)
+    );
 
-if(document.getElementById("sortSelect").value==="brewery"){
-items.sort((a,b)=>a.brewery.localeCompare(b.brewery));
-}else{
-items.sort((a,b)=>a.id-b.id);
+  if(
+    document.getElementById("sortSelect").value
+    === "brewery"
+  ){
+
+    items.sort(
+      (a,b) =>
+        a.brewery.localeCompare(b.brewery)
+    );
+
+  }else{
+
+    items.sort(
+      (a,b) =>
+        a.id-b.id
+    );
+
+  }
+
+  list.innerHTML = "";
+
+  items.forEach(c => {
+
+    const chosen =
+      trade[c.id] !== undefined;
+
+    const el =
+      document.createElement("div");
+
+    el.className = "cap-card";
+
+    el.innerHTML = `
+      <div class="cap-img">
+        ${c.image}
+      </div>
+
+      <div>
+        <div class="cap-number">
+          #${c.id}
+        </div>
+
+        <div class="cap-name">
+          ${c.brewery}
+        </div>
+
+        <div class="cap-sub">
+          Verfügbar
+        </div>
+      </div>
+
+      <button
+        class="select-btn
+        ${chosen ? "selected" : ""}"
+      >
+        ${chosen ? "✓ Dabei" : "Auswählen"}
+      </button>
+    `;
+
+    el
+      .querySelector(".select-btn")
+      .onclick = () => {
+
+        if(chosen){
+
+          delete trade[c.id];
+
+        }else{
+
+          trade[c.id] = "unrated";
+
+        }
+
+        saveTrade();
+        renderAll();
+
+      };
+
+    list.appendChild(el);
+
+  });
+
+
+  document
+    .getElementById("totalCaps")
+    .textContent =
+    caps.length;
+
+
+  document
+    .getElementById("selectedCountHome")
+    .textContent =
+    selectedIds().length;
+
 }
 
-list.innerHTML="";
-
-items.forEach(c=>{
-
-const chosen=trade[c.id]!==undefined;
-
-const el=document.createElement("div");
-el.className="cap-card";
-
-el.innerHTML=`
-<div class="cap-img">${c.image}</div>
-<div>
-<div class="cap-number">#${c.id}</div>
-<div class="cap-name">${c.brewery}</div>
-<div class="cap-sub">Verfügbar</div>
-</div>
-<button class="select-btn ${chosen?"selected":""}">
-${chosen?"✓ Dabei":"Auswählen"}
-</button>
-`;
-
-el.querySelector("button").onclick=()=>{
-if(chosen) delete trade[c.id];
-else trade[c.id]="unrated";
-saveTrade();
-renderAll();
-};
-
-list.appendChild(el);
-
-});
-
-document.getElementById("totalCaps").textContent=caps.length;
-document.getElementById("selectedCountHome")
-.textContent=selectedIds().length;
-
-}
 
 function renderSelection(){
 
-const box=document.getElementById("selectionList");
-const ids=selectedIds();
+  const box =
+    document.getElementById("selectionList");
 
-document.getElementById("selectedCountSelection")
-.textContent=ids.length;
+  const ids =
+    selectedIds();
 
-if(!ids.length){
-box.innerHTML='<div class="empty">Noch keine Kronkorken ausgewählt.</div>';
-return;
+  document
+    .getElementById("selectedCountSelection")
+    .textContent =
+    ids.length;
+
+
+  if(!ids.length){
+
+    box.innerHTML = `
+      <div class="empty">
+        Noch keine Kronkorken ausgewählt.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  box.innerHTML = "";
+
+
+  ids.forEach(id => {
+
+    const c =
+      caps.find(
+        x => x.id === id
+      );
+
+    if(!c) return;
+
+
+    const el =
+      document.createElement("div");
+
+    el.className =
+      "choice-card";
+
+
+    el.innerHTML = `
+      <div class="cap-img">
+        ${c.image}
+      </div>
+
+      <div>
+
+        <div class="cap-number">
+          #${c.id}
+        </div>
+
+        <div class="cap-name">
+          ${c.brewery}
+        </div>
+
+        <div class="choice-actions">
+
+          <button
+            class="choice-btn safe
+            ${trade[id] === "safe"
+              ? "active"
+              : ""}"
+          >
+            ✓ Sicher
+          </button>
+
+          <button
+            class="choice-btn maybe
+            ${trade[id] === "maybe"
+              ? "active"
+              : ""}"
+          >
+            ? Vielleicht
+          </button>
+
+          <button
+            class="choice-btn remove"
+          >
+            × Raus
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+
+    el.querySelector(".safe")
+      .onclick = () => {
+
+        trade[id] = "safe";
+
+        saveTrade();
+        renderAll();
+
+      };
+
+
+    el.querySelector(".maybe")
+      .onclick = () => {
+
+        trade[id] = "maybe";
+
+        saveTrade();
+        renderAll();
+
+      };
+
+
+    el.querySelector(".remove")
+      .onclick = () => {
+
+        delete trade[id];
+
+        saveTrade();
+        renderAll();
+
+      };
+
+
+    box.appendChild(el);
+
+  });
+
 }
 
-box.innerHTML="";
-
-ids.forEach(id=>{
-
-const c=caps.find(x=>x.id===id);
-if(!c)return;
-
-const el=document.createElement("div");
-el.className="choice-card";
-
-el.innerHTML=`
-<div class="cap-img">${c.image}</div>
-<div>
-<div class="cap-number">#${c.id}</div>
-<div class="cap-name">${c.brewery}</div>
-
-<div class="choice-actions">
-
-<button class="choice-btn safe
-${trade[id]==="safe"?"active":""}">
-✓ Sicher
-</button>
-
-<button class="choice-btn maybe
-${trade[id]==="maybe"?"active":""}">
-? Vielleicht
-</button>
-
-<button class="choice-btn remove">
-× Raus
-</button>
-
-</div>
-</div>
-`;
-
-el.querySelector(".safe").onclick=()=>{
-trade[id]="safe";
-saveTrade();
-renderAll();
-};
-
-el.querySelector(".maybe").onclick=()=>{
-trade[id]="maybe";
-saveTrade();
-renderAll();
-};
-
-el.querySelector(".remove").onclick=()=>{
-delete trade[id];
-saveTrade();
-renderAll();
-};
-
-box.appendChild(el);
-
-});
-
-}
 
 function renderOverview(){
 
-const safe=selectedIds().filter(x=>trade[x]==="safe");
-const maybe=selectedIds().filter(x=>trade[x]==="maybe");
+  const safe =
+    selectedIds()
+      .filter(
+        id =>
+          trade[id] === "safe"
+      );
 
-document.getElementById("safeCount").textContent=safe.length;
-document.getElementById("maybeCount").textContent=maybe.length;
+  const maybe =
+    selectedIds()
+      .filter(
+        id =>
+          trade[id] === "maybe"
+      );
 
-renderGroup("safeList",safe);
-renderGroup("maybeList",maybe);
+
+  document
+    .getElementById("safeCount")
+    .textContent =
+    safe.length;
+
+
+  document
+    .getElementById("maybeCount")
+    .textContent =
+    maybe.length;
+
+
+  renderGroup(
+    "safeList",
+    safe
+  );
+
+  renderGroup(
+    "maybeList",
+    maybe
+  );
+
+}
+
+
+function renderGroup(
+  targetId,
+  ids
+){
+
+  const box =
+    document.getElementById(targetId);
+
+
+  if(!ids.length){
+
+    box.innerHTML = `
+      <div class="empty">
+        Keine Kronkorken
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  box.innerHTML = "";
+
+
+  ids.forEach(id => {
+
+    const c =
+      caps.find(
+        x => x.id === id
+      );
+
+    if(!c) return;
+
+
+    const el =
+      document.createElement("div");
+
+    el.className =
+      "cap-card";
+
+
+    el.innerHTML = `
+      <div class="cap-img">
+        ${c.image}
+      </div>
+
+      <div>
+
+        <div class="cap-number">
+          #${c.id}
+        </div>
+
+        <div class="cap-name">
+          ${c.brewery}
+        </div>
+
+      </div>
+
+      <div></div>
+    `;
+
+
+    box.appendChild(el);
+
+  });
 
 }
 
-function renderGroup(id,items){
-
-const box=document.getElementById(id);
-
-if(!items.length){
-box.innerHTML='<div class="empty">Keine Kronkorken</div>';
-return;
-}
-
-box.innerHTML="";
-
-items.forEach(id=>{
-
-const c=caps.find(x=>x.id===id);
-if(!c)return;
-
-const el=document.createElement("div");
-el.className="cap-card";
-
-el.innerHTML=`
-<div class="cap-img">${c.image}</div>
-<div>
-<div class="cap-number">#${c.id}</div>
-<div class="cap-name">${c.brewery}</div>
-</div>
-<div></div>
-`;
-
-box.appendChild(el);
-
-});
-
-}
 
 function renderFind(){
 
-const box=document.getElementById("findList");
+  const box =
+    document.getElementById("findList");
 
-const ids=selectedIds().filter(id=>
-trade[id]==="safe"||trade[id]==="maybe"
-);
 
-if(!ids.length){
-box.innerHTML='<div class="empty">Noch keine Kronkorken zum Heraussuchen.</div>';
-return;
+  const ids =
+    selectedIds()
+      .filter(
+        id =>
+          trade[id] === "safe" ||
+          trade[id] === "maybe"
+      );
+
+
+  if(!ids.length){
+
+    box.innerHTML = `
+      <div class="empty">
+        Noch keine Kronkorken zum Heraussuchen.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  box.innerHTML = "";
+
+
+  ids.forEach(id => {
+
+    const c =
+      caps.find(
+        x => x.id === id
+      );
+
+    if(!c) return;
+
+
+    const el =
+      document.createElement("div");
+
+    el.className =
+      "location-card";
+
+
+    el.innerHTML = `
+      <div class="cap-img">
+        ${c.image}
+      </div>
+
+      <div>
+
+        <div class="cap-number">
+          #${c.id}
+        </div>
+
+        <div class="cap-name">
+          ${c.brewery}
+        </div>
+
+        <div class="location-line">
+          Status:
+          <span class="location-highlight">
+            ${
+              trade[id] === "safe"
+              ? "Auf jeden Fall"
+              : "Vielleicht"
+            }
+          </span>
+        </div>
+
+        <div class="location-line">
+          Lagerort:
+          <span class="location-highlight">
+            ${c.storage}
+            · Reihe ${c.row}
+            · Position ${c.position}
+          </span>
+        </div>
+
+      </div>
+    `;
+
+
+    box.appendChild(el);
+
+  });
+
 }
 
-box.innerHTML="";
-
-ids.forEach(id=>{
-
-const c=caps.find(x=>x.id===id);
-if(!c)return;
-
-const el=document.createElement("div");
-el.className="location-card";
-
-el.innerHTML=`
-<div class="cap-img">${c.image}</div>
-
-<div>
-
-<div class="cap-number">#${c.id}</div>
-<div class="cap-name">${c.brewery}</div>
-
-<div class="location-line">
-Status:
-<span class="location-highlight">
-${trade[id]==="safe"?"Auf jeden Fall":"Vielleicht"}
-</span>
-</div>
-
-<div class="location-line">
-Lagerort:
-<span class="location-highlight">
-${c.storage} · Reihe ${c.row} · Position ${c.position}
-</span>
-</div>
-
-</div>
-`;
-
-box.appendChild(el);
-
-});
-
-}
 
 function renderStorages(){
 
-const list=document.getElementById("storageList");
-const select=document.getElementById("photoStorage");
+  const list =
+    document.getElementById("storageList");
 
-list.innerHTML="";
-select.innerHTML="";
+  const select =
+    document.getElementById("photoStorage");
 
-storages.forEach((s,i)=>{
 
-const el=document.createElement("div");
-el.className="storage-item";
+  list.innerHTML = "";
+  select.innerHTML = "";
 
-el.innerHTML=`
-<div>
-<div class="storage-name">${s.name}</div>
-<div class="storage-type">${s.type}</div>
-</div>
-<div>#${i+1}</div>
-`;
 
-list.appendChild(el);
+  storages.forEach(
+    (storage,index) => {
 
-const option=document.createElement("option");
-option.value=s.name;
-option.textContent=s.name+" · "+s.type;
+      const el =
+        document.createElement("div");
 
-select.appendChild(option);
+      el.className =
+        "storage-item";
 
-});
+
+      el.innerHTML = `
+        <div>
+
+          <div class="storage-name">
+            ${storage.name}
+          </div>
+
+          <div class="storage-type">
+            ${storage.type}
+          </div>
+
+        </div>
+
+        <div>
+          #${index + 1}
+        </div>
+      `;
+
+
+      list.appendChild(el);
+
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        storage.name;
+
+      option.textContent =
+        storage.name +
+        " · " +
+        storage.type;
+
+
+      select.appendChild(option);
+
+    }
+  );
 
 }
+
 
 function renderAll(){
-renderHome();
-renderSelection();
-renderOverview();
-renderFind();
-renderStorages();
+
+  renderHome();
+  renderSelection();
+  renderOverview();
+  renderFind();
+  renderStorages();
+
 }
 
-document.querySelectorAll(".nav-btn").forEach(btn=>{
 
-btn.onclick=()=>{
+document
+  .querySelectorAll(".nav-btn")
+  .forEach(btn => {
 
-document.querySelectorAll(".page")
-.forEach(x=>x.classList.remove("active"));
+    btn.onclick = () => {
 
-document.querySelectorAll(".nav-btn")
-.forEach(x=>x.classList.remove("active"));
+      document
+        .querySelectorAll(".page")
+        .forEach(page =>
+          page.classList.remove("active")
+        );
 
-document.getElementById(btn.dataset.page)
-.classList.add("active");
 
-btn.classList.add("active");
+      document
+        .querySelectorAll(".nav-btn")
+        .forEach(nav =>
+          nav.classList.remove("active")
+        );
 
-window.scrollTo({top:0,behavior:"smooth"});
+
+      document
+        .getElementById(
+          btn.dataset.page
+        )
+        .classList
+        .add("active");
+
+
+      btn.classList.add("active");
+
+
+      window.scrollTo({
+        top:0,
+        behavior:"smooth"
+      });
+
+    };
+
+  });
+
+
+document
+  .getElementById("searchInput")
+  .oninput =
+  renderHome;
+
+
+document
+  .getElementById("sortSelect")
+  .onchange =
+  renderHome;
+
+
+document
+  .getElementById("clearSelectionBtn")
+  .onclick = () => {
+
+    if(
+      confirm(
+        "Komplette Tauschauswahl leeren?"
+      )
+    ){
+
+      trade = {};
+
+      saveTrade();
+      renderAll();
+
+    }
+
+  };
+
+
+document
+  .getElementById("addStorageBtn")
+  .onclick = () => {
+
+    const type =
+      document
+        .getElementById("storageType")
+        .value;
+
+
+    const name =
+      document
+        .getElementById("storageName")
+        .value
+        .trim();
+
+
+    if(!name){
+
+      alert(
+        "Bitte einen Namen eingeben."
+      );
+
+      return;
+
+    }
+
+
+    storages.push({
+      type,
+      name
+    });
+
+
+    saveStorages();
+
+
+    document
+      .getElementById("storageName")
+      .value = "";
+
+
+    renderStorages();
+
+  };
+
+
+const photoInput =
+  document.getElementById("photoInput");
+
+const photoPreview =
+  document.getElementById("photoPreview");
+
+const preview =
+  document.getElementById("preview");
+
+const gridOverlay =
+  document.getElementById("gridOverlay");
+
+const resizeHandle =
+  document.getElementById("resizeHandle");
+
+const photoStage =
+  document.getElementById("photoStage");
+
+
+document
+  .getElementById("choosePhotoBtn")
+  .onclick = () => {
+
+    if(!storages.length){
+
+      alert(
+        "Bitte zuerst einen Lagerort anlegen."
+      );
+
+      return;
+
+    }
+
+    photoInput.click();
+
+  };
+
+
+photoInput.onchange = event => {
+
+  const file =
+    event.target.files[0];
+
+  if(!file) return;
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload = e => {
+
+    photoPreview.src =
+      e.target.result;
+
+
+    photoPreview.onload = () => {
+
+      preview
+        .classList
+        .add("show");
+
+
+      resetGrid();
+
+      drawGrid();
+
+    };
+
+  };
+
+
+  reader.readAsDataURL(file);
 
 };
 
-});
-
-document.getElementById("searchInput").oninput=renderHome;
-document.getElementById("sortSelect").onchange=renderHome;
-
-document.getElementById("clearSelectionBtn").onclick=()=>{
-
-if(confirm("Komplette Tauschauswahl leeren?")){
-trade={};
-saveTrade();
-renderAll();
-}
-
-};
-
-document.getElementById("addStorageBtn").onclick=()=>{
-
-const type=document.getElementById("storageType").value;
-const name=document.getElementById("storageName").value.trim();
-
-if(!name){
-alert("Bitte einen Namen eingeben.");
-return;
-}
-
-storages.push({type,name});
-saveStorages();
-
-document.getElementById("storageName").value="";
-renderStorages();
-
-};
-
-const photoInput=document.getElementById("photoInput");
-
-document.getElementById("choosePhotoBtn").onclick=()=>{
-
-if(!storages.length){
-alert("Bitte zuerst einen Lagerort anlegen.");
-return;
-}
-
-photoInput.click();
-
-};
-
-photoInput.onchange=e=>{
-
-const file=e.target.files[0];
-if(!file)return;
-
-const reader=new FileReader();
-
-reader.onload=ev=>{
-
-const img=new Image();
-
-img.onload=()=>{
-
-currentImage=img;
-
-document.getElementById("preview")
-.classList.add("show");
-
-drawGrid();
-
-};
-
-img.src=ev.target.result;
-
-};
-
-reader.readAsDataURL(file);
-
-};
-
-document.getElementById("rowsInput").oninput=drawGrid;
-document.getElementById("colsInput").oninput=drawGrid;
 
 function drawGrid(){
 
-if(!currentImage)return;
+  const rows =
+    Math.max(
+      1,
+      Number(
+        document
+          .getElementById("rowsInput")
+          .value
+      ) || 1
+    );
 
-const rows=Math.max(
-1,
-Number(document.getElementById("rowsInput").value)||1
-);
 
-const cols=Math.max(
-1,
-Number(document.getElementById("colsInput").value)||1
-);
+  const cols =
+    Math.max(
+      1,
+      Number(
+        document
+          .getElementById("colsInput")
+          .value
+      ) || 1
+    );
 
-const canvas=document.getElementById("gridCanvas");
-const ctx=canvas.getContext("2d");
 
-const maxWidth=1000;
-const scale=Math.min(1,maxWidth/currentImage.width);
+  const gridLines =
+    document.getElementById("gridLines");
 
-canvas.width=Math.round(currentImage.width*scale);
-canvas.height=Math.round(currentImage.height*scale);
 
-ctx.drawImage(
-currentImage,
-0,
-0,
-canvas.width,
-canvas.height
-);
+  gridLines.innerHTML = "";
 
-const cellW=canvas.width/cols;
-const cellH=canvas.height/rows;
 
-ctx.strokeStyle="#36c96b";
-ctx.lineWidth=Math.max(2,canvas.width/500);
+  const cellWidth =
+    100 / cols;
 
-ctx.font=`bold ${Math.max(14,canvas.width/55)}px sans-serif`;
-ctx.fillStyle="#36c96b";
+  const cellHeight =
+    100 / rows;
 
-for(let r=0;r<rows;r++){
 
-for(let c=0;c<cols;c++){
+  for(
+    let row = 0;
+    row < rows;
+    row++
+  ){
 
-const x=c*cellW;
-const y=r*cellH;
+    for(
+      let col = 0;
+      col < cols;
+      col++
+    ){
 
-ctx.strokeRect(
-x,
-y,
-cellW,
-cellH
-);
+      const cell =
+        document.createElement("div");
 
-const number=(r*cols)+c+1;
 
-ctx.fillText(
-String(number),
-x+6,
-y+Math.max(18,cellH*.18)
-);
+      cell.className =
+        "grid-cell";
+
+
+      cell.style.left =
+        (col * cellWidth) + "%";
+
+      cell.style.top =
+        (row * cellHeight) + "%";
+
+      cell.style.width =
+        cellWidth + "%";
+
+      cell.style.height =
+        cellHeight + "%";
+
+
+      const number =
+        document.createElement("div");
+
+
+      number.className =
+        "grid-number";
+
+
+      number.textContent =
+        (row * cols) +
+        col +
+        1;
+
+
+      cell.appendChild(number);
+
+      gridLines.appendChild(cell);
+
+    }
+
+  }
+
+
+  document
+    .getElementById("positionCount")
+    .textContent =
+    rows * cols;
 
 }
 
+
+document
+  .getElementById("rowsInput")
+  .oninput =
+  drawGrid;
+
+
+document
+  .getElementById("colsInput")
+  .oninput =
+  drawGrid;
+
+
+function resetGrid(){
+
+  gridOverlay.style.left =
+    "8%";
+
+  gridOverlay.style.top =
+    "8%";
+
+  gridOverlay.style.width =
+    "84%";
+
+  gridOverlay.style.height =
+    "84%";
+
 }
 
-document.getElementById("positionCount")
-.textContent=rows*cols;
 
-}
+document
+  .getElementById("resetGridBtn")
+  .onclick =
+  resetGrid;
+
+
+
+let dragging = false;
+let resizing = false;
+
+let startX = 0;
+let startY = 0;
+
+let startLeft = 0;
+let startTop = 0;
+
+let startWidth = 0;
+let startHeight = 0;
+
+
+gridOverlay
+  .addEventListener(
+    "pointerdown",
+    event => {
+
+      if(
+        event.target === resizeHandle
+      ){
+        return;
+      }
+
+
+      dragging = true;
+
+
+      startX =
+        event.clientX;
+
+      startY =
+        event.clientY;
+
+
+      startLeft =
+        gridOverlay.offsetLeft;
+
+      startTop =
+        gridOverlay.offsetTop;
+
+
+      gridOverlay
+        .setPointerCapture(
+          event.pointerId
+        );
+
+
+      event.preventDefault();
+
+    }
+  );
+
+
+resizeHandle
+  .addEventListener(
+    "pointerdown",
+    event => {
+
+      resizing = true;
+
+
+      startX =
+        event.clientX;
+
+      startY =
+        event.clientY;
+
+
+      startWidth =
+        gridOverlay.offsetWidth;
+
+      startHeight =
+        gridOverlay.offsetHeight;
+
+
+      resizeHandle
+        .setPointerCapture(
+          event.pointerId
+        );
+
+
+      event.stopPropagation();
+      event.preventDefault();
+
+    }
+  );
+
+
+window
+  .addEventListener(
+    "pointermove",
+    event => {
+
+      if(dragging){
+
+        const dx =
+          event.clientX -
+          startX;
+
+        const dy =
+          event.clientY -
+          startY;
+
+
+        const maxLeft =
+          photoStage.clientWidth -
+          gridOverlay.offsetWidth;
+
+
+        const maxTop =
+          photoStage.clientHeight -
+          gridOverlay.offsetHeight;
+
+
+        let newLeft =
+          startLeft + dx;
+
+        let newTop =
+          startTop + dy;
+
+
+        newLeft =
+          Math.max(
+            0,
+            Math.min(
+              newLeft,
+              maxLeft
+            )
+          );
+
+
+        newTop =
+          Math.max(
+            0,
+            Math.min(
+              newTop,
+              maxTop
+            )
+          );
+
+
+        gridOverlay.style.left =
+          newLeft + "px";
+
+        gridOverlay.style.top =
+          newTop + "px";
+
+      }
+
+
+      if(resizing){
+
+        const dx =
+          event.clientX -
+          startX;
+
+        const dy =
+          event.clientY -
+          startY;
+
+
+        const maxWidth =
+          photoStage.clientWidth -
+          gridOverlay.offsetLeft;
+
+
+        const maxHeight =
+          photoStage.clientHeight -
+          gridOverlay.offsetTop;
+
+
+        let newWidth =
+          startWidth + dx;
+
+        let newHeight =
+          startHeight + dy;
+
+
+        newWidth =
+          Math.max(
+            100,
+            Math.min(
+              newWidth,
+              maxWidth
+            )
+          );
+
+
+        newHeight =
+          Math.max(
+            100,
+            Math.min(
+              newHeight,
+              maxHeight
+            )
+          );
+
+
+        gridOverlay.style.width =
+          newWidth + "px";
+
+        gridOverlay.style.height =
+          newHeight + "px";
+
+      }
+
+    }
+  );
+
+
+window
+  .addEventListener(
+    "pointerup",
+    () => {
+
+      dragging = false;
+      resizing = false;
+
+    }
+  );
+
 
 renderAll();
 
