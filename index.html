@@ -10,7 +10,6 @@
 :root{
   --bg:#06182c;
   --card:#102944;
-  --card2:#0c223a;
   --line:#27425e;
   --text:#f5f7fa;
   --muted:#9eacba;
@@ -222,10 +221,6 @@ main{
   width:100%;
   height:100%;
   object-fit:cover;
-}
-
-.placeholder{
-  font-size:28px;
 }
 
 .cap-number{
@@ -468,6 +463,95 @@ main{
   padding:11px;
 }
 
+.check-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+
+.check-item{
+  border:1px solid rgba(255,255,255,.08);
+  background:#0c223a;
+  border-radius:12px;
+  padding:6px;
+  text-align:center;
+}
+
+.check-item img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:9px;
+  display:block;
+}
+
+.check-number{
+  margin-top:5px;
+  font-size:12px;
+  font-weight:800;
+  color:#dce6ef;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  background:rgba(0,0,0,.72);
+  padding:18px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-card{
+  width:100%;
+  max-width:520px;
+  background:#0d243d;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;
+  padding:15px;
+}
+
+.modal-close{
+  float:right;
+  width:36px;
+  height:36px;
+  border:0;
+  border-radius:50%;
+  background:#18334f;
+  color:white;
+  font-size:22px;
+}
+
+.modal-image{
+  width:100%;
+  max-height:48vh;
+  object-fit:contain;
+  background:#071625;
+  border-radius:14px;
+  margin-top:10px;
+}
+
+.modal-title{
+  font-size:23px;
+  font-weight:850;
+  margin-top:12px;
+}
+
+.modal-detail{
+  color:var(--muted);
+  margin-top:6px;
+  line-height:1.5;
+}
+
+.modal-detail strong{
+  color:white;
+}
+
 .bottom-nav{
   position:fixed;
   left:0;
@@ -509,7 +593,7 @@ main{
 <header class="topbar">
   <div class="toprow">
     <div class="logo">Cap<span>Trade</span></div>
-    <div class="version">V0.9</div>
+    <div class="version">V0.10</div>
   </div>
 </header>
 
@@ -631,8 +715,8 @@ main{
 
   <div class="intro">
     <strong>Verwalten:</strong>
-    Brett F wurde anhand deines Originalfotos vorbereitet.
-    Du musst hier kein Raster mehr einstellen.
+    Brett F kannst du importieren und anschließend alle
+    ausgeschnittenen Kronkorken kontrollieren.
   </div>
 
   <div class="manage-card">
@@ -642,9 +726,8 @@ main{
     </div>
 
     <div class="manage-text">
-      Wähle hier genau das Originalfoto von Brett F aus,
-      das du mir geschickt hast. CapTrade schneidet daraus
-      automatisch die 139 Kronkorken aus.
+      Wähle genau das Originalfoto von Brett F aus,
+      das du mir geschickt hast.
     </div>
 
     <input
@@ -667,16 +750,46 @@ main{
 
     <div id="successBox" class="success-box">
       ✓ Brett F wurde importiert.<br>
-      <strong>139 Kronkorken</strong> sind jetzt in CapTrade gespeichert.
+      <strong>139 Kronkorken</strong> sind gespeichert.
     </div>
 
     <div class="warning-box">
-      Die Bilder werden nur auf deinem Gerät gespeichert.
-      Die Brauerei-Zuordnung machen wir anschließend separat.
+      Die Brauerei-Zuordnung kommt danach.
+      Zuerst prüfen wir nur, ob alle Einzelbilder sauber aussehen.
+    </div>
+
+  </div>
+
+
+  <div class="manage-card">
+
+    <div class="manage-title">
+      Kronkorken prüfen
+    </div>
+
+    <div class="manage-text">
+      Tippe auf einen Kronkorken, um ihn groß zu öffnen
+      und Lagerort, Reihe und Position zu prüfen.
+    </div>
+
+    <div id="checkGrid" class="check-grid"></div>
+
+  </div>
+
+
+  <div class="manage-card">
+
+    <div class="manage-title">
+      Testdaten
+    </div>
+
+    <div class="manage-text">
+      Falls beim Test etwas schiefgeht, kannst du Brett F
+      komplett löschen und neu importieren.
     </div>
 
     <button id="deleteBoardF" class="danger-btn">
-      Brett-F-Testdaten wieder löschen
+      Brett-F-Testdaten löschen
     </button>
 
   </div>
@@ -718,15 +831,24 @@ main{
 </nav>
 
 
+<div id="detailModal" class="modal">
+
+  <div class="modal-card">
+
+    <button id="closeModal" class="modal-close">×</button>
+
+    <img id="modalImage" class="modal-image">
+
+    <div id="modalTitle" class="modal-title"></div>
+
+    <div id="modalDetails" class="modal-detail"></div>
+
+  </div>
+
+</div>
+
+
 <script>
-
-/*
-  Die Positionen wurden aus deinem Originalfoto
-  von Brett F (1152 × 1536) bestimmt.
-
-  Reihe 1 enthält 9 Kronkorken.
-  Reihen 2–14 enthalten jeweils 10.
-*/
 
 const boardFPoints = [
 [116,92],[218,95],[316,86],[418,85],[515,85],[616,85],[715,81],[814,87],[914,79],
@@ -811,11 +933,7 @@ function capImage(cap){
 
   }
 
-  return `
-    <span class="placeholder">
-      ◯
-    </span>
-  `;
+  return "◯";
 
 }
 
@@ -835,16 +953,15 @@ function renderHome(){
 
 
   let items =
-    [...caps].filter(cap => {
+    [...caps].filter(cap =>
 
-      return (
-        String(cap.id).includes(query) ||
-        cap.brewery
-          .toLowerCase()
-          .includes(query)
-      );
+      String(cap.id).includes(query) ||
 
-    });
+      cap.brewery
+        .toLowerCase()
+        .includes(query)
+
+    );
 
 
   if(
@@ -876,7 +993,6 @@ function renderHome(){
     list.innerHTML = `
       <div class="empty">
         Noch keine Kronkorken importiert.
-        Öffne unten „Verwalten“.
       </div>
     `;
 
@@ -1068,42 +1184,34 @@ function renderSelection(){
     `;
 
 
-    card
-      .querySelector(".safe")
-      .onclick = () => {
+    card.querySelector(".safe").onclick = () => {
 
-        trade[id] =
-          "safe";
+      trade[id] = "safe";
 
-        saveTrade();
-        renderAll();
+      saveTrade();
+      renderAll();
 
-      };
+    };
 
 
-    card
-      .querySelector(".maybe")
-      .onclick = () => {
+    card.querySelector(".maybe").onclick = () => {
 
-        trade[id] =
-          "maybe";
+      trade[id] = "maybe";
 
-        saveTrade();
-        renderAll();
+      saveTrade();
+      renderAll();
 
-      };
+    };
 
 
-    card
-      .querySelector(".remove")
-      .onclick = () => {
+    card.querySelector(".remove").onclick = () => {
 
-        delete trade[id];
+      delete trade[id];
 
-        saveTrade();
-        renderAll();
+      saveTrade();
+      renderAll();
 
-      };
+    };
 
 
     box.appendChild(card);
@@ -1182,6 +1290,7 @@ function renderOverview(){
 
   safeList.innerHTML =
     safe.length
+
     ? safe
         .map(
           id =>
@@ -1190,11 +1299,13 @@ function renderOverview(){
         .filter(Boolean)
         .map(simpleCapCard)
         .join("")
+
     : `<div class="empty">Keine Kronkorken</div>`;
 
 
   maybeList.innerHTML =
     maybe.length
+
     ? maybe
         .map(
           id =>
@@ -1203,6 +1314,7 @@ function renderOverview(){
         .filter(Boolean)
         .map(simpleCapCard)
         .join("")
+
     : `<div class="empty">Keine Kronkorken</div>`;
 
 }
@@ -1306,12 +1418,128 @@ function renderFind(){
 }
 
 
+function renderCheckGrid(){
+
+  const grid =
+    document.getElementById("checkGrid");
+
+
+  grid.innerHTML = "";
+
+
+  if(!caps.length){
+
+    grid.innerHTML = `
+      <div class="empty" style="grid-column:1/-1">
+        Noch nichts importiert.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  caps
+    .sort(
+      (a,b) =>
+        a.id-b.id
+    )
+    .forEach(cap => {
+
+      const item =
+        document.createElement("button");
+
+
+      item.className =
+        "check-item";
+
+
+      item.innerHTML = `
+
+        <img
+          src="${cap.image}"
+          alt="Kronkorken ${cap.id}"
+        >
+
+        <div class="check-number">
+          #${cap.id}
+        </div>
+
+      `;
+
+
+      item.onclick = () => {
+
+        openDetail(cap);
+
+      };
+
+
+      grid.appendChild(item);
+
+    });
+
+}
+
+
+function openDetail(cap){
+
+  document
+    .getElementById("modalImage")
+    .src =
+    cap.image;
+
+
+  document
+    .getElementById("modalTitle")
+    .textContent =
+    "#" + cap.id;
+
+
+  document
+    .getElementById("modalDetails")
+    .innerHTML = `
+
+      <strong>${cap.brewery}</strong><br>
+
+      Lagerort:
+      <strong>${cap.storage}</strong><br>
+
+      Reihe:
+      <strong>${cap.row}</strong><br>
+
+      Position:
+      <strong>${cap.position}</strong>
+
+    `;
+
+
+  document
+    .getElementById("detailModal")
+    .classList
+    .add("show");
+
+}
+
+
+function closeDetail(){
+
+  document
+    .getElementById("detailModal")
+    .classList
+    .remove("show");
+
+}
+
+
 function renderAll(){
 
   renderHome();
   renderSelection();
   renderOverview();
   renderFind();
+  renderCheckGrid();
 
 }
 
@@ -1392,6 +1620,27 @@ document
   };
 
 
+document
+  .getElementById("closeModal")
+  .onclick =
+  closeDetail;
+
+
+document
+  .getElementById("detailModal")
+  .onclick = event => {
+
+    if(
+      event.target.id === "detailModal"
+    ){
+
+      closeDetail();
+
+    }
+
+  };
+
+
 const boardFInput =
   document.getElementById("boardFInput");
 
@@ -1460,17 +1709,15 @@ async function importBoardF(img){
     document.getElementById("successBox");
 
 
-  progressBox.classList.add("show");
-  successBox.classList.remove("show");
+  progressBox
+    .classList
+    .add("show");
 
 
-  /*
-    Koordinaten stammen vom Originalbild
-    1152 × 1536.
+  successBox
+    .classList
+    .remove("show");
 
-    Sollte iOS das Bild in anderer Auflösung
-    laden, werden sie automatisch skaliert.
-  */
 
   const scaleX =
     img.naturalWidth /
@@ -1486,11 +1733,16 @@ async function importBoardF(img){
     56;
 
 
-  const imported = [];
+  const imported =
+    [];
 
 
-  let currentRow = 1;
-  let positionInRow = 0;
+  let currentRow =
+    1;
+
+
+  let positionInRow =
+    0;
 
 
   for(
@@ -1501,8 +1753,11 @@ async function importBoardF(img){
 
     if(i === 0){
 
-      currentRow = 1;
-      positionInRow = 1;
+      currentRow =
+        1;
+
+      positionInRow =
+        1;
 
     }else if(i < 9){
 
@@ -1517,14 +1772,16 @@ async function importBoardF(img){
       currentRow =
         2 +
         Math.floor(
-          afterFirst / 10
+          afterFirst /
+          10
         );
 
 
       positionInRow =
         1 +
         (
-          afterFirst % 10
+          afterFirst %
+          10
         );
 
     }
@@ -1704,11 +1961,15 @@ async function importBoardF(img){
   }catch(error){
 
     alert(
-      "Die Bilder sind für den lokalen Speicher zu groß. " +
-      "Sag mir Bescheid – dann stellen wir den Bildspeicher um."
+      "Der lokale Speicher ist voll. " +
+      "Dann müssen wir den Bildspeicher anders lösen."
     );
 
-    progressBox.classList.remove("show");
+
+    progressBox
+      .classList
+      .remove("show");
+
 
     return;
 
@@ -1728,7 +1989,9 @@ async function importBoardF(img){
     "100%";
 
 
-  successBox.classList.add("show");
+  successBox
+    .classList
+    .add("show");
 
 
   renderAll();
@@ -1742,10 +2005,12 @@ document
 
     if(
       !confirm(
-        "Brett F wirklich aus CapTrade löschen?"
+        "Brett F wirklich löschen?"
       )
     ){
+
       return;
+
     }
 
 
