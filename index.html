@@ -2,9 +2,8 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b1020">
-
 <title>CapTrade</title>
 
 <style>
@@ -22,9 +21,7 @@
   --green:#38c985;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -33,22 +30,13 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
 
-button,
-input{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
+button,input{font:inherit}
 
 .app{
-  width:min(1100px,100%);
+  max-width:1100px;
   margin:auto;
   padding:20px 14px 80px;
 }
-
-/* HEADER */
 
 .topbar{
   display:flex;
@@ -64,14 +52,12 @@ button{
   letter-spacing:-1px;
 }
 
-.brand span{
-  color:var(--red);
-}
+.brand span{color:var(--red)}
 
 .subtitle{
   color:var(--muted);
   font-size:13px;
-  margin-top:3px;
+  margin-top:4px;
 }
 
 .topbuttons{
@@ -79,26 +65,24 @@ button{
   gap:8px;
 }
 
-.btn{
-  height:42px;
+.topbtn{
   width:104px;
+  height:42px;
   border-radius:13px;
   font-weight:800;
 }
 
-.btn-secondary{
-  background:var(--panel);
+.secondary{
   color:white;
+  background:var(--panel);
   border:1px solid var(--line);
 }
 
-.btn-primary{
-  border:0;
+.primary{
   color:white;
+  border:0;
   background:linear-gradient(180deg,var(--blue),var(--blue2));
 }
-
-/* STATISTIK */
 
 .stats{
   display:grid;
@@ -114,17 +98,15 @@ button{
   padding:12px;
 }
 
-.stat-number{
+.stat strong{
+  display:block;
   font-size:22px;
-  font-weight:900;
 }
 
-.stat-label{
+.stat span{
   color:var(--muted);
   font-size:12px;
 }
-
-/* FILTER */
 
 .tabs{
   display:flex;
@@ -134,13 +116,13 @@ button{
 }
 
 .tab{
+  white-space:nowrap;
   border:1px solid var(--line);
   background:var(--panel);
   color:var(--muted);
-  padding:9px 13px;
   border-radius:999px;
+  padding:9px 13px;
   font-weight:800;
-  white-space:nowrap;
 }
 
 .tab.active{
@@ -149,20 +131,16 @@ button{
   color:white;
 }
 
-/* SUCHE */
-
 .search{
   width:100%;
-  background:var(--panel);
-  border:1px solid var(--line);
-  color:white;
-  border-radius:13px;
   padding:12px;
+  border-radius:13px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:white;
   margin-bottom:14px;
   outline:none;
 }
-
-/* KRONKORKEN */
 
 .grid{
   display:grid;
@@ -171,9 +149,7 @@ button{
 }
 
 @media(min-width:680px){
-  .grid{
-    grid-template-columns:repeat(4,minmax(0,1fr));
-  }
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 
 .cap{
@@ -183,44 +159,38 @@ button{
   overflow:hidden;
 }
 
-.cap.selected{
-  border-color:var(--blue);
-}
+.cap.selected{border-color:var(--blue)}
+.cap.maybe{border-color:var(--yellow)}
 
-.cap.maybe{
-  border-color:var(--yellow);
-}
-
-.image-wrap{
-  aspect-ratio:1/1;
-  background:#080d18;
+.pic{
+  aspect-ratio:1;
   position:relative;
+  background:#070c17;
+  overflow:hidden;
 }
 
-.cap-image{
+.pic img{
   width:100%;
   height:100%;
   object-fit:cover;
 }
 
-.number{
+.badge{
   position:absolute;
   top:7px;
   left:7px;
-  background:rgba(0,0,0,.72);
-  padding:5px 8px;
+  background:rgba(0,0,0,.75);
   border-radius:999px;
+  padding:5px 8px;
   font-size:11px;
   font-weight:900;
 }
 
-.cap-body{
-  padding:9px;
-}
+.capbody{padding:9px}
 
 .location{
-  font-size:11px;
   color:var(--muted);
+  font-size:11px;
   margin-bottom:8px;
 }
 
@@ -235,17 +205,17 @@ button{
   background:#0f1728;
   color:white;
   border-radius:10px;
-  padding:8px 4px;
+  padding:8px 3px;
   font-size:11px;
   font-weight:800;
 }
 
-.action.selected{
+.action.on-selected{
   border-color:var(--blue);
   background:rgba(76,141,255,.18);
 }
 
-.action.maybe{
+.action.on-maybe{
   border-color:var(--yellow);
   background:rgba(244,200,75,.15);
 }
@@ -256,111 +226,159 @@ button{
 
 .empty{
   grid-column:1/-1;
+  padding:40px 15px;
   text-align:center;
+  color:var(--muted);
   border:1px dashed var(--line);
   border-radius:18px;
-  padding:40px 15px;
-  color:var(--muted);
 }
 
 /* MODAL */
 
-.modal-background{
+.modalbg{
+  display:none;
   position:fixed;
   inset:0;
-  display:none;
-  background:rgba(0,0,0,.7);
   z-index:100;
-  align-items:flex-end;
+  background:rgba(0,0,0,.72);
+  overflow:auto;
+  padding:20px 12px;
 }
 
-.modal-background.open{
-  display:flex;
-}
+.modalbg.open{display:block}
 
 .modal{
-  width:100%;
+  max-width:650px;
+  margin:auto;
   background:#111a2d;
-  border-radius:22px 22px 0 0;
-  padding:20px 16px calc(20px + env(safe-area-inset-bottom));
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:18px;
 }
 
 .modal h2{
   margin:0 0 6px;
 }
 
-.modal-info{
+.info{
   color:var(--muted);
   font-size:13px;
   line-height:1.45;
-  margin-bottom:18px;
+  margin-bottom:15px;
 }
 
 .field{
-  margin-bottom:15px;
+  margin-bottom:14px;
 }
 
 .field label{
   display:block;
-  margin-bottom:6px;
   font-size:12px;
   font-weight:800;
+  margin-bottom:6px;
 }
 
 .field input{
   width:100%;
-  padding:12px;
-  border-radius:12px;
   border:1px solid var(--line);
   background:#0c1425;
   color:white;
+  border-radius:12px;
+  padding:12px;
 }
 
-.filebox{
+.previewbox{
+  display:none;
+  margin-top:15px;
+}
+
+.previewbox.show{display:block}
+
+.steptext{
   background:#0c1425;
-  border:1px dashed #405477;
-  border-radius:14px;
-  padding:16px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px;
+  margin-bottom:10px;
+  font-size:13px;
 }
 
-.modal-buttons{
+#boardCanvas{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:14px;
+  border:1px solid var(--line);
+  touch-action:manipulation;
+}
+
+.pointbuttons{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+}
+
+.pointbuttons button{
+  flex:1;
+  border:1px solid var(--line);
+  background:var(--panel2);
+  color:white;
+  border-radius:11px;
+  padding:10px;
+  font-weight:800;
+}
+
+.modalbuttons{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:9px;
-  margin-top:18px;
+  margin-top:16px;
 }
 
-.modal-buttons button{
-  height:44px;
+.modalbuttons button{
+  min-height:44px;
   border-radius:13px;
   font-weight:800;
 }
 
 .cancel{
-  background:var(--panel);
   border:1px solid var(--line);
+  background:var(--panel);
   color:white;
 }
 
 .import{
-  background:var(--blue);
   border:0;
+  background:var(--blue);
   color:white;
 }
 
-/* TOAST */
+.import:disabled{
+  opacity:.4;
+}
+
+.resetall{
+  margin-top:20px;
+  width:100%;
+  padding:11px;
+  border-radius:12px;
+  border:1px solid rgba(255,78,91,.45);
+  color:#ffb8bd;
+  background:rgba(255,78,91,.08);
+  font-weight:800;
+}
 
 .toast{
   position:fixed;
-  bottom:30px;
   left:50%;
+  bottom:30px;
   transform:translate(-50%,100px);
   background:white;
   color:#111827;
-  border-radius:999px;
   padding:10px 15px;
-  font-weight:800;
+  border-radius:999px;
   font-size:13px;
+  font-weight:800;
   transition:.25s;
   z-index:200;
 }
@@ -368,7 +386,6 @@ button{
 .toast.show{
   transform:translate(-50%,0);
 }
-
 </style>
 </head>
 
@@ -379,1291 +396,1321 @@ button{
 <header class="topbar">
 
 <div>
-  <div class="brand">
-    Cap<span>Trade</span>
-  </div>
-
-  <div class="subtitle">
-    Sony‘s Tauschkronkorken
-  </div>
+  <div class="brand">Cap<span>Trade</span></div>
+  <div class="subtitle">Sony‘s Tauschkronkorken</div>
 </div>
 
 <div class="topbuttons">
-
-<button
-  class="btn btn-secondary"
-  id="shareButton">
-  ↗ Teilen
-</button>
-
-<button
-  class="btn btn-primary"
-  id="addBoardButton">
-  + Brett
-</button>
-
+  <button class="topbtn secondary" id="shareBtn">↗ Teilen</button>
+  <button class="topbtn primary" id="addBtn">+ Brett</button>
 </div>
 
 </header>
 
-
 <section class="stats">
 
 <div class="stat">
-  <div class="stat-number" id="availableCount">0</div>
-  <div class="stat-label">verfügbar</div>
+  <strong id="availableCount">0</strong>
+  <span>verfügbar</span>
 </div>
 
 <div class="stat">
-  <div class="stat-number" id="selectedCount">0</div>
-  <div class="stat-label">ausgewählt</div>
+  <strong id="selectedCount">0</strong>
+  <span>ausgewählt</span>
 </div>
 
 <div class="stat">
-  <div class="stat-number" id="maybeCount">0</div>
-  <div class="stat-label">vielleicht</div>
+  <strong id="maybeCount">0</strong>
+  <span>vielleicht</span>
 </div>
 
 </section>
 
-
 <nav class="tabs">
-
-<button class="tab active" data-filter="all">
-Alle
-</button>
-
-<button class="tab" data-filter="selected">
-Ausgewählt
-</button>
-
-<button class="tab" data-filter="maybe">
-Vielleicht
-</button>
-
-<button class="tab" data-filter="traded">
-Getauscht
-</button>
-
+  <button class="tab active" data-filter="all">Alle</button>
+  <button class="tab" data-filter="selected">Ausgewählt</button>
+  <button class="tab" data-filter="maybe">Vielleicht</button>
+  <button class="tab" data-filter="traded">Getauscht</button>
 </nav>
 
-
 <input
-  id="search"
   class="search"
+  id="search"
   placeholder="Nr. oder Brett suchen …"
 >
 
-
-<section
-  class="grid"
-  id="grid">
-</section>
+<section id="grid" class="grid"></section>
 
 </main>
 
 
 <!-- BRETT IMPORT -->
 
-<div
-  class="modal-background"
-  id="boardModal">
+<div class="modalbg" id="modal">
 
 <div class="modal">
 
-<h2>
-Brett hinzufügen
-</h2>
+<h2>Brett hinzufügen</h2>
 
-<div class="modal-info">
-Ein komplettes Brettfoto auswählen.
-CapTrade teilt es automatisch in
-<strong>10 Spalten × 14 Reihen</strong>
-und erstellt daraus 140 einzelne Kronkorken.
+<div class="info">
+Wähle dein komplettes Brettfoto aus und markiere anschließend
+die <strong>Mitte der vier äußeren Kronkorken</strong>.
 </div>
-
 
 <div class="field">
 
-<label>
-Brettname
-</label>
+<label>Brettname</label>
 
 <input
   id="boardName"
-  placeholder="z. B. Brett A"
+  placeholder="z. B. Brett F"
 >
 
 </div>
 
-
 <div class="field">
 
-<label>
-Brettfoto
-</label>
-
-<div class="filebox">
+<label>Brettfoto</label>
 
 <input
-  id="boardImage"
+  id="boardFile"
   type="file"
   accept="image/*">
 
 </div>
 
+
+<div class="previewbox" id="previewBox">
+
+<div class="steptext" id="stepText">
+1. Tippe auf die Mitte des Kronkorkens oben links.
+</div>
+
+<canvas id="boardCanvas"></canvas>
+
+<div class="pointbuttons">
+
+<button id="undoPoint">
+↶ Punkt zurück
+</button>
+
+<button id="resetPoints">
+Punkte löschen
+</button>
+
+</div>
+
 </div>
 
 
-<div class="modal-buttons">
+<div class="modalbuttons">
 
-<button
-  class="cancel"
-  id="cancelButton">
+<button class="cancel" id="cancelBtn">
 Abbrechen
 </button>
 
 <button
   class="import"
-  id="importButton">
-Importieren
+  id="importBtn"
+  disabled>
+Ausschneiden
+</button>
+
+</div>
+
+<button class="resetall" id="deleteAll">
+Alle bisherigen Test-Kronkorken löschen
 </button>
 
 </div>
 
 </div>
 
-</div>
 
-
-<div
-  class="toast"
-  id="toast">
-</div>
+<div class="toast" id="toast"></div>
 
 
 <script>
 
-/* =========================
+/* =========================================
    DATENBANK
-========================= */
+========================================= */
 
 const DB_NAME = "captrade";
-const STORE_NAME = "caps";
+const STORE = "caps";
 
 let db;
 let caps = [];
-let currentFilter = "all";
+let filter = "all";
 
+function openDB(){
 
-function openDatabase(){
+  return new Promise((resolve,reject)=>{
 
-return new Promise((resolve,reject)=>{
+    const req = indexedDB.open(DB_NAME,1);
 
-const request =
-indexedDB.open(DB_NAME,1);
+    req.onupgradeneeded = ()=>{
 
-request.onupgradeneeded = function(){
+      const database = req.result;
 
-const database =
-request.result;
+      if(!database.objectStoreNames.contains(STORE)){
 
-if(
-!database.objectStoreNames.contains(
-STORE_NAME
-)
-){
+        database.createObjectStore(
+          STORE,
+          {
+            keyPath:"id",
+            autoIncrement:true
+          }
+        );
 
-database.createObjectStore(
-STORE_NAME,
-{
-keyPath:"id",
-autoIncrement:true
-}
-);
+      }
 
-}
+    };
 
-};
+    req.onsuccess = ()=>resolve(req.result);
+    req.onerror = ()=>reject(req.error);
 
-request.onsuccess = function(){
-
-resolve(
-request.result
-);
-
-};
-
-request.onerror = function(){
-
-reject(
-request.error
-);
-
-};
-
-});
+  });
 
 }
 
 
-function getAllCaps(){
+function getAll(){
 
-return new Promise((resolve,reject)=>{
+  return new Promise((resolve,reject)=>{
 
-const transaction =
-db.transaction(
-STORE_NAME,
-"readonly"
-);
+    const tx = db.transaction(STORE,"readonly");
+    const req = tx.objectStore(STORE).getAll();
 
-const store =
-transaction.objectStore(
-STORE_NAME
-);
+    req.onsuccess = ()=>resolve(req.result || []);
+    req.onerror = ()=>reject(req.error);
 
-const request =
-store.getAll();
-
-request.onsuccess =
-()=>resolve(
-request.result || []
-);
-
-request.onerror =
-()=>reject(
-request.error
-);
-
-});
+  });
 
 }
 
 
 function addCap(cap){
 
-return new Promise((resolve,reject)=>{
+  return new Promise((resolve,reject)=>{
 
-const transaction =
-db.transaction(
-STORE_NAME,
-"readwrite"
-);
+    const tx = db.transaction(STORE,"readwrite");
+    const req = tx.objectStore(STORE).add(cap);
 
-const request =
-transaction
-.objectStore(STORE_NAME)
-.add(cap);
+    req.onsuccess = ()=>resolve(req.result);
+    req.onerror = ()=>reject(req.error);
 
-request.onsuccess =
-()=>resolve(
-request.result
-);
-
-request.onerror =
-()=>reject(
-request.error
-);
-
-});
+  });
 
 }
 
 
-function updateCap(cap){
+function saveCap(cap){
 
-return new Promise((resolve,reject)=>{
+  return new Promise((resolve,reject)=>{
 
-const transaction =
-db.transaction(
-STORE_NAME,
-"readwrite"
-);
+    const tx = db.transaction(STORE,"readwrite");
+    const req = tx.objectStore(STORE).put(cap);
 
-const request =
-transaction
-.objectStore(STORE_NAME)
-.put(cap);
+    req.onsuccess = ()=>resolve();
+    req.onerror = ()=>reject(req.error);
 
-request.onsuccess =
-()=>resolve();
-
-request.onerror =
-()=>reject(
-request.error
-);
-
-});
+  });
 
 }
 
 
-/* =========================
-   BILDER
-========================= */
+function clearCaps(){
 
-function fileToDataURL(file){
+  return new Promise((resolve,reject)=>{
 
-return new Promise(
-(resolve,reject)=>{
+    const tx = db.transaction(STORE,"readwrite");
+    const req = tx.objectStore(STORE).clear();
 
-const reader =
-new FileReader();
+    req.onsuccess = ()=>resolve();
+    req.onerror = ()=>reject(req.error);
 
-reader.onload =
-()=>resolve(
-reader.result
-);
-
-reader.onerror =
-reject;
-
-reader.readAsDataURL(
-file
-);
-
-});
+  });
 
 }
 
 
-function loadImage(dataURL){
+/* =========================================
+   HAUPTANSICHT
+========================================= */
 
-return new Promise(
-(resolve,reject)=>{
-
-const image =
-new Image();
-
-image.onload =
-()=>resolve(image);
-
-image.onerror =
-reject;
-
-image.src =
-dataURL;
-
-});
-
+function number(id){
+  return "#" + String(id).padStart(3,"0");
 }
 
 
-/* =========================
-   BRETT AUSSCHNEIDEN
-========================= */
+function visibleCaps(){
 
-async function splitBoard(file){
+  const query =
+    document
+    .getElementById("search")
+    .value
+    .trim()
+    .toLowerCase();
 
-const dataURL =
-await fileToDataURL(file);
 
-const image =
-await loadImage(dataURL);
+  return caps.filter(cap=>{
 
+    if(
+      filter === "all" &&
+      cap.status === "traded"
+    ) return false;
 
-/*
-TESTBRETT:
+    if(
+      filter === "selected" &&
+      cap.status !== "selected"
+    ) return false;
 
-10 Spalten
-14 Reihen
+    if(
+      filter === "maybe" &&
+      cap.status !== "maybe"
+    ) return false;
 
-Diese Werte können wir später
-noch fein anpassen.
-*/
+    if(
+      filter === "traded" &&
+      cap.status !== "traded"
+    ) return false;
 
-const columns = 10;
-const rows = 14;
 
+    if(query){
 
-/*
-Rand des Kronkorken-Rasters
-innerhalb des Fotos.
-*/
+      const text =
+        (
+          number(cap.id) +
+          " " +
+          cap.board +
+          " " +
+          cap.position
+        ).toLowerCase();
 
-const leftPercent = 0.055;
-const rightPercent = 0.965;
+      if(!text.includes(query)){
+        return false;
+      }
 
-const topPercent = 0.02;
-const bottomPercent = 0.985;
+    }
 
+    return true;
 
-const startX =
-image.width *
-leftPercent;
-
-const startY =
-image.height *
-topPercent;
-
-
-const gridWidth =
-image.width *
-(
-rightPercent -
-leftPercent
-);
-
-const gridHeight =
-image.height *
-(
-bottomPercent -
-topPercent
-);
-
-
-const cellWidth =
-gridWidth /
-columns;
-
-const cellHeight =
-gridHeight /
-rows;
-
-
-const images = [];
-
-
-for(
-let row = 0;
-row < rows;
-row++
-){
-
-for(
-let column = 0;
-column < columns;
-column++
-){
-
-const centerX =
-startX +
-(column + 0.5) *
-cellWidth;
-
-
-const centerY =
-startY +
-(row + 0.5) *
-cellHeight;
-
-
-/*
-Quadratischer Ausschnitt.
-
-Etwas kleiner als das Rasterfeld,
-damit möglichst kein Nachbar-
-Kronkorken mit im Bild landet.
-*/
-
-const size =
-Math.min(
-cellWidth,
-cellHeight
-) * 0.92;
-
-
-const sourceX =
-centerX -
-size / 2;
-
-const sourceY =
-centerY -
-size / 2;
-
-
-const canvas =
-document.createElement(
-"canvas"
-);
-
-
-canvas.width = 260;
-canvas.height = 260;
-
-
-const context =
-canvas.getContext(
-"2d"
-);
-
-
-context.fillStyle =
-"#ffffff";
-
-
-context.fillRect(
-0,
-0,
-260,
-260
-);
-
-
-context.drawImage(
-image,
-
-sourceX,
-sourceY,
-size,
-size,
-
-0,
-0,
-260,
-260
-);
-
-
-images.push(
-
-canvas.toDataURL(
-"image/jpeg",
-0.86
-)
-
-);
-
-}
-
-}
-
-
-return images;
-
-}
-
-
-/* =========================
-   ANZEIGE
-========================= */
-
-function capNumber(id){
-
-return "#" +
-String(id)
-.padStart(
-3,
-"0"
-);
-
-}
-
-
-function showToast(text){
-
-const toast =
-document.getElementById(
-"toast"
-);
-
-toast.textContent =
-text;
-
-toast.classList.add(
-"show"
-);
-
-setTimeout(
-()=>{
-
-toast.classList.remove(
-"show"
-);
-
-},
-1800
-);
-
-}
-
-
-function filteredCaps(){
-
-const search =
-document
-.getElementById("search")
-.value
-.toLowerCase()
-.trim();
-
-
-return caps.filter(cap=>{
-
-if(
-currentFilter === "all" &&
-cap.status === "traded"
-){
-
-return false;
-
-}
-
-
-if(
-currentFilter === "selected" &&
-cap.status !== "selected"
-){
-
-return false;
-
-}
-
-
-if(
-currentFilter === "maybe" &&
-cap.status !== "maybe"
-){
-
-return false;
-
-}
-
-
-if(
-currentFilter === "traded" &&
-cap.status !== "traded"
-){
-
-return false;
-
-}
-
-
-if(search){
-
-const text =
-(
-capNumber(cap.id) +
-" " +
-cap.board +
-" " +
-cap.position
-)
-.toLowerCase();
-
-
-if(
-!text.includes(search)
-){
-
-return false;
-
-}
-
-}
-
-
-return true;
-
-});
+  });
 
 }
 
 
 function render(){
 
-const grid =
-document.getElementById(
-"grid"
-);
+  document.getElementById("availableCount").textContent =
+    caps.filter(c=>c.status !== "traded").length;
+
+  document.getElementById("selectedCount").textContent =
+    caps.filter(c=>c.status === "selected").length;
+
+  document.getElementById("maybeCount").textContent =
+    caps.filter(c=>c.status === "maybe").length;
 
 
-document.getElementById(
-"availableCount"
-).textContent =
-
-caps.filter(
-cap =>
-cap.status !== "traded"
-).length;
+  const grid = document.getElementById("grid");
+  const list = visibleCaps();
 
 
-document.getElementById(
-"selectedCount"
-).textContent =
+  if(!list.length){
 
-caps.filter(
-cap =>
-cap.status === "selected"
-).length;
+    grid.innerHTML = `
+      <div class="empty">
+        Noch keine Kronkorken.<br><br>
+        Tippe auf <strong>+ Brett</strong>.
+      </div>
+    `;
 
+    return;
 
-document.getElementById(
-"maybeCount"
-).textContent =
-
-caps.filter(
-cap =>
-cap.status === "maybe"
-).length;
+  }
 
 
-const list =
-filteredCaps();
+  grid.innerHTML = list.map(cap=>{
+
+    const selected =
+      cap.status === "selected";
+
+    const maybe =
+      cap.status === "maybe";
 
 
-if(
-list.length === 0
-){
+    return `
 
-grid.innerHTML = `
+      <article class="cap ${selected ? "selected":""} ${maybe ? "maybe":""}">
 
-<div class="empty">
+        <div class="pic">
 
-<strong>
-Noch keine Kronkorken
-</strong>
+          <img src="${cap.image}">
 
-<br><br>
+          <div class="badge">
+            ${number(cap.id)}
+          </div>
 
-Tippe oben auf
-<strong>+ Brett</strong>
-und lade dein Testbrett hoch.
-
-</div>
-
-`;
-
-return;
-
-}
+        </div>
 
 
-grid.innerHTML =
+        <div class="capbody">
 
-list.map(cap=>{
-
-const selected =
-cap.status ===
-"selected";
-
-const maybe =
-cap.status ===
-"maybe";
+          <div class="location">
+            ${cap.board} · Pos. ${cap.position}
+          </div>
 
 
-return `
+          <div class="actions">
 
-<article
-class="
-cap
-${selected ? "selected" : ""}
-${maybe ? "maybe" : ""}
-">
+            <button
+              class="action ${selected ? "on-selected":""}"
+              data-id="${cap.id}"
+              data-status="selected">
 
-<div class="image-wrap">
+              ${selected ? "✓ Ausgewählt":"Auswählen"}
 
-<img
-class="cap-image"
-src="${cap.image}"
->
-
-<div class="number">
-${capNumber(cap.id)}
-</div>
-
-</div>
+            </button>
 
 
-<div class="cap-body">
+            <button
+              class="action ${maybe ? "on-maybe":""}"
+              data-id="${cap.id}"
+              data-status="maybe">
 
-<div class="location">
+              ${maybe ? "★ Vielleicht":"Vielleicht"}
 
-${cap.board}
-· Pos. ${cap.position}
-
-</div>
-
-
-<div class="actions">
+            </button>
 
 
-<button
-class="
-action
-${selected ? "selected" : ""}
-"
-data-id="${cap.id}"
-data-status="selected"
->
+            <button
+              class="action traded"
+              data-id="${cap.id}"
+              data-status="traded">
 
-${selected
-? "✓ Ausgewählt"
-: "Auswählen"}
+              Getauscht
 
-</button>
+            </button>
 
+          </div>
 
-<button
-class="
-action
-${maybe ? "maybe" : ""}
-"
-data-id="${cap.id}"
-data-status="maybe"
->
+        </div>
 
-${maybe
-? "★ Vielleicht"
-: "Vielleicht"}
+      </article>
 
-</button>
+    `;
 
-
-<button
-class="action traded"
-data-id="${cap.id}"
-data-status="traded"
->
-
-Getauscht
-
-</button>
-
-
-</div>
-
-</div>
-
-</article>
-
-`;
-
-}).join("");
+  }).join("");
 
 }
 
-
-/* =========================
-   + BRETT
-========================= */
-
-const modal =
-document.getElementById(
-"boardModal"
-);
-
-
-document
-.getElementById(
-"addBoardButton"
-)
-.addEventListener(
-"click",
-function(){
-
-modal.classList.add(
-"open"
-);
-
-}
-);
-
-
-document
-.getElementById(
-"cancelButton"
-)
-.addEventListener(
-"click",
-function(){
-
-modal.classList.remove(
-"open"
-);
-
-}
-);
-
-
-modal.addEventListener(
-"click",
-function(event){
-
-if(
-event.target === modal
-){
-
-modal.classList.remove(
-"open"
-);
-
-}
-
-}
-);
-
-
-/* =========================
-   IMPORT
-========================= */
-
-document
-.getElementById(
-"importButton"
-)
-.addEventListener(
-"click",
-async function(){
-
-const boardName =
-document
-.getElementById(
-"boardName"
-)
-.value
-.trim();
-
-
-const file =
-document
-.getElementById(
-"boardImage"
-)
-.files[0];
-
-
-if(
-!boardName
-){
-
-alert(
-"Bitte gib einen Brettnamen ein."
-);
-
-return;
-
-}
-
-
-if(
-!file
-){
-
-alert(
-"Bitte wähle ein Brettfoto aus."
-);
-
-return;
-
-}
-
-
-const button =
-document.getElementById(
-"importButton"
-);
-
-
-button.disabled =
-true;
-
-
-button.textContent =
-"Brett wird geschnitten …";
-
-
-try{
-
-const pieces =
-await splitBoard(
-file
-);
-
-
-/*
-Positionen beginnen bei 1.
-*/
-
-for(
-let i = 0;
-i < pieces.length;
-i++
-){
-
-button.textContent =
-"Speichere " +
-(i + 1) +
-" / 140";
-
-
-await addCap({
-
-board:
-boardName,
-
-position:
-i + 1,
-
-image:
-pieces[i],
-
-status:
-"available",
-
-createdAt:
-Date.now()
-
-});
-
-}
-
-
-modal.classList.remove(
-"open"
-);
-
-
-document.getElementById(
-"boardName"
-).value = "";
-
-
-document.getElementById(
-"boardImage"
-).value = "";
-
-
-await reload();
-
-
-showToast(
-"140 Kronkorken erstellt"
-);
-
-}
-catch(error){
-
-console.error(
-error
-);
-
-
-alert(
-"Das Brettfoto konnte nicht verarbeitet werden."
-);
-
-}
-finally{
-
-button.disabled =
-false;
-
-
-button.textContent =
-"Importieren";
-
-}
-
-}
-);
-
-
-/* =========================
-   STATUS
-========================= */
-
-document
-.getElementById(
-"grid"
-)
-.addEventListener(
-"click",
-async function(event){
-
-const button =
-event.target.closest(
-"[data-status]"
-);
-
-
-if(
-!button
-){
-
-return;
-
-}
-
-
-const id =
-Number(
-button.dataset.id
-);
-
-
-const status =
-button.dataset.status;
-
-
-const cap =
-caps.find(
-item =>
-item.id === id
-);
-
-
-if(
-!cap
-){
-
-return;
-
-}
-
-
-/*
-Wenn Auswahl erneut angeklickt wird,
-wird sie wieder entfernt.
-*/
-
-if(
-cap.status === status &&
-status !== "traded"
-){
-
-cap.status =
-"available";
-
-}
-else{
-
-cap.status =
-status;
-
-}
-
-
-await updateCap(
-cap
-);
-
-
-await reload();
-
-}
-);
-
-
-/* =========================
-   FILTER
-========================= */
-
-document
-.querySelectorAll(
-".tab"
-)
-.forEach(button=>{
-
-button.addEventListener(
-"click",
-function(){
-
-document
-.querySelectorAll(
-".tab"
-)
-.forEach(item=>{
-
-item.classList.remove(
-"active"
-);
-
-});
-
-
-button.classList.add(
-"active"
-);
-
-
-currentFilter =
-button.dataset.filter;
-
-
-render();
-
-}
-);
-
-});
-
-
-document
-.getElementById(
-"search"
-)
-.addEventListener(
-"input",
-render
-);
-
-
-/* =========================
-   TEILEN
-========================= */
-
-document
-.getElementById(
-"shareButton"
-)
-.addEventListener(
-"click",
-function(){
-
-alert(
-"Der sichere Tauschmodus kommt wieder dazu, sobald wir geprüft haben, ob die 140 Kronkorken sauber ausgeschnitten werden."
-);
-
-}
-);
-
-
-/* =========================
-   START
-========================= */
 
 async function reload(){
 
-caps =
-await getAllCaps();
+  caps = await getAll();
 
+  caps.sort(
+    (a,b)=>a.id-b.id
+  );
 
-caps.sort(
-(a,b)=>
-a.id - b.id
-);
-
-
-render();
+  render();
 
 }
 
+
+/* =========================================
+   FILTER
+========================================= */
+
+document
+.querySelectorAll(".tab")
+.forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    document
+    .querySelectorAll(".tab")
+    .forEach(item=>item.classList.remove("active"));
+
+    button.classList.add("active");
+
+    filter =
+      button.dataset.filter;
+
+    render();
+
+  });
+
+});
+
+
+document
+.getElementById("search")
+.addEventListener(
+  "input",
+  render
+);
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+document
+.getElementById("grid")
+.addEventListener(
+"click",
+async event=>{
+
+  const button =
+    event.target.closest("[data-status]");
+
+  if(!button) return;
+
+
+  const id =
+    Number(button.dataset.id);
+
+  const status =
+    button.dataset.status;
+
+
+  const cap =
+    caps.find(item=>item.id === id);
+
+  if(!cap) return;
+
+
+  if(
+    cap.status === status &&
+    status !== "traded"
+  ){
+
+    cap.status = "available";
+
+  }else{
+
+    cap.status = status;
+
+  }
+
+
+  await saveCap(cap);
+  await reload();
+
+});
+
+
+/* =========================================
+   MODAL
+========================================= */
+
+const modal =
+  document.getElementById("modal");
+
+
+document
+.getElementById("addBtn")
+.addEventListener(
+"click",
+()=>{
+
+  modal.classList.add("open");
+
+});
+
+
+document
+.getElementById("cancelBtn")
+.addEventListener(
+"click",
+()=>{
+
+  modal.classList.remove("open");
+
+});
+
+
+/* =========================================
+   FOTO LADEN
+========================================= */
+
+const canvas =
+  document.getElementById("boardCanvas");
+
+const ctx =
+  canvas.getContext("2d");
+
+let boardImage = null;
+
+let points = [];
+
+
+/*
+Punkte werden in dieser Reihenfolge gesetzt:
+
+0 = oben links
+1 = oben rechts
+2 = unten rechts
+3 = unten links
+*/
+
+const instructions = [
+
+  "1. Tippe auf die Mitte des Kronkorkens oben links.",
+
+  "2. Jetzt auf die Mitte des Kronkorkens oben rechts.",
+
+  "3. Jetzt auf die Mitte des Kronkorkens unten rechts.",
+
+  "4. Jetzt auf die Mitte des Kronkorkens unten links.",
+
+  "Perfekt. Alle vier Punkte sind gesetzt."
+
+];
+
+
+function fileToDataURL(file){
+
+  return new Promise((resolve,reject)=>{
+
+    const reader =
+      new FileReader();
+
+    reader.onload =
+      ()=>resolve(reader.result);
+
+    reader.onerror =
+      reject;
+
+    reader.readAsDataURL(file);
+
+  });
+
+}
+
+
+function loadImage(dataURL){
+
+  return new Promise((resolve,reject)=>{
+
+    const image =
+      new Image();
+
+    image.onload =
+      ()=>resolve(image);
+
+    image.onerror =
+      reject;
+
+    image.src =
+      dataURL;
+
+  });
+
+}
+
+
+document
+.getElementById("boardFile")
+.addEventListener(
+"change",
+async event=>{
+
+  const file =
+    event.target.files[0];
+
+  if(!file) return;
+
+
+  const dataURL =
+    await fileToDataURL(file);
+
+  boardImage =
+    await loadImage(dataURL);
+
+
+  /*
+  Canvas nutzt intern die echte Fotoauflösung.
+  Dadurch bleiben die Klickpunkte exakt.
+  */
+
+  canvas.width =
+    boardImage.width;
+
+  canvas.height =
+    boardImage.height;
+
+
+  points = [];
+
+  document
+  .getElementById("previewBox")
+  .classList.add("show");
+
+
+  drawPreview();
+
+  updateStep();
+
+});
+
+
+/* =========================================
+   PUNKTE SETZEN
+========================================= */
+
+canvas.addEventListener(
+"click",
+event=>{
+
+  if(!boardImage) return;
+
+  if(points.length >= 4){
+    return;
+  }
+
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+
+  const scaleX =
+    canvas.width / rect.width;
+
+  const scaleY =
+    canvas.height / rect.height;
+
+
+  const x =
+    (event.clientX - rect.left) *
+    scaleX;
+
+  const y =
+    (event.clientY - rect.top) *
+    scaleY;
+
+
+  points.push({x,y});
+
+
+  drawPreview();
+
+  updateStep();
+
+});
+
+
+function updateStep(){
+
+  document
+  .getElementById("stepText")
+  .textContent =
+    instructions[
+      Math.min(
+        points.length,
+        4
+      )
+    ];
+
+
+  document
+  .getElementById("importBtn")
+  .disabled =
+    points.length !== 4;
+
+}
+
+
+function drawPreview(){
+
+  if(!boardImage) return;
+
+
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+
+  ctx.drawImage(
+    boardImage,
+    0,
+    0
+  );
+
+
+  const radius =
+    Math.max(
+      12,
+      canvas.width * 0.012
+    );
+
+
+  points.forEach(
+  (point,index)=>{
+
+    ctx.beginPath();
+
+    ctx.arc(
+      point.x,
+      point.y,
+      radius,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fillStyle =
+      "rgba(76,141,255,.9)";
+
+    ctx.fill();
+
+
+    ctx.lineWidth =
+      Math.max(
+        3,
+        canvas.width * .003
+      );
+
+    ctx.strokeStyle =
+      "white";
+
+    ctx.stroke();
+
+
+    ctx.fillStyle =
+      "white";
+
+    ctx.font =
+      `bold ${radius}px Arial`;
+
+    ctx.textAlign =
+      "center";
+
+    ctx.textBaseline =
+      "middle";
+
+    ctx.fillText(
+      String(index + 1),
+      point.x,
+      point.y
+    );
+
+  });
+
+
+  if(points.length === 4){
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      points[0].x,
+      points[0].y
+    );
+
+    ctx.lineTo(
+      points[1].x,
+      points[1].y
+    );
+
+    ctx.lineTo(
+      points[2].x,
+      points[2].y
+    );
+
+    ctx.lineTo(
+      points[3].x,
+      points[3].y
+    );
+
+    ctx.closePath();
+
+
+    ctx.lineWidth =
+      Math.max(
+        3,
+        canvas.width * .003
+      );
+
+    ctx.strokeStyle =
+      "#4c8dff";
+
+    ctx.stroke();
+
+  }
+
+}
+
+
+document
+.getElementById("undoPoint")
+.addEventListener(
+"click",
+()=>{
+
+  points.pop();
+
+  drawPreview();
+
+  updateStep();
+
+});
+
+
+document
+.getElementById("resetPoints")
+.addEventListener(
+"click",
+()=>{
+
+  points = [];
+
+  drawPreview();
+
+  updateStep();
+
+});
+
+
+/* =========================================
+   PERSPEKTIVISCHES RASTER
+========================================= */
+
+/*
+Bilineare Interpolation innerhalb
+der vier gesetzten Eckpunkte.
+*/
+
+function gridPoint(u,v){
+
+  const TL = points[0];
+  const TR = points[1];
+  const BR = points[2];
+  const BL = points[3];
+
+
+  const x =
+    (1-u)*(1-v)*TL.x +
+    u*(1-v)*TR.x +
+    u*v*BR.x +
+    (1-u)*v*BL.x;
+
+
+  const y =
+    (1-u)*(1-v)*TL.y +
+    u*(1-v)*TR.y +
+    u*v*BR.y +
+    (1-u)*v*BL.y;
+
+
+  return {x,y};
+
+}
+
+
+/*
+Abstand zweier Punkte.
+*/
+
+function distance(a,b){
+
+  return Math.hypot(
+    a.x-b.x,
+    a.y-b.y
+  );
+
+}
+
+
+/* =========================================
+   140 KRONKORKEN AUSSCHNEIDEN
+========================================= */
+
+async function createCaps(){
+
+  const COLS = 10;
+  const ROWS = 14;
+
+  const results = [];
+
+
+  for(
+    let row=0;
+    row<ROWS;
+    row++
+  ){
+
+    for(
+      let col=0;
+      col<COLS;
+      col++
+    ){
+
+      /*
+      Da die 4 angeklickten Punkte bereits
+      die MITTEN der äußeren Kronkorken sind:
+
+      Spalte 0 = u 0
+      Spalte 9 = u 1
+
+      Reihe 0 = v 0
+      Reihe 13 = v 1
+      */
+
+      const u =
+        col / (COLS-1);
+
+      const v =
+        row / (ROWS-1);
+
+
+      const center =
+        gridPoint(u,v);
+
+
+      /*
+      Lokale Abstände zu Nachbarpositionen.
+      Dadurch werden die Ausschnitte unten
+      automatisch etwas größer, falls das
+      Brett perspektivisch größer wird.
+      */
+
+      const leftU =
+        Math.max(
+          0,
+          (col-1)/(COLS-1)
+        );
+
+      const rightU =
+        Math.min(
+          1,
+          (col+1)/(COLS-1)
+        );
+
+      const upV =
+        Math.max(
+          0,
+          (row-1)/(ROWS-1)
+        );
+
+      const downV =
+        Math.min(
+          1,
+          (row+1)/(ROWS-1)
+        );
+
+
+      const left =
+        gridPoint(leftU,v);
+
+      const right =
+        gridPoint(rightU,v);
+
+      const up =
+        gridPoint(u,upV);
+
+      const down =
+        gridPoint(u,downV);
+
+
+      let horizontal =
+        distance(left,right);
+
+      let vertical =
+        distance(up,down);
+
+
+      if(col>0 && col<COLS-1){
+        horizontal /= 2;
+      }
+
+      if(row>0 && row<ROWS-1){
+        vertical /= 2;
+      }
+
+
+      /*
+      84 % des kleineren Rasterabstands.
+      So bleibt etwas Luft um den Kronkorken.
+      */
+
+      const size =
+        Math.min(
+          horizontal,
+          vertical
+        ) * 0.84;
+
+
+      const output =
+        document.createElement("canvas");
+
+
+      output.width = 260;
+      output.height = 260;
+
+
+      const outputCtx =
+        output.getContext("2d");
+
+
+      outputCtx.fillStyle =
+        "#ffffff";
+
+
+      outputCtx.fillRect(
+        0,
+        0,
+        260,
+        260
+      );
+
+
+      outputCtx.drawImage(
+
+        boardImage,
+
+        center.x - size/2,
+        center.y - size/2,
+
+        size,
+        size,
+
+        0,
+        0,
+
+        260,
+        260
+
+      );
+
+
+      results.push(
+
+        output.toDataURL(
+          "image/jpeg",
+          .88
+        )
+
+      );
+
+    }
+
+  }
+
+
+  return results;
+
+}
+
+
+/* =========================================
+   IMPORTIEREN
+========================================= */
+
+document
+.getElementById("importBtn")
+.addEventListener(
+"click",
+async ()=>{
+
+  const board =
+    document
+    .getElementById("boardName")
+    .value
+    .trim();
+
+
+  if(!board){
+
+    alert(
+      "Bitte zuerst einen Brettnamen eingeben."
+    );
+
+    return;
+
+  }
+
+
+  if(!boardImage){
+
+    alert(
+      "Bitte ein Brettfoto auswählen."
+    );
+
+    return;
+
+  }
+
+
+  if(points.length !== 4){
+
+    alert(
+      "Bitte zuerst alle vier Eck-Kronkorken markieren."
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById("importBtn");
+
+
+  button.disabled = true;
+  button.textContent = "Schneide Brett …";
+
+
+  try{
+
+    const images =
+      await createCaps();
+
+
+    for(
+      let i=0;
+      i<images.length;
+      i++
+    ){
+
+      button.textContent =
+        `Speichere ${i+1}/140`;
+
+
+      await addCap({
+
+        board,
+
+        position:i+1,
+
+        image:images[i],
+
+        status:"available",
+
+        createdAt:Date.now()
+
+      });
+
+    }
+
+
+    await reload();
+
+
+    modal.classList.remove("open");
+
+
+    showToast(
+      "140 Kronkorken erstellt"
+    );
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    alert(
+      "Beim Ausschneiden ist etwas schiefgelaufen."
+    );
+
+  }
+  finally{
+
+    button.disabled = false;
+
+    button.textContent =
+      "Ausschneiden";
+
+  }
+
+});
+
+
+/* =========================================
+   TESTDATEN LÖSCHEN
+========================================= */
+
+document
+.getElementById("deleteAll")
+.addEventListener(
+"click",
+async ()=>{
+
+  const ok =
+    confirm(
+      "Wirklich alle bisherigen CapTrade-Kronkorken löschen?"
+    );
+
+
+  if(!ok) return;
+
+
+  await clearCaps();
+
+  await reload();
+
+  showToast(
+    "Alle Kronkorken gelöscht"
+  );
+
+});
+
+
+/* =========================================
+   TEILEN
+========================================= */
+
+document
+.getElementById("shareBtn")
+.addEventListener(
+"click",
+()=>{
+
+  alert(
+    "Den sicheren Tauschmodus setzen wir wieder ein, sobald der Brett-Ausschnitt sauber funktioniert."
+  );
+
+});
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+function showToast(text){
+
+  const toast =
+    document.getElementById("toast");
+
+
+  toast.textContent =
+    text;
+
+
+  toast.classList.add("show");
+
+
+  setTimeout(
+    ()=>toast.classList.remove("show"),
+    1800
+  );
+
+}
+
+
+/* =========================================
+   START
+========================================= */
 
 async function start(){
 
-try{
+  db =
+    await openDB();
 
-db =
-await openDatabase();
-
-
-await reload();
-
-}
-catch(error){
-
-console.error(
-error
-);
-
-
-alert(
-"CapTrade konnte den lokalen Speicher nicht öffnen."
-);
-
-}
+  await reload();
 
 }
 
