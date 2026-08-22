@@ -1,1060 +1,2314 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#06182c">
-<title>CapTrade</title>
-
-<style>
-:root{
-  --bg:#06182c;
-  --card:#102944;
-  --card2:#0c223a;
-  --line:#27425e;
-  --text:#f5f7fa;
-  --muted:#9eacba;
-  --blue:#3183ff;
-  --green:#36c96b;
-  --yellow:#f0b429;
-  --red:#ef5757;
-}
-
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
-html,body{
-  margin:0;
-  min-height:100%;
-  background:
-    radial-gradient(circle at top,#0d2a4b 0%,#06182c 52%,#04111f 100%);
-  color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-
-button,input,select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-.app{
-  max-width:720px;
-  margin:auto;
-  padding-bottom:105px;
-}
-
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:30;
-  padding:14px 16px 12px;
-  background:rgba(6,24,44,.95);
-  backdrop-filter:blur(16px);
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-
-.toprow{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.logo{
-  font-size:30px;
-  font-weight:850;
-}
-
-.logo span{
-  color:#ed3131;
-}
-
-.version{
-  font-size:13px;
-  font-weight:750;
-  border:1px solid #d0a321;
-  color:#f1c43b;
-  border-radius:9px;
-  padding:5px 8px;
-}
-
-main{
-  padding:14px;
-}
-
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
-}
-
-.intro{
-  background:rgba(17,42,70,.78);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:16px;
-  padding:12px 14px;
-  margin-bottom:14px;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.45;
-}
-
-.intro strong{
-  color:white;
-}
-
-.summary{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-bottom:14px;
-}
-
-.summary-card{
-  background:rgba(17,42,70,.9);
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:16px;
-  padding:13px 14px;
-}
-
-.summary-label{
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:5px;
-}
-
-.summary-value{
-  font-size:25px;
-  font-weight:850;
-}
-
-.green{color:var(--green)}
-.yellow{color:var(--yellow)}
-.red{color:var(--red)}
-
-.search-row{
-  display:grid;
-  grid-template-columns:1fr 58px;
-  gap:8px;
-  margin-bottom:12px;
-}
-
-.search,
-.edit-input,
-.edit-select{
-  width:100%;
-  border:1px solid var(--line);
-  background:#0b2037;
-  color:white;
-  border-radius:12px;
-  padding:12px;
-  outline:none;
-}
-
-.search::placeholder,
-.edit-input::placeholder{
-  color:#7e8f9f;
-}
-
-.search-btn{
-  border:1px solid var(--line);
-  background:#0b2037;
-  color:white;
-  border-radius:12px;
-  font-size:31px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.toolbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin:6px 0 10px;
-}
-
-.toolbar-title{
-  font-size:21px;
-  font-weight:850;
-}
-
-.sort{
-  border:1px solid var(--line);
-  background:#0c233c;
-  color:white;
-  border-radius:10px;
-  padding:9px;
-}
-
-.cap-list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.cap-card{
-  display:grid;
-  grid-template-columns:66px 1fr auto;
-  gap:11px;
-  align-items:center;
-  background:rgba(14,36,61,.96);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:15px;
-  padding:9px;
-}
-
-.cap-img{
-  width:66px;
-  height:66px;
-  border-radius:12px;
-  background:#1b3652;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-
-.cap-img img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.cap-number{
-  font-size:14px;
-  font-weight:800;
-  color:#d5deea;
-}
-
-.cap-name{
-  font-size:17px;
-  font-weight:750;
-  margin-top:2px;
-}
-
-.cap-sub{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:3px;
-}
-
-.status-line{
-  margin-top:4px;
-  font-size:12px;
-  font-weight:700;
-}
-
-.status-safe{
-  color:var(--green);
-}
-
-.status-probable{
-  color:var(--yellow);
-}
-
-.status-unclear{
-  color:#a8b4c2;
-}
-
-.select-btn{
-  border:1px solid #31526f;
-  background:transparent;
-  color:#dbe7f2;
-  border-radius:10px;
-  padding:8px 9px;
-  font-size:13px;
-  font-weight:700;
-}
-
-.select-btn.selected{
-  color:#67df8d;
-  border-color:#26864b;
-  background:rgba(38,149,79,.18);
-}
-
-.choice-card,
-.location-card{
-  display:grid;
-  grid-template-columns:64px 1fr;
-  gap:10px;
-  background:rgba(14,36,61,.96);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:15px;
-  padding:9px;
-  margin-bottom:8px;
-}
-
-.choice-actions{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  margin-top:8px;
-}
-
-.choice-btn{
-  border:1px solid #36526d;
-  background:#0c223a;
-  color:#d9e3ec;
-  border-radius:9px;
-  padding:7px 9px;
-  font-size:13px;
-  font-weight:700;
-}
-
-.choice-btn.safe.active{
-  border-color:#2db65c;
-  color:#61db88;
-  background:rgba(45,182,92,.15);
-}
-
-.choice-btn.maybe.active{
-  border-color:#d69b11;
-  color:#f6c448;
-  background:rgba(214,155,17,.15);
-}
-
-.choice-btn.remove{
-  color:#ff8181;
-}
-
-.selection-header{
-  background:rgba(16,41,68,.9);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:16px;
-  padding:13px 14px;
-  margin-bottom:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.selection-count{
-  font-size:18px;
-  font-weight:800;
-}
-
-.clear-btn{
-  border:0;
-  background:none;
-  color:#ff7474;
-}
-
-.group{
-  margin-top:16px;
-}
-
-.group-title{
-  font-size:17px;
-  font-weight:800;
-  margin-bottom:8px;
-}
-
-.empty{
-  padding:20px 10px;
-  text-align:center;
-  color:var(--muted);
-  border:1px dashed #294660;
-  border-radius:14px;
-}
-
-.location-line{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:4px;
-}
-
-.location-highlight{
-  color:white;
-  font-weight:700;
-}
-
-.manage-card{
-  background:rgba(14,36,61,.96);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:16px;
-  padding:14px;
-  margin-bottom:12px;
-}
-
-.manage-title{
-  font-size:18px;
-  font-weight:850;
-  margin-bottom:8px;
-}
-
-.manage-text{
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.45;
-  margin-bottom:12px;
-}
-
-#boardFInput,
-#assignmentInput{
-  display:none;
-}
-
-.primary-btn,
-.secondary-btn{
-  width:100%;
-  border-radius:11px;
-  padding:12px 13px;
-  font-weight:800;
-}
-
-.primary-btn{
-  border:0;
-  background:var(--blue);
-  color:white;
-}
-
-.secondary-btn{
-  border:1px solid #36526d;
-  background:#0c223a;
-  color:white;
-}
-
-.progress{
-  display:none;
-  margin-top:12px;
-  padding:12px;
-  background:#0a2037;
-  border:1px solid var(--line);
-  border-radius:12px;
-}
-
-.progress.show{
-  display:block;
-}
-
-.progress-bar{
-  width:100%;
-  height:8px;
-  background:#071625;
-  border-radius:20px;
-  overflow:hidden;
-  margin-top:8px;
-}
-
-.progress-fill{
-  width:0%;
-  height:100%;
-  background:var(--blue);
-  transition:width .15s;
-}
-
-.success-box{
-  display:none;
-  margin-top:12px;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid rgba(54,201,107,.35);
-  background:rgba(54,201,107,.1);
-  color:#70df98;
-  line-height:1.45;
-}
-
-.success-box.show{
-  display:block;
-}
-
-.warning-box{
-  padding:11px 12px;
-  border:1px solid rgba(240,180,41,.3);
-  background:rgba(240,180,41,.08);
-  border-radius:12px;
-  color:#eac967;
-  font-size:13px;
-  line-height:1.4;
-  margin-top:10px;
-}
-
-.danger-btn{
-  width:100%;
-  margin-top:10px;
-  border:1px solid rgba(239,87,87,.45);
-  background:transparent;
-  color:#ff8181;
-  border-radius:11px;
-  padding:11px;
-}
-
-.check-toolbar{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-bottom:10px;
-}
-
-.check-filter{
-  width:100%;
-  border:1px solid var(--line);
-  background:#0b2037;
-  color:white;
-  border-radius:10px;
-  padding:9px;
-}
-
-.check-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
-}
-
-.check-item{
-  border:1px solid rgba(255,255,255,.08);
-  background:#0c223a;
-  border-radius:12px;
-  padding:6px;
-  text-align:center;
-  color:white;
-}
-
-.check-item img{
-  width:100%;
-  aspect-ratio:1/1;
-  object-fit:cover;
-  border-radius:9px;
-  display:block;
-}
-
-.check-number{
-  margin-top:5px;
-  font-size:12px;
-  font-weight:800;
-  color:#dce6ef;
-}
-
-.check-status{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  display:inline-block;
-  margin-left:4px;
-}
-
-.dot-safe{
-  background:var(--green);
-}
-
-.dot-probable{
-  background:var(--yellow);
-}
-
-.dot-unclear{
-  background:#8291a1;
-}
-
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:100;
-  display:none;
-  align-items:flex-end;
-  justify-content:center;
-  background:rgba(0,0,0,.72);
-  padding:18px;
-}
-
-.modal.show{
-  display:flex;
-}
-
-.modal-card{
-  width:100%;
-  max-width:520px;
-  max-height:92vh;
-  overflow:auto;
-  background:#0d243d;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:20px;
-  padding:15px;
-}
-
-.modal-close{
-  float:right;
-  width:36px;
-  height:36px;
-  border:0;
-  border-radius:50%;
-  background:#18334f;
-  color:white;
-  font-size:22px;
-}
-
-.modal-image{
-  width:100%;
-  max-height:40vh;
-  object-fit:contain;
-  background:#071625;
-  border-radius:14px;
-  margin-top:10px;
-}
-
-.modal-title{
-  font-size:23px;
-  font-weight:850;
-  margin-top:12px;
-}
-
-.modal-detail{
-  color:var(--muted);
-  margin-top:6px;
-  line-height:1.5;
-}
-
-.modal-detail strong{
-  color:white;
-}
-
-.edit-section{
-  margin-top:16px;
-  padding-top:14px;
-  border-top:1px solid rgba(255,255,255,.08);
-}
-
-.edit-label{
-  display:block;
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:5px;
-}
-
-.edit-field{
-  margin-bottom:12px;
-}
-
-.save-btn{
-  width:100%;
-  border:0;
-  background:var(--green);
-  color:#041b0d;
-  border-radius:11px;
-  padding:12px;
-  font-weight:850;
-}
-
-.import-success{
-  display:none;
-  margin-top:10px;
-  color:#70df98;
-  font-size:14px;
-}
-
-.import-success.show{
-  display:block;
-}
-
-.bottom-nav{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  z-index:40;
-  display:flex;
-  background:rgba(5,20,36,.97);
-  backdrop-filter:blur(16px);
-  border-top:1px solid rgba(255,255,255,.08);
-  padding:8px 3px calc(8px + env(safe-area-inset-bottom));
-}
-
-.nav-btn{
-  flex:1;
-  border:0;
-  background:none;
-  color:#8e9baa;
-  font-size:11px;
-  padding:3px 1px;
-}
-
-.nav-btn.active{
-  color:var(--blue);
-}
-
-.nav-icon{
-  display:block;
-  font-size:20px;
-  margin-bottom:2px;
-}
-
-@media(max-width:390px){
-  .check-grid{
-    grid-template-columns:repeat(3,1fr);
-  }
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>CapTrade</title>
+
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#121a2d;
+      --panel2:#18233a;
+      --line:#273552;
+      --text:#f6f8ff;
+      --muted:#9aa8c3;
+      --blue:#4c8dff;
+      --blue2:#2d6eea;
+      --red:#ff4e5b;
+      --yellow:#f4c84b;
+      --green:#38c985;
+      --shadow:0 12px 30px rgba(0,0,0,.28);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+
+    html{-webkit-text-size-adjust:100%}
+
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(76,141,255,.12), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      min-height:100vh;
+    }
+
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+
+    .app{
+      width:min(1100px,100%);
+      margin:0 auto;
+      padding:calc(18px + env(safe-area-inset-top)) 14px calc(90px + env(safe-area-inset-bottom));
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .brand{
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-1px;
+      line-height:1;
+    }
+
+    .brand span{color:var(--red)}
+
+    .sub{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:5px;
+    }
+
+    .primary{
+      border:0;
+      background:linear-gradient(180deg,var(--blue),var(--blue2));
+      color:white;
+      padding:11px 15px;
+      border-radius:13px;
+      font-weight:800;
+      box-shadow:0 8px 18px rgba(76,141,255,.22);
+    }
+
+    .primary:active{transform:translateY(1px)}
+
+    .top-action{
+      width:104px;
+      min-width:104px;
+      height:42px;
+      padding:0 8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      white-space:nowrap;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .stat{
+      background:rgba(18,26,45,.88);
+      border:1px solid var(--line);
+      border-radius:15px;
+      padding:12px;
+      box-shadow:var(--shadow);
+    }
+
+    .stat .n{
+      font-size:22px;
+      font-weight:900;
+    }
+
+    .stat .l{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    .tabs{
+      display:flex;
+      gap:8px;
+      overflow-x:auto;
+      padding-bottom:5px;
+      margin-bottom:14px;
+      scrollbar-width:none;
+    }
+
+    .tabs::-webkit-scrollbar{display:none}
+
+    .tab{
+      flex:0 0 auto;
+      background:var(--panel);
+      color:var(--muted);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:9px 13px;
+      font-weight:800;
+      font-size:13px;
+    }
+
+    .tab.active{
+      background:var(--blue);
+      border-color:var(--blue);
+      color:white;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      margin-bottom:14px;
+    }
+
+    .search{
+      flex:1;
+      background:var(--panel);
+      border:1px solid var(--line);
+      color:var(--text);
+      border-radius:13px;
+      padding:11px 12px;
+      outline:none;
+    }
+
+    .search:focus{border-color:var(--blue)}
+
+    .ghost{
+      background:var(--panel);
+      border:1px solid var(--line);
+      color:var(--text);
+      border-radius:13px;
+      padding:11px 12px;
+      font-weight:800;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    @media (min-width:680px){
+      .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+    }
+
+    @media (min-width:960px){
+      .grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+    }
+
+    .cap{
+      background:linear-gradient(180deg,var(--panel2),var(--panel));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      position:relative;
+    }
+
+    .cap.selected{
+      border-color:var(--blue);
+      box-shadow:0 0 0 2px rgba(76,141,255,.14),var(--shadow);
+    }
+
+    .cap.maybe{
+      border-color:var(--yellow);
+      box-shadow:0 0 0 2px rgba(244,200,75,.12),var(--shadow);
+    }
+
+    .cap.traded{opacity:.75}
+
+    .cap-img-wrap{
+      aspect-ratio:1/1;
+      background:#0a0f1d;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .cap-img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .badge{
+      position:absolute;
+      top:8px;
+      left:8px;
+      background:rgba(7,11,20,.82);
+      backdrop-filter:blur(7px);
+      color:white;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:5px 8px;
+      font-size:11px;
+      font-weight:900;
+    }
+
+    .cap-body{padding:10px}
+
+    .cap-title{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:4px;
+    }
+
+    .cap-no{
+      font-weight:900;
+      font-size:15px;
+    }
+
+    .loc{
+      color:var(--muted);
+      font-size:11px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:7px;
+      margin-top:9px;
+    }
+
+    .act{
+      border:1px solid var(--line);
+      background:#0f1728;
+      color:var(--text);
+      border-radius:11px;
+      padding:8px 5px;
+      font-size:11px;
+      font-weight:850;
+      min-height:37px;
+    }
+
+    .act.select.on{
+      background:rgba(76,141,255,.17);
+      border-color:var(--blue);
+      color:#cfe0ff;
+    }
+
+    .act.maybe.on{
+      background:rgba(244,200,75,.14);
+      border-color:var(--yellow);
+      color:#ffeaa1;
+    }
+
+    .act.trade{grid-column:1/-1}
+
+    .act.trade.on{
+      background:rgba(56,201,133,.14);
+      border-color:var(--green);
+      color:#b9f4d6;
+    }
+
+    .empty{
+      border:1px dashed var(--line);
+      border-radius:18px;
+      padding:42px 18px;
+      text-align:center;
+      color:var(--muted);
+      background:rgba(18,26,45,.45);
+    }
+
+    .empty strong{
+      display:block;
+      color:var(--text);
+      font-size:18px;
+      margin-bottom:7px;
+    }
+
+    .modalback{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.62);
+      backdrop-filter:blur(8px);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      z-index:20;
+      padding:0;
+    }
+
+    .modalback.show{display:flex}
+
+    .modal{
+      width:min(620px,100%);
+      background:#111a2d;
+      border:1px solid var(--line);
+      border-radius:22px 22px 0 0;
+      padding:18px 16px calc(18px + env(safe-area-inset-bottom));
+      max-height:90vh;
+      overflow:auto;
+    }
+
+    @media(min-width:700px){
+      .modalback{
+        align-items:center;
+        padding:20px;
+      }
+
+      .modal{border-radius:22px}
+    }
+
+    .modal h2{
+      margin:0 0 5px;
+      font-size:22px;
+    }
+
+    .modal p{
+      margin:0 0 16px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .field{margin-bottom:13px}
+
+    .field label{
+      display:block;
+      font-size:12px;
+      font-weight:800;
+      color:#cbd5e8;
+      margin-bottom:6px;
+    }
+
+    .field input,
+    .field select{
+      width:100%;
+      background:#0c1425;
+      border:1px solid var(--line);
+      color:var(--text);
+      border-radius:12px;
+      padding:12px;
+      outline:none;
+    }
+
+    .field input:focus{border-color:var(--blue)}
+
+    .filebox{
+      border:1px dashed #405477;
+      border-radius:14px;
+      padding:18px;
+      text-align:center;
+      background:#0c1425;
+      color:var(--muted);
+    }
+
+    .filebox input{
+      margin-top:10px;
+      width:100%;
+    }
+
+    .modal-actions{
+      display:flex;
+      gap:9px;
+      margin-top:16px;
+    }
+
+    .modal-actions button{flex:1}
+
+    .danger{
+      background:rgba(255,78,91,.12);
+      border:1px solid rgba(255,78,91,.5);
+      color:#ffb7bd;
+      border-radius:13px;
+      padding:11px;
+      font-weight:800;
+    }
+
+    .footer-note{
+      color:var(--muted);
+      font-size:11px;
+      text-align:center;
+      margin-top:20px;
+      line-height:1.45;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:calc(24px + env(safe-area-inset-bottom));
+      transform:translateX(-50%) translateY(120px);
+      background:#edf3ff;
+      color:#101827;
+      font-weight:800;
+      border-radius:999px;
+      padding:10px 14px;
+      z-index:50;
+      transition:.25s ease;
+      box-shadow:0 12px 30px rgba(0,0,0,.28);
+      font-size:13px;
+      max-width:90vw;
+      text-align:center;
+    }
+
+    .toast.show{
+      transform:translateX(-50%) translateY(0);
+    }
+
+    .mini-menu{
+      position:absolute;
+      top:8px;
+      right:8px;
+      border:1px solid rgba(255,255,255,.13);
+      background:rgba(7,11,20,.82);
+      color:white;
+      border-radius:10px;
+      width:30px;
+      height:30px;
+      font-weight:900;
+      backdrop-filter:blur(7px);
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="app">
+  <main class="app">
 
-<header class="topbar">
-  <div class="toprow">
-    <div class="logo">Cap<span>Trade</span></div>
-    <div class="version">V0.11</div>
-  </div>
-</header>
+    <header class="topbar">
+      <div>
+        <div class="brand">Cap<span>Trade</span></div>
+        <div class="sub">Sony‘s Tauschkronkorken</div>
+      </div>
 
-<main>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="ghost top-action" id="shareBtn">↗ Teilen</button>
+        <button class="primary top-action" id="addBtn">+ Brett</button>
+      </div>
+    </header>
 
-<section id="home" class="page active">
+    <section class="stats">
 
-  <div class="intro">
-    <strong>So funktioniert's:</strong>
-    Tippe auf „Auswählen“, wenn dich ein Kronkorken interessiert.
-    Deine Auswahl kannst du anschließend bearbeiten.
-  </div>
+      <div class="stat">
+        <div class="n" id="availableCount">0</div>
+        <div class="l">verfügbar</div>
+      </div>
 
-  <div class="summary">
+      <div class="stat">
+        <div class="n" id="selectedCount">0</div>
+        <div class="l">ausgewählt</div>
+      </div>
 
-    <div class="summary-card">
-      <div class="summary-label">Kronkorken</div>
-      <div id="totalCaps" class="summary-value">0</div>
+      <div class="stat">
+        <div class="n" id="maybeCount">0</div>
+        <div class="l">vielleicht</div>
+      </div>
+
+    </section>
+
+    <nav class="tabs" aria-label="Filter">
+      <button class="tab active" data-filter="all">Alle</button>
+      <button class="tab" data-filter="selected">Ausgewählt</button>
+      <button class="tab" data-filter="maybe">Vielleicht</button>
+      <button class="tab" data-filter="traded">Getauscht</button>
+    </nav>
+
+    <section class="toolbar">
+      <input
+        id="search"
+        class="search"
+        type="search"
+        placeholder="Nr. oder Brett suchen …"
+      />
+
+      <button
+        id="resetBtn"
+        class="ghost"
+        title="Tauschauswahl zurücksetzen"
+      >↺</button>
+    </section>
+
+    <section id="grid" class="grid"></section>
+
+    <div class="footer-note">
+      Besitzer-Modus · Deine Daten bleiben auf diesem Gerät.
+      Eine Tauschdatei ist nur eine schreibgeschützte Kopie
+      der aktuell verfügbaren Kronkorken.
     </div>
 
-    <div class="summary-card">
-      <div class="summary-label">Ausgewählt</div>
-      <div id="selectedHome" class="summary-value green">0</div>
+  </main>
+
+
+  <!-- BRETT HINZUFÜGEN -->
+
+  <div class="modalback" id="addModal">
+    <div class="modal">
+
+      <h2>Brett hinzufügen</h2>
+
+      <p>
+        Wähle die bereits ausgeschnittenen Kronkorkenbilder eines Bretts aus.
+        CapTrade vergibt die Positionen automatisch in der Reihenfolge
+        der Dateinamen.
+      </p>
+
+      <div class="field">
+        <label for="boardName">Brettname</label>
+
+        <input
+          id="boardName"
+          type="text"
+          placeholder="z. B. Brett A"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="field">
+        <label>Kronkorkenbilder</label>
+
+        <div class="filebox">
+          Mehrere Bilder gleichzeitig auswählen
+
+          <input
+            id="capFiles"
+            type="file"
+            accept="image/*"
+            multiple
+          />
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="ghost" id="cancelAdd">
+          Abbrechen
+        </button>
+
+        <button class="primary" id="importBtn">
+          Importieren
+        </button>
+      </div>
+
     </div>
-
-  </div>
-
-  <div class="search-row">
-
-    <input
-      id="searchInput"
-      class="search"
-      placeholder="Nach Nummer oder Brauerei suchen..."
-    >
-
-    <button class="search-btn">⌕</button>
-
-  </div>
-
-  <div class="toolbar">
-
-    <div class="toolbar-title">
-      Alle Kronkorken
-    </div>
-
-    <select id="sortSelect" class="sort">
-      <option value="number">Nummer</option>
-      <option value="brewery">Brauerei</option>
-    </select>
-
-  </div>
-
-  <div id="homeList" class="cap-list"></div>
-
-</section>
-
-
-<section id="selection" class="page">
-
-  <div class="intro">
-    <strong>Tausch-Auswahl:</strong>
-    Entscheide bei jedem ausgewählten Kronkorken:
-    sicher, vielleicht oder raus.
-  </div>
-
-  <div class="selection-header">
-
-    <div class="selection-count">
-      <span id="selectionCount">0</span> ausgewählt
-    </div>
-
-    <button id="clearTrade" class="clear-btn">
-      Auswahl leeren
-    </button>
-
-  </div>
-
-  <div id="selectionList"></div>
-
-</section>
-
-
-<section id="overview" class="page">
-
-  <div class="intro">
-    <strong>Übersicht:</strong>
-    Grün möchtest du auf jeden Fall.
-    Gelb sind deine Vielleicht-Kronkorken.
-  </div>
-
-  <div class="summary">
-
-    <div class="summary-card">
-      <div class="summary-label">Auf jeden Fall</div>
-      <div id="safeCount" class="summary-value green">0</div>
-    </div>
-
-    <div class="summary-card">
-      <div class="summary-label">Vielleicht</div>
-      <div id="maybeCount" class="summary-value yellow">0</div>
-    </div>
-
-  </div>
-
-  <div class="group">
-    <div class="group-title green">Auf jeden Fall</div>
-    <div id="safeList"></div>
-  </div>
-
-  <div class="group">
-    <div class="group-title yellow">Vielleicht</div>
-    <div id="maybeList"></div>
-  </div>
-
-</section>
-
-
-<section id="find" class="page">
-
-  <div class="intro">
-    <strong>Heraussuchen:</strong>
-    Hier siehst du nur für dich, auf welchem Brett und
-    an welcher Position der Kronkorken liegt.
-  </div>
-
-  <div id="findList"></div>
-
-</section>
-
-
-<section id="manage" class="page">
-
-  <div class="intro">
-    <strong>Verwalten:</strong>
-    Hier kontrollierst und bearbeitest du deine Kronkorken.
-    Der Lagerort bleibt unabhängig von der Brauerei gespeichert.
   </div>
 
 
-  <div class="manage-card">
+  <!-- KRONKORKEN BEARBEITEN -->
 
-    <div class="manage-title">
-      Kronkorken prüfen & zuordnen
+  <div class="modalback" id="editModal">
+    <div class="modal">
+
+      <h2>Kronkorken bearbeiten</h2>
+
+      <p>
+        Hier kannst du Brett oder Position korrigieren.
+      </p>
+
+      <input type="hidden" id="editId" />
+
+      <div class="field">
+        <label for="editBoard">Brett</label>
+        <input id="editBoard" type="text" />
+      </div>
+
+      <div class="field">
+        <label for="editPosition">Position</label>
+
+        <input
+          id="editPosition"
+          type="number"
+          min="1"
+          inputmode="numeric"
+        />
+      </div>
+
+      <div class="modal-actions">
+
+        <button class="danger" id="deleteCap">
+          Löschen
+        </button>
+
+        <button class="ghost" id="cancelEdit">
+          Abbrechen
+        </button>
+
+        <button class="primary" id="saveEdit">
+          Speichern
+        </button>
+
+      </div>
+
     </div>
-
-    <div class="manage-text">
-      Tippe auf einen Kronkorken. Dort kannst du Brauerei
-      und Erkennungsstatus bearbeiten.
-    </div>
-
-    <div class="check-toolbar">
-
-      <select id="checkFilter" class="check-filter">
-        <option value="all">Alle</option>
-        <option value="unclear">Nur unklar</option>
-        <option value="probable">Wahrscheinlich</option>
-        <option value="safe">Sicher</option>
-      </select>
-
-      <select id="checkSort" class="check-filter">
-        <option value="number">Nach Nummer</option>
-        <option value="brewery">Nach Brauerei</option>
-      </select>
-
-    </div>
-
-    <div id="checkGrid" class="check-grid"></div>
-
   </div>
 
-
-  <div class="manage-card">
-
-    <div class="manage-title">
-      Zuordnungen gesammelt importieren
-    </div>
-
-    <div class="manage-text">
-      Hier können wir später eine von mir vorbereitete Datei
-      mit vielen Brauerei-Zuordnungen auf einmal einlesen.
-      Deine Kronkorkenbilder und Lagerorte bleiben dabei erhalten.
-    </div>
-
-    <input
-      id="assignmentInput"
-      type="file"
-      accept=".json,application/json"
-    >
-
-    <button id="assignmentButton" class="secondary-btn">
-      Zuordnungsdatei auswählen
-    </button>
-
-    <div id="assignmentSuccess" class="import-success">
-      ✓ Zuordnungen wurden übernommen.
-    </div>
-
-  </div>
+  <div class="toast" id="toast"></div>
 
 
-  <div class="manage-card">
+<script>
 
-    <div class="manage-title">
-      Brett F erneut importieren
-    </div>
+(() => {
 
-    <div class="manage-text">
-      Nur nötig, falls du die Einzelbilder einmal neu erstellen möchtest.
-      Normalerweise musst du Brett F jetzt nicht erneut importieren.
-    </div>
+  const DB_NAME = "captrade_local";
+  const DB_VERSION = 1;
+  const STORE = "caps";
 
-    <input
-      id="boardFInput"
-      type="file"
-      accept="image/*"
-    >
+  let db;
+  let caps = [];
+  let filter = "all";
 
-    <button id="boardFButton" class="secondary-btn">
-      Originalfoto von Brett F auswählen
-    </button>
+  const $ = (id) => document.getElementById(id);
 
-    <div id="progressBox" class="progress">
+  const grid = $("grid");
+  const search = $("search");
+  const addModal = $("addModal");
+  const editModal = $("editModal");
+  const toastEl = $("toast");
 
-      <strong id="progressText">
-        Import wird vorbereitet …
-      </strong>
 
-      <div class="progress-bar">
-        <div id="progressFill" class="progress-fill"></div>
+  function openDB(){
+
+    return new Promise((resolve, reject) => {
+
+      const req = indexedDB.open(DB_NAME, DB_VERSION);
+
+      req.onupgradeneeded = () => {
+
+        const d = req.result;
+
+        if(!d.objectStoreNames.contains(STORE)){
+
+          const store = d.createObjectStore(
+            STORE,
+            {
+              keyPath:"id",
+              autoIncrement:true
+            }
+          );
+
+          store.createIndex(
+            "status",
+            "status",
+            {unique:false}
+          );
+
+          store.createIndex(
+            "board",
+            "board",
+            {unique:false}
+          );
+        }
+      };
+
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+
+    });
+  }
+
+
+  function getAll(){
+
+    return new Promise((resolve, reject) => {
+
+      const tx = db.transaction(
+        STORE,
+        "readonly"
+      );
+
+      const req = tx
+        .objectStore(STORE)
+        .getAll();
+
+      req.onsuccess = () =>
+        resolve(req.result || []);
+
+      req.onerror = () =>
+        reject(req.error);
+
+    });
+  }
+
+
+  function addRecord(record){
+
+    return new Promise((resolve, reject) => {
+
+      const tx = db.transaction(
+        STORE,
+        "readwrite"
+      );
+
+      const req = tx
+        .objectStore(STORE)
+        .add(record);
+
+      req.onsuccess = () =>
+        resolve(req.result);
+
+      req.onerror = () =>
+        reject(req.error);
+
+    });
+  }
+
+
+  function putRecord(record){
+
+    return new Promise((resolve, reject) => {
+
+      const tx = db.transaction(
+        STORE,
+        "readwrite"
+      );
+
+      const req = tx
+        .objectStore(STORE)
+        .put(record);
+
+      req.onsuccess = () =>
+        resolve();
+
+      req.onerror = () =>
+        reject(req.error);
+
+    });
+  }
+
+
+  function deleteRecord(id){
+
+    return new Promise((resolve, reject) => {
+
+      const tx = db.transaction(
+        STORE,
+        "readwrite"
+      );
+
+      const req = tx
+        .objectStore(STORE)
+        .delete(id);
+
+      req.onsuccess = () =>
+        resolve();
+
+      req.onerror = () =>
+        reject(req.error);
+
+    });
+  }
+
+
+  async function load(){
+
+    caps = await getAll();
+
+    caps.sort(
+      (a,b) => a.id-b.id
+    );
+
+    render();
+  }
+
+
+  function naturalSortFiles(files){
+
+    return [...files].sort(
+      (a,b) =>
+        a.name.localeCompare(
+          b.name,
+          undefined,
+          {
+            numeric:true,
+            sensitivity:"base"
+          }
+        )
+    );
+  }
+
+
+  function fileToDataURL(file){
+
+    return new Promise(
+      (resolve, reject) => {
+
+        const reader =
+          new FileReader();
+
+        reader.onload = () =>
+          resolve(reader.result);
+
+        reader.onerror =
+          reject;
+
+        reader.readAsDataURL(file);
+
+      }
+    );
+  }
+
+
+  function capNumber(id){
+
+    return "#" +
+      String(id).padStart(3,"0");
+  }
+
+
+  function toast(msg){
+
+    toastEl.textContent = msg;
+
+    toastEl.classList.add("show");
+
+    clearTimeout(
+      toastEl._timer
+    );
+
+    toastEl._timer =
+      setTimeout(
+        () =>
+          toastEl.classList.remove("show"),
+        1800
+      );
+  }
+
+
+  function statusClass(cap){
+
+    if(cap.status === "selected")
+      return "selected";
+
+    if(cap.status === "maybe")
+      return "maybe";
+
+    if(cap.status === "traded")
+      return "traded";
+
+    return "";
+  }
+
+
+  function visibleCaps(){
+
+    const q =
+      search.value
+        .trim()
+        .toLowerCase();
+
+    return caps.filter(cap => {
+
+      if(
+        filter === "all" &&
+        cap.status === "traded"
+      ) return false;
+
+      if(
+        filter === "selected" &&
+        cap.status !== "selected"
+      ) return false;
+
+      if(
+        filter === "maybe" &&
+        cap.status !== "maybe"
+      ) return false;
+
+      if(
+        filter === "traded" &&
+        cap.status !== "traded"
+      ) return false;
+
+      if(q){
+
+        const hay = [
+          capNumber(cap.id),
+          String(cap.id),
+          cap.board || "",
+          cap.position || ""
+        ]
+        .join(" ")
+        .toLowerCase();
+
+        if(!hay.includes(q))
+          return false;
+      }
+
+      return true;
+
+    });
+  }
+
+
+  function updateStats(){
+
+    $("availableCount").textContent =
+      caps.filter(
+        c => c.status !== "traded"
+      ).length;
+
+    $("selectedCount").textContent =
+      caps.filter(
+        c => c.status === "selected"
+      ).length;
+
+    $("maybeCount").textContent =
+      caps.filter(
+        c => c.status === "maybe"
+      ).length;
+  }
+
+
+  function render(){
+
+    updateStats();
+
+    const list = visibleCaps();
+
+    if(!list.length){
+
+      grid.innerHTML = `
+        <div
+          class="empty"
+          style="grid-column:1/-1"
+        >
+
+          <strong>
+            ${
+              caps.length
+                ? "Hier ist gerade nichts."
+                : "Noch keine Kronkorken"
+            }
+          </strong>
+
+          ${
+            caps.length
+              ? "Wähle einen anderen Filter oder ändere die Suche."
+              : "Tippe oben auf „+ Brett“, um deine ersten ausgeschnittenen Kronkorken zu importieren."
+          }
+
+        </div>
+      `;
+
+      return;
+    }
+        grid.innerHTML = list.map(cap => `
+      <article class="cap ${statusClass(cap)}" data-id="${cap.id}">
+
+        <div class="cap-img-wrap">
+
+          <img
+            class="cap-img"
+            src="${cap.image}"
+            alt="${capNumber(cap.id)}"
+          />
+
+          <div class="badge">
+            ${capNumber(cap.id)}
+          </div>
+
+          <button
+            class="mini-menu"
+            data-action="edit"
+            data-id="${cap.id}"
+            aria-label="Bearbeiten"
+          >•••</button>
+
+        </div>
+
+        <div class="cap-body">
+
+          <div class="cap-title">
+
+            <div class="cap-no">
+              ${capNumber(cap.id)}
+            </div>
+
+            <div class="loc">
+              ${escapeHTML(cap.board)} · Pos. ${cap.position}
+            </div>
+
+          </div>
+
+          <div class="actions">
+
+            ${
+              cap.status !== "traded"
+              ? `
+                <button
+                  class="act select ${cap.status === "selected" ? "on":""}"
+                  data-action="selected"
+                  data-id="${cap.id}"
+                >
+                  ${
+                    cap.status === "selected"
+                    ? "✓ Ausgewählt"
+                    : "Auswählen"
+                  }
+                </button>
+
+                <button
+                  class="act maybe ${cap.status === "maybe" ? "on":""}"
+                  data-action="maybe"
+                  data-id="${cap.id}"
+                >
+                  ${
+                    cap.status === "maybe"
+                    ? "★ Vielleicht"
+                    : "Vielleicht"
+                  }
+                </button>
+
+                <button
+                  class="act trade"
+                  data-action="traded"
+                  data-id="${cap.id}"
+                >
+                  Getauscht
+                </button>
+              `
+              : `
+                <button
+                  class="act trade on"
+                  data-action="restore"
+                  data-id="${cap.id}"
+                >
+                  ↺ Wieder verfügbar
+                </button>
+              `
+            }
+
+          </div>
+
+        </div>
+
+      </article>
+    `).join("");
+  }
+
+
+  function escapeHTML(str){
+
+    return String(str ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+
+  async function setStatus(id, next){
+
+    const cap =
+      caps.find(c => c.id === id);
+
+    if(!cap) return;
+
+    if(
+      (next === "selected" ||
+       next === "maybe") &&
+      cap.status === next
+    ){
+      cap.status = "available";
+    }
+    else{
+      cap.status = next;
+    }
+
+    cap.updatedAt = Date.now();
+
+    await putRecord(cap);
+
+    render();
+
+    if(next === "traded"){
+      toast(
+        `${capNumber(id)} ist jetzt getauscht`
+      );
+    }
+  }
+
+
+  grid.addEventListener(
+    "click",
+    async (e) => {
+
+      const btn =
+        e.target.closest(
+          "[data-action]"
+        );
+
+      if(!btn) return;
+
+      const id =
+        Number(btn.dataset.id);
+
+      const action =
+        btn.dataset.action;
+
+
+      if(action === "edit"){
+
+        const cap =
+          caps.find(
+            c => c.id === id
+          );
+
+        if(!cap) return;
+
+        $("editId").value =
+          cap.id;
+
+        $("editBoard").value =
+          cap.board;
+
+        $("editPosition").value =
+          cap.position;
+
+        editModal
+          .classList
+          .add("show");
+
+        return;
+      }
+
+
+      if(action === "traded"){
+
+        const cap =
+          caps.find(
+            c => c.id === id
+          );
+
+        if(!cap) return;
+
+        const ok = confirm(
+          `${capNumber(id)} wirklich als getauscht markieren?
+
+Er verschwindet danach aus der normalen Ansicht.`
+        );
+
+        if(!ok) return;
+
+        await setStatus(
+          id,
+          "traded"
+        );
+
+        return;
+      }
+
+
+      if(action === "restore"){
+
+        await setStatus(
+          id,
+          "available"
+        );
+
+        toast(
+          `${capNumber(id)} ist wieder verfügbar`
+        );
+
+        return;
+      }
+
+
+      if(
+        action === "selected" ||
+        action === "maybe"
+      ){
+
+        await setStatus(
+          id,
+          action
+        );
+      }
+
+    }
+  );
+
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(btn => {
+
+      btn.addEventListener(
+        "click",
+        () => {
+
+          document
+            .querySelectorAll(".tab")
+            .forEach(
+              b =>
+                b.classList.remove(
+                  "active"
+                )
+            );
+
+          btn.classList.add(
+            "active"
+          );
+
+          filter =
+            btn.dataset.filter;
+
+          render();
+
+        }
+      );
+
+    });
+
+
+  search.addEventListener(
+    "input",
+    render
+  );
+
+
+  $("addBtn")
+    .addEventListener(
+      "click",
+      () => {
+
+        $("boardName").value = "";
+
+        $("capFiles").value = "";
+
+        addModal
+          .classList
+          .add("show");
+
+        setTimeout(
+          () =>
+            $("boardName").focus(),
+          120
+        );
+
+      }
+    );
+
+
+  $("cancelAdd")
+    .addEventListener(
+      "click",
+      () =>
+        addModal
+          .classList
+          .remove("show")
+    );
+
+
+  $("cancelEdit")
+    .addEventListener(
+      "click",
+      () =>
+        editModal
+          .classList
+          .remove("show")
+    );
+
+
+  addModal.addEventListener(
+    "click",
+    (e) => {
+
+      if(e.target === addModal){
+
+        addModal
+          .classList
+          .remove("show");
+
+      }
+
+    }
+  );
+
+
+  editModal.addEventListener(
+    "click",
+    (e) => {
+
+      if(e.target === editModal){
+
+        editModal
+          .classList
+          .remove("show");
+
+      }
+
+    }
+  );
+
+
+  $("importBtn")
+    .addEventListener(
+      "click",
+      async () => {
+
+        const board =
+          $("boardName")
+            .value
+            .trim();
+
+        const files =
+          naturalSortFiles(
+            $("capFiles").files
+          );
+
+
+        if(!board){
+
+          alert(
+            "Bitte gib zuerst einen Brettnamen ein."
+          );
+
+          return;
+        }
+
+
+        if(!files.length){
+
+          alert(
+            "Bitte wähle mindestens ein Kronkorkenbild aus."
+          );
+
+          return;
+        }
+
+
+        const importBtn =
+          $("importBtn");
+
+        importBtn.disabled =
+          true;
+
+        importBtn.textContent =
+          "Importiere …";
+
+
+        try{
+
+          const currentPositions =
+            caps
+              .filter(
+                c =>
+                  (c.board || "")
+                    .toLowerCase() ===
+                  board.toLowerCase()
+              )
+              .map(
+                c =>
+                  Number(c.position) || 0
+              );
+
+
+          let position =
+            currentPositions.length
+              ? Math.max(
+                  ...currentPositions
+                ) + 1
+              : 1;
+
+
+          for(const file of files){
+
+            const image =
+              await fileToDataURL(
+                file
+              );
+
+
+            await addRecord({
+
+              board,
+
+              position,
+
+              image,
+
+              status:
+                "available",
+
+              createdAt:
+                Date.now(),
+
+              updatedAt:
+                Date.now()
+
+            });
+
+
+            position++;
+
+          }
+
+
+          addModal
+            .classList
+            .remove("show");
+
+
+          await load();
+
+
+          toast(
+            `${files.length} Kronkorken hinzugefügt`
+          );
+
+        }
+        catch(err){
+
+          console.error(err);
+
+          alert(
+            "Beim Import ist etwas schiefgelaufen."
+          );
+
+        }
+        finally{
+
+          importBtn.disabled =
+            false;
+
+          importBtn.textContent =
+            "Importieren";
+
+        }
+
+      }
+    );
+
+
+  $("saveEdit")
+    .addEventListener(
+      "click",
+      async () => {
+
+        const id =
+          Number(
+            $("editId").value
+          );
+
+        const cap =
+          caps.find(
+            c => c.id === id
+          );
+
+        if(!cap) return;
+
+
+        const board =
+          $("editBoard")
+            .value
+            .trim();
+
+
+        const position =
+          Math.max(
+            1,
+            Number(
+              $("editPosition").value
+            ) || 1
+          );
+
+
+        if(!board){
+
+          alert(
+            "Bitte gib einen Brettnamen ein."
+          );
+
+          return;
+        }
+
+
+        cap.board =
+          board;
+
+        cap.position =
+          position;
+
+        cap.updatedAt =
+          Date.now();
+
+
+        await putRecord(cap);
+
+
+        editModal
+          .classList
+          .remove("show");
+
+
+        render();
+
+
+        toast(
+          `${capNumber(id)} gespeichert`
+        );
+
+      }
+    );
+
+
+  $("deleteCap")
+    .addEventListener(
+      "click",
+      async () => {
+
+        const id =
+          Number(
+            $("editId").value
+          );
+
+        const cap =
+          caps.find(
+            c => c.id === id
+          );
+
+        if(!cap) return;
+
+
+        const ok =
+          confirm(
+            `${capNumber(id)} wirklich dauerhaft löschen?`
+          );
+
+
+        if(!ok) return;
+
+
+        await deleteRecord(id);
+
+
+        editModal
+          .classList
+          .remove("show");
+
+
+        await load();
+
+
+        toast(
+          `${capNumber(id)} gelöscht`
+        );
+
+      }
+    );
+
+
+  $("resetBtn")
+    .addEventListener(
+      "click",
+      async () => {
+
+        const affected =
+          caps.filter(
+            c =>
+              c.status === "selected" ||
+              c.status === "maybe"
+          );
+
+
+        if(!affected.length){
+
+          toast(
+            "Keine Auswahl vorhanden"
+          );
+
+          return;
+        }
+
+
+        const ok =
+          confirm(
+            `Auswahl und „Vielleicht“ bei ${affected.length} Kronkorken zurücksetzen?`
+          );
+
+
+        if(!ok) return;
+
+
+        for(
+          const cap
+          of affected
+        ){
+
+          cap.status =
+            "available";
+
+          cap.updatedAt =
+            Date.now();
+
+          await putRecord(cap);
+
+        }
+
+
+        render();
+
+
+        toast(
+          "Tauschauswahl zurückgesetzt"
+        );
+
+      }
+    );
+
+
+  function safeScriptJSON(value){
+
+    return JSON
+      .stringify(value)
+      .replace(
+        /</g,
+        "\\u003c"
+      );
+  }
+
+
+  function dataURLToImage(dataURL){
+
+    return new Promise(
+      (resolve,reject) => {
+
+        const img =
+          new Image();
+
+        img.onload =
+          () => resolve(img);
+
+        img.onerror =
+          reject;
+
+        img.src =
+          dataURL;
+
+      }
+    );
+  }
+
+
+  async function compactImage(
+    dataURL,
+    maxSize = 440,
+    quality = .82
+  ){
+
+    try{
+
+      const img =
+        await dataURLToImage(
+          dataURL
+        );
+
+
+      const scale =
+        Math.min(
+          1,
+          maxSize /
+          Math.max(
+            img.width,
+            img.height
+          )
+        );
+
+
+      const w =
+        Math.max(
+          1,
+          Math.round(
+            img.width * scale
+          )
+        );
+
+
+      const h =
+        Math.max(
+          1,
+          Math.round(
+            img.height * scale
+          )
+        );
+
+
+      const canvas =
+        document.createElement(
+          "canvas"
+        );
+
+
+      canvas.width =
+        w;
+
+      canvas.height =
+        h;
+
+
+      const ctx =
+        canvas.getContext(
+          "2d"
+        );
+
+
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        w,
+        h
+      );
+
+
+      return canvas
+        .toDataURL(
+          "image/jpeg",
+          quality
+        );
+
+    }
+    catch(e){
+
+      return dataURL;
+
+    }
+  }
+
+
+  function buildTradeViewerHTML(items){
+
+    const payload =
+      safeScriptJSON(items);
+
+
+    return `<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<meta
+  name="theme-color"
+  content="#0b1020"
+>
+
+<title>
+CapTrade – Tauschliste
+</title>
+
+
+<style>
+
+:root{
+  --bg:#0b1020;
+  --panel:#121a2d;
+  --panel2:#18233a;
+  --line:#273552;
+  --text:#f6f8ff;
+  --muted:#9aa8c3;
+  --blue:#4c8dff;
+  --yellow:#f4c84b;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+.app{
+  width:min(1100px,100%);
+  margin:auto;
+  padding:
+    calc(18px + env(safe-area-inset-top))
+    14px
+    calc(80px + env(safe-area-inset-bottom));
+}
+
+.head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.brand{
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+
+.brand span{
+  color:#ff4e5b;
+}
+
+.sub{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.readonly{
+  font-size:11px;
+  color:#b8c8e7;
+  background:#18233a;
+  border:1px solid var(--line);
+  padding:7px 9px;
+  border-radius:999px;
+  white-space:nowrap;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:
+    repeat(3,1fr);
+  gap:9px;
+  margin-bottom:12px;
+}
+
+.stat{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:11px;
+}
+
+.n{
+  font-size:20px;
+  font-weight:900;
+}
+
+.l{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.tabs{
+  display:flex;
+  gap:7px;
+  overflow:auto;
+  margin-bottom:11px;
+  padding-bottom:4px;
+}
+
+.tab{
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:var(--muted);
+  border-radius:999px;
+  padding:8px 12px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.tab.on{
+  background:var(--blue);
+  border-color:var(--blue);
+  color:#fff;
+}
+
+.search{
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#fff;
+  border-radius:13px;
+  padding:11px;
+  margin-bottom:12px;
+  outline:none;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+  gap:11px;
+}
+
+@media(min-width:680px){
+
+  .grid{
+    grid-template-columns:
+      repeat(4,minmax(0,1fr));
+  }
+
+}
+
+@media(min-width:960px){
+
+  .grid{
+    grid-template-columns:
+      repeat(5,minmax(0,1fr));
+  }
+
+}
+
+.cap{
+  background:
+    linear-gradient(
+      180deg,
+      var(--panel2),
+      var(--panel)
+    );
+
+  border:
+    1px solid var(--line);
+
+  border-radius:17px;
+
+  overflow:hidden;
+}
+
+.cap.sel{
+  border-color:var(--blue);
+}
+
+.cap.maybe{
+  border-color:var(--yellow);
+}
+
+.pic{
+  aspect-ratio:1/1;
+  background:#080d18;
+  position:relative;
+  overflow:hidden;
+}
+
+.pic img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.badge{
+  position:absolute;
+  left:8px;
+  top:8px;
+  background:
+    rgba(6,10,18,.82);
+  border-radius:999px;
+  padding:5px 8px;
+  font-size:11px;
+  font-weight:900;
+}
+
+.body{
+  padding:9px;
+}
+
+.loc{
+  font-size:11px;
+  color:var(--muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  margin-bottom:7px;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:
+    1fr 1fr;
+  gap:6px;
+}
+
+.act{
+  border:1px solid var(--line);
+  background:#0f1728;
+  color:#fff;
+  border-radius:10px;
+  padding:8px 4px;
+  font-size:11px;
+  font-weight:850;
+}
+
+.act.sel.on{
+  border-color:var(--blue);
+  background:
+    rgba(76,141,255,.17);
+}
+
+.act.may.on{
+  border-color:var(--yellow);
+  background:
+    rgba(244,200,75,.14);
+  color:#ffeaa1;
+}
+
+.bottom{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:
+    10px 14px
+    calc(10px + env(safe-area-inset-bottom));
+
+  background:
+    rgba(11,16,32,.94);
+
+  backdrop-filter:
+    blur(12px);
+
+  border-top:
+    1px solid var(--line);
+}
+
+.share{
+  width:min(600px,100%);
+  display:block;
+  margin:auto;
+  border:0;
+
+  background:
+    linear-gradient(
+      180deg,
+      #4c8dff,
+      #2d6eea
+    );
+
+  color:#fff;
+  border-radius:13px;
+  padding:12px;
+  font-weight:900;
+}
+
+.empty{
+  grid-column:1/-1;
+  text-align:center;
+  color:var(--muted);
+  padding:35px 10px;
+}
+
+.sheet{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:
+    rgba(0,0,0,.7);
+  z-index:50;
+  padding:20px;
+  align-items:center;
+  justify-content:center;
+}
+
+.sheet.show{
+  display:flex;
+}
+
+.box{
+  width:min(560px,100%);
+  background:#121a2d;
+  border:
+    1px solid var(--line);
+  border-radius:18px;
+  padding:15px;
+}
+
+.box h2{
+  margin:0 0 8px;
+}
+
+.box p{
+  color:var(--muted);
+  font-size:12px;
+}
+
+textarea{
+  width:100%;
+  min-height:180px;
+  background:#0b1020;
+  color:#fff;
+  border:
+    1px solid var(--line);
+  border-radius:12px;
+  padding:10px;
+}
+
+.close{
+  width:100%;
+  margin-top:8px;
+  border:
+    1px solid var(--line);
+  background:#18233a;
+  color:#fff;
+  border-radius:12px;
+  padding:10px;
+  font-weight:800;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<main class="app">
+
+  <div class="head">
+
+    <div>
+
+      <div class="brand">
+        Cap<span>Trade</span>
+      </div>
+
+      <div class="sub">
+        Sony‘s Tauschkronkorken
       </div>
 
     </div>
 
-    <div id="successBox" class="success-box">
-      ✓ Brett F wurde importiert.<br>
-      <strong>139 Kronkorken</strong> sind gespeichert.
-    </div>
-
-    <div class="warning-box">
-      Beim erneuten Import werden die bisherigen
-      Brauerei-Zuordnungen von Brett F zurückgesetzt.
+    <div class="readonly">
+      Nur auswählen
     </div>
 
   </div>
 
 
-  <div class="manage-card">
+  <div class="stats">
 
-    <div class="manage-title">
-      Testdaten
+    <div class="stat">
+
+      <div
+        class="n"
+        id="total"
+      >0</div>
+
+      <div class="l">
+        verfügbar
+      </div>
+
     </div>
 
-    <button id="deleteBoardF" class="danger-btn">
-      Brett-F-Testdaten löschen
+
+    <div class="stat">
+
+      <div
+        class="n"
+        id="selected"
+      >0</div>
+
+      <div class="l">
+        ausgewählt
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div
+        class="n"
+        id="maybe"
+      >0</div>
+
+      <div class="l">
+        vielleicht
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="tabs">
+
+    <button
+      class="tab on"
+      data-f="all"
+    >
+      Alle
+    </button>
+
+    <button
+      class="tab"
+      data-f="selected"
+    >
+      Ausgewählt
+    </button>
+
+    <button
+      class="tab"
+      data-f="maybe"
+    >
+      Vielleicht
     </button>
 
   </div>
 
-</section>
+
+  <input
+    class="search"
+    id="q"
+    type="search"
+    placeholder="Nr. oder Brett suchen …"
+  >
+
+
+  <section
+    class="grid"
+    id="grid"
+  ></section>
 
 </main>
+
+
+<div class="bottom">
+
+  <button
+    class="share"
+    id="shareSelection"
+  >
+    Auswahl teilen
+  </button>
+
 </div>
 
 
-<nav class="bottom-nav">
+<div
+  class="sheet"
+  id="sheet"
+>
 
-<button class="nav-btn active" data-page="home">
-  <span class="nav-icon">⌂</span>
-  Start
-</button>
+  <div class="box">
 
-<button class="nav-btn" data-page="selection">
-  <span class="nav-icon">✓</span>
-  Auswahl
-</button>
+    <h2>
+      Meine Auswahl
+    </h2>
 
-<button class="nav-btn" data-page="overview">
-  <span class="nav-icon">◉</span>
-  Übersicht
-</button>
+    <p>
+      Falls das Teilen nicht automatisch funktioniert,
+      kannst du diese Liste kopieren und schicken.
+    </p>
 
-<button class="nav-btn" data-page="find">
-  <span class="nav-icon">▣</span>
-  Finden
-</button>
+    <textarea
+      id="selectionText"
+      readonly
+    ></textarea>
 
-<button class="nav-btn" data-page="manage">
-  <span class="nav-icon">⚙</span>
-  Verwalten
-</button>
-
-</nav>
-
-
-<div id="detailModal" class="modal">
-
-  <div class="modal-card">
-
-    <button id="closeModal" class="modal-close">×</button>
-
-    <img id="modalImage" class="modal-image">
-
-    <div id="modalTitle" class="modal-title"></div>
-
-    <div id="modalDetails" class="modal-detail"></div>
-
-
-    <div class="edit-section">
-
-      <div class="edit-field">
-
-        <label class="edit-label">
-          Brauerei / Marke
-        </label>
-
-        <input
-          id="breweryInput"
-          class="edit-input"
-          placeholder="z. B. Veltins"
-        >
-
-      </div>
-
-
-      <div class="edit-field">
-
-        <label class="edit-label">
-          Zuordnung
-        </label>
-
-        <select id="recognitionStatus" class="edit-select">
-
-          <option value="safe">
-            Sicher
-          </option>
-
-          <option value="probable">
-            Wahrscheinlich
-          </option>
-
-          <option value="unclear">
-            Unklar
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <button id="saveCapButton" class="save-btn">
-        ✓ Speichern
-      </button>
-
-    </div>
+    <button
+      class="close"
+      id="closeSheet"
+    >
+      Schließen
+    </button>
 
   </div>
 
@@ -1063,1601 +2317,795 @@ main{
 
 <script>
 
-const boardFPoints = [
-[116,92],[218,95],[316,86],[418,85],[515,85],[616,85],[715,81],[814,87],[914,79],
+const caps = ${payload};
 
-[110,182],[213,185],[311,189],[418,178],[520,182],[616,176],[717,179],[814,182],[921,176],[1023,176],
+const KEY =
+  "captrade_trade_selection_v1";
 
-[113,289],[212,287],[320,272],[417,273],[521,274],[621,271],[721,278],[819,275],[920,278],[1033,273],
+let state = {};
 
-[121,380],[215,380],[317,375],[409,379],[518,371],[620,369],[723,375],[815,381],[921,375],[1030,371],
-
-[100,476],[209,484],[307,477],[409,476],[513,470],[617,470],[719,475],[821,475],[922,478],[1027,472],
-
-[105,577],[203,583],[304,571],[405,574],[509,571],[610,574],[712,571],[825,568],[922,577],[1028,579],
-
-[101,676],[206,680],[309,679],[407,683],[512,674],[607,674],[717,673],[823,676],[937,675],[1043,681],
-
-[93,775],[196,782],[295,781],[412,783],[506,781],[615,779],[724,770],[836,772],[928,778],[1033,781],
-
-[87,878],[188,884],[293,883],[398,877],[507,878],[619,881],[731,872],[826,896],[940,885],[1045,884],
-
-[92,983],[194,987],[291,987],[405,985],[506,985],[604,994],[718,994],[826,997],[938,993],[1058,993],
-
-[77,1084],[184,1091],[287,1089],[387,1102],[501,1097],[615,1097],[722,1107],[837,1107],[947,1105],[1063,1102],
-
-[75,1198],[181,1201],[286,1203],[394,1208],[501,1208],[611,1214],[731,1215],[842,1227],[951,1221],[1061,1223],
-
-[70,1316],[176,1316],[287,1315],[400,1321],[505,1322],[616,1333],[729,1328],[844,1334],[953,1340],[1067,1335],
-
-[71,1444],[171,1437],[283,1439],[401,1441],[509,1439],[627,1447],[746,1444],[859,1457],[968,1450],[1082,1475]
-];
+let filter =
+  "all";
 
 
-let caps =
-  JSON.parse(
-    localStorage.getItem("captradeCaps")
-  ) || [];
+try{
+
+  state =
+    JSON.parse(
+      localStorage.getItem(KEY)
+      || "{}"
+    );
+
+}
+catch(e){
+
+  state = {};
+
+}
 
 
-let trade =
-  JSON.parse(
-    localStorage.getItem("captradeSelection")
-  ) || {};
-
-
-let openCapId =
-  null;
-
-
-/*
-  Alte V0.10-Daten automatisch ergänzen.
-  Dadurch muss Brett F nicht neu importiert werden.
-*/
-
-caps = caps.map(cap => {
-
-  return {
-
-    ...cap,
-
-    brewery:
-      cap.brewery ||
-      "Zuordnung prüfen",
-
-    recognitionStatus:
-      cap.recognitionStatus ||
-      "unclear"
-
-  };
-
-});
-
-
-function saveCaps(){
-
-  localStorage.setItem(
-    "captradeCaps",
-    JSON.stringify(caps)
+const grid =
+  document.getElementById(
+    "grid"
   );
 
-}
 
-
-function saveTrade(){
-
-  localStorage.setItem(
-    "captradeSelection",
-    JSON.stringify(trade)
+const q =
+  document.getElementById(
+    "q"
   );
 
-}
 
+function num(id){
 
-function selectedIds(){
-
-  return Object
-    .keys(trade)
-    .map(Number);
+  return "#" +
+    String(id)
+      .padStart(3,"0");
 
 }
 
 
-function statusText(status){
+function esc(s){
 
-  if(status === "safe"){
-    return "Sicher";
-  }
-
-  if(status === "probable"){
-    return "Wahrscheinlich";
-  }
-
-  return "Unklar";
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
 }
 
 
-function statusClass(status){
+function save(){
 
-  if(status === "safe"){
-    return "status-safe";
-  }
+  try{
 
-  if(status === "probable"){
-    return "status-probable";
-  }
-
-  return "status-unclear";
-
-}
-
-
-function dotClass(status){
-
-  if(status === "safe"){
-    return "dot-safe";
-  }
-
-  if(status === "probable"){
-    return "dot-probable";
-  }
-
-  return "dot-unclear";
-
-}
-
-
-function capImage(cap){
-
-  if(cap.image){
-
-    return `
-      <img
-        src="${cap.image}"
-        alt="Kronkorken ${cap.id}"
-      >
-    `;
-
-  }
-
-  return "◯";
-
-}
-
-
-function renderHome(){
-
-  const list =
-    document.getElementById("homeList");
-
-
-  const query =
-    document
-      .getElementById("searchInput")
-      .value
-      .toLowerCase()
-      .trim();
-
-
-  let items =
-    [...caps].filter(cap =>
-
-      String(cap.id).includes(query) ||
-
-      cap.brewery
-        .toLowerCase()
-        .includes(query)
-
-    );
-
-
-  if(
-    document
-      .getElementById("sortSelect")
-      .value === "brewery"
-  ){
-
-    items.sort(
-      (a,b) =>
-        a.brewery.localeCompare(
-          b.brewery,
-          "de"
-        ) ||
-        a.id-b.id
-    );
-
-  }else{
-
-    items.sort(
-      (a,b) =>
-        a.id-b.id
+    localStorage.setItem(
+      KEY,
+      JSON.stringify(state)
     );
 
   }
-
-
-  list.innerHTML =
-    "";
-
-
-  if(!items.length){
-
-    list.innerHTML = `
-      <div class="empty">
-        Noch keine Kronkorken importiert.
-      </div>
-    `;
-
-  }
-
-
-  items.forEach(cap => {
-
-    const selected =
-      trade[cap.id] !== undefined;
-
-
-    const card =
-      document.createElement("div");
-
-
-    card.className =
-      "cap-card";
-
-
-    card.innerHTML = `
-
-      <div class="cap-img">
-        ${capImage(cap)}
-      </div>
-
-      <div>
-
-        <div class="cap-number">
-          #${cap.id}
-        </div>
-
-        <div class="cap-name">
-          ${cap.brewery}
-        </div>
-
-        <div class="
-          status-line
-          ${statusClass(cap.recognitionStatus)}
-        ">
-          ${statusText(cap.recognitionStatus)}
-        </div>
-
-      </div>
-
-      <button
-        class="select-btn
-        ${selected ? "selected" : ""}"
-      >
-        ${selected ? "✓ Dabei" : "Auswählen"}
-      </button>
-
-    `;
-
-
-    card
-      .querySelector(".select-btn")
-      .onclick = () => {
-
-        if(
-          trade[cap.id] !== undefined
-        ){
-
-          delete trade[cap.id];
-
-        }else{
-
-          trade[cap.id] =
-            "unrated";
-
-        }
-
-
-        saveTrade();
-        renderAll();
-
-      };
-
-
-    list.appendChild(card);
-
-  });
-
-
-  document
-    .getElementById("totalCaps")
-    .textContent =
-    caps.length;
-
-
-  document
-    .getElementById("selectedHome")
-    .textContent =
-    selectedIds().length;
+  catch(e){}
 
 }
 
 
-function renderSelection(){
+function setChoice(
+  id,
+  choice
+){
 
-  const box =
-    document.getElementById("selectionList");
+  if(state[id] === choice){
 
+    delete state[id];
 
-  const ids =
-    selectedIds();
+  }
+  else{
 
-
-  document
-    .getElementById("selectionCount")
-    .textContent =
-    ids.length;
-
-
-  box.innerHTML =
-    "";
-
-
-  if(!ids.length){
-
-    box.innerHTML = `
-      <div class="empty">
-        Noch keine Kronkorken ausgewählt.
-      </div>
-    `;
-
-    return;
+    state[id] = choice;
 
   }
 
+  save();
 
-  ids.forEach(id => {
+  render();
 
-    const cap =
-      caps.find(
-        c => c.id === id
-      );
+}
 
 
-    if(!cap){
-      return;
+function list(){
+
+  const term =
+    q.value
+      .trim()
+      .toLowerCase();
+
+
+  return caps.filter(c => {
+
+    const s =
+      state[c.id] || "";
+
+
+    if(
+      filter === "selected" &&
+      s !== "selected"
+    ){
+      return false;
     }
 
 
-    const card =
-      document.createElement("div");
+    if(
+      filter === "maybe" &&
+      s !== "maybe"
+    ){
+      return false;
+    }
 
 
-    card.className =
-      "choice-card";
+    if(term){
+
+      const hay = [
+        num(c.id),
+        c.id,
+        c.board,
+        c.position
+      ]
+      .join(" ")
+      .toLowerCase();
 
 
-    card.innerHTML = `
+      if(!hay.includes(term)){
+        return false;
+      }
 
-      <div class="cap-img">
-        ${capImage(cap)}
-      </div>
-
-      <div>
-
-        <div class="cap-number">
-          #${cap.id}
-        </div>
-
-        <div class="cap-name">
-          ${cap.brewery}
-        </div>
-
-        <div class="choice-actions">
-
-          <button
-            class="choice-btn safe
-            ${
-              trade[id] === "safe"
-              ? "active"
-              : ""
-            }"
-          >
-            ✓ Sicher
-          </button>
-
-          <button
-            class="choice-btn maybe
-            ${
-              trade[id] === "maybe"
-              ? "active"
-              : ""
-            }"
-          >
-            ? Vielleicht
-          </button>
-
-          <button class="choice-btn remove">
-            × Raus
-          </button>
-
-        </div>
-
-      </div>
-
-    `;
+    }
 
 
-    card
-      .querySelector(".safe")
-      .onclick = () => {
-
-        trade[id] =
-          "safe";
-
-        saveTrade();
-        renderAll();
-
-      };
-
-
-    card
-      .querySelector(".maybe")
-      .onclick = () => {
-
-        trade[id] =
-          "maybe";
-
-        saveTrade();
-        renderAll();
-
-      };
-
-
-    card
-      .querySelector(".remove")
-      .onclick = () => {
-
-        delete trade[id];
-
-        saveTrade();
-        renderAll();
-
-      };
-
-
-    box.appendChild(card);
+    return true;
 
   });
 
 }
 
 
-function simpleCapCard(cap){
+function render(){
 
-  return `
-
-    <div class="cap-card">
-
-      <div class="cap-img">
-        ${capImage(cap)}
-      </div>
-
-      <div>
-
-        <div class="cap-number">
-          #${cap.id}
-        </div>
-
-        <div class="cap-name">
-          ${cap.brewery}
-        </div>
-
-      </div>
-
-      <div></div>
-
-    </div>
-
-  `;
-
-}
-
-
-function renderOverview(){
-
-  const safe =
-    selectedIds()
-      .filter(
-        id =>
-          trade[id] === "safe"
-      );
+  const selected =
+    caps.filter(
+      c =>
+        state[c.id] ===
+        "selected"
+    ).length;
 
 
   const maybe =
-    selectedIds()
-      .filter(
-        id =>
-          trade[id] === "maybe"
-      );
+    caps.filter(
+      c =>
+        state[c.id] ===
+        "maybe"
+    ).length;
 
 
   document
-    .getElementById("safeCount")
+    .getElementById(
+      "total"
+    )
     .textContent =
-    safe.length;
+      caps.length;
 
 
   document
-    .getElementById("maybeCount")
+    .getElementById(
+      "selected"
+    )
     .textContent =
-    maybe.length;
+      selected;
 
 
-  const safeList =
-    document.getElementById("safeList");
+  document
+    .getElementById(
+      "maybe"
+    )
+    .textContent =
+      maybe;
 
 
-  const maybeList =
-    document.getElementById("maybeList");
+  const rows =
+    list();
 
 
-  safeList.innerHTML =
-    safe.length
+  if(!rows.length){
 
-    ? safe
-        .map(
-          id =>
-            caps.find(
-              cap =>
-                cap.id === id
-            )
-        )
-        .filter(Boolean)
-        .map(simpleCapCard)
-        .join("")
-
-    : `
-      <div class="empty">
-        Keine Kronkorken
-      </div>
-    `;
-
-
-  maybeList.innerHTML =
-    maybe.length
-
-    ? maybe
-        .map(
-          id =>
-            caps.find(
-              cap =>
-                cap.id === id
-            )
-        )
-        .filter(Boolean)
-        .map(simpleCapCard)
-        .join("")
-
-    : `
-      <div class="empty">
-        Keine Kronkorken
-      </div>
-    `;
-
-}
-
-
-function renderFind(){
-
-  const box =
-    document.getElementById("findList");
-
-
-  const ids =
-    selectedIds()
-      .filter(
-        id =>
-          trade[id] === "safe" ||
-          trade[id] === "maybe"
-      );
-
-
-  box.innerHTML =
-    "";
-
-
-  if(!ids.length){
-
-    box.innerHTML = `
-      <div class="empty">
-        Noch keine Kronkorken zum Heraussuchen.
-      </div>
-    `;
+    grid.innerHTML =
+      '<div class="empty">Hier ist gerade nichts.</div>';
 
     return;
-
-  }
-
-
-  ids.forEach(id => {
-
-    const cap =
-      caps.find(
-        c => c.id === id
-      );
-
-
-    if(!cap){
-      return;
-    }
-
-
-    const card =
-      document.createElement("div");
-
-
-    card.className =
-      "location-card";
-
-
-    card.innerHTML = `
-
-      <div class="cap-img">
-        ${capImage(cap)}
-      </div>
-
-      <div>
-
-        <div class="cap-number">
-          #${cap.id}
-        </div>
-
-        <div class="cap-name">
-          ${cap.brewery}
-        </div>
-
-        <div class="location-line">
-          Status:
-          <span class="location-highlight">
-            ${
-              trade[id] === "safe"
-              ? "Auf jeden Fall"
-              : "Vielleicht"
-            }
-          </span>
-        </div>
-
-        <div class="location-line">
-          Lagerort:
-          <span class="location-highlight">
-            ${cap.storage}
-            · Reihe ${cap.row}
-            · Position ${cap.position}
-          </span>
-        </div>
-
-      </div>
-
-    `;
-
-
-    box.appendChild(card);
-
-  });
-
-}
-
-
-function renderCheckGrid(){
-
-  const grid =
-    document.getElementById("checkGrid");
-
-
-  const filter =
-    document.getElementById("checkFilter")
-      .value;
-
-
-  const sort =
-    document.getElementById("checkSort")
-      .value;
-
-
-  let items =
-    [...caps];
-
-
-  if(filter !== "all"){
-
-    items =
-      items.filter(
-        cap =>
-          cap.recognitionStatus === filter
-      );
-
-  }
-
-
-  if(sort === "brewery"){
-
-    items.sort(
-      (a,b) =>
-        a.brewery.localeCompare(
-          b.brewery,
-          "de"
-        ) ||
-        a.id-b.id
-    );
-
-  }else{
-
-    items.sort(
-      (a,b) =>
-        a.id-b.id
-    );
 
   }
 
 
   grid.innerHTML =
-    "";
+    rows.map(c => {
+
+      const s =
+        state[c.id] || "";
 
 
-  if(!items.length){
+      return \`
+        <article
+          class="cap \${
+            s === "selected"
+              ? "sel"
+              : s === "maybe"
+              ? "maybe"
+              : ""
+          }"
+        >
 
-    grid.innerHTML = `
-      <div class="empty" style="grid-column:1/-1">
-        Keine passenden Kronkorken.
-      </div>
-    `;
+          <div class="pic">
 
-    return;
+            <img
+              src="\${c.image}"
+              alt="\${num(c.id)}"
+            >
 
-  }
+            <div class="badge">
+              \${num(c.id)}
+            </div>
 
-
-  items.forEach(cap => {
-
-    const item =
-      document.createElement("button");
-
-
-    item.className =
-      "check-item";
-
-
-    item.innerHTML = `
-
-      <img
-        src="${cap.image}"
-        alt="Kronkorken ${cap.id}"
-      >
-
-      <div class="check-number">
-        #${cap.id}
-
-        <span
-          class="
-            check-status
-            ${dotClass(cap.recognitionStatus)}
-          "
-        ></span>
-
-      </div>
-
-    `;
+          </div>
 
 
-    item.onclick = () => {
+          <div class="body">
 
-      openDetail(cap.id);
+            <div class="loc">
+              \${esc(c.board)}
+              · Pos. \${c.position}
+            </div>
 
-    };
+
+            <div class="actions">
+
+              <button
+                class="act sel \${
+                  s === "selected"
+                    ? "on"
+                    : ""
+                }"
+                data-id="\${c.id}"
+                data-choice="selected"
+              >
+                \${
+                  s === "selected"
+                    ? "✓ Ausgewählt"
+                    : "Auswählen"
+                }
+              </button>
 
 
-    grid.appendChild(item);
+              <button
+                class="act may \${
+                  s === "maybe"
+                    ? "on"
+                    : ""
+                }"
+                data-id="\${c.id}"
+                data-choice="maybe"
+              >
+                \${
+                  s === "maybe"
+                    ? "★ Vielleicht"
+                    : "Vielleicht"
+                }
+              </button>
 
-  });
+            </div>
+
+          </div>
+
+        </article>
+      \`;
+
+    }).join("");
 
 }
 
 
-function openDetail(capId){
+function selectionText(){
 
-  const cap =
-    caps.find(
-      c => c.id === capId
+  const yes =
+    caps.filter(
+      c =>
+        state[c.id] ===
+        "selected"
     );
 
 
-  if(!cap){
-    return;
-  }
+  const maybe =
+    caps.filter(
+      c =>
+        state[c.id] ===
+        "maybe"
+    );
 
 
-  openCapId =
-    cap.id;
+  const lines = [
+    "CapTrade – meine Auswahl",
+    ""
+  ];
 
 
-  document
-    .getElementById("modalImage")
-    .src =
-    cap.image;
+  lines.push(
+    "AUSGEWÄHLT:"
+  );
 
 
-  document
-    .getElementById("modalTitle")
-    .textContent =
-    "#" + cap.id;
+  lines.push(
+    yes.length
+      ? yes.map(
+          c =>
+            \`\${num(c.id)} – \${c.board}, Pos. \${c.position}\`
+        ).join("\\n")
+      : "–"
+  );
 
 
-  document
-    .getElementById("modalDetails")
-    .innerHTML = `
-
-      Lagerort:
-      <strong>${cap.storage}</strong><br>
-
-      Reihe:
-      <strong>${cap.row}</strong><br>
-
-      Position:
-      <strong>${cap.position}</strong>
-
-    `;
+  lines.push(
+    "",
+    "VIELLEICHT:"
+  );
 
 
-  document
-    .getElementById("breweryInput")
-    .value =
-    cap.brewery === "Zuordnung prüfen"
-    ? ""
-    : cap.brewery;
+  lines.push(
+    maybe.length
+      ? maybe.map(
+          c =>
+            \`\${num(c.id)} – \${c.board}, Pos. \${c.position}\`
+        ).join("\\n")
+      : "–"
+  );
 
 
-  document
-    .getElementById("recognitionStatus")
-    .value =
-    cap.recognitionStatus;
-
-
-  document
-    .getElementById("detailModal")
-    .classList
-    .add("show");
+  return lines.join(
+    "\\n"
+  );
 
 }
 
 
-function closeDetail(){
+grid.addEventListener(
+  "click",
+  e => {
 
-  document
-    .getElementById("detailModal")
-    .classList
-    .remove("show");
-
-
-  openCapId =
-    null;
-
-}
-
-
-document
-  .getElementById("saveCapButton")
-  .onclick = () => {
-
-    if(openCapId === null){
-      return;
-    }
-
-
-    const cap =
-      caps.find(
-        c =>
-          c.id === openCapId
+    const b =
+      e.target.closest(
+        "[data-choice]"
       );
 
 
-    if(!cap){
-      return;
-    }
+    if(!b) return;
 
 
-    const brewery =
-      document
-        .getElementById("breweryInput")
-        .value
-        .trim();
+    setChoice(
+      Number(
+        b.dataset.id
+      ),
+      b.dataset.choice
+    );
+
+  }
+);
 
 
-    const recognitionStatus =
-      document
-        .getElementById("recognitionStatus")
-        .value;
-
-
-    cap.brewery =
-      brewery ||
-      "Zuordnung prüfen";
-
-
-    cap.recognitionStatus =
-      recognitionStatus;
-
-
-    saveCaps();
-    renderAll();
-    closeDetail();
-
-  };
-
-
-function renderAll(){
-
-  renderHome();
-  renderSelection();
-  renderOverview();
-  renderFind();
-  renderCheckGrid();
-
-}
+q.addEventListener(
+  "input",
+  render
+);
 
 
 document
-  .querySelectorAll(".nav-btn")
-  .forEach(btn => {
+  .querySelectorAll(".tab")
+  .forEach(
+    b =>
+      b.addEventListener(
+        "click",
+        () => {
 
-    btn.onclick = () => {
+          document
+            .querySelectorAll(
+              ".tab"
+            )
+            .forEach(
+              x =>
+                x.classList.remove(
+                  "on"
+                )
+            );
 
-      document
-        .querySelectorAll(".page")
-        .forEach(
-          page =>
-            page.classList.remove("active")
-        );
+
+          b.classList.add(
+            "on"
+          );
 
 
-      document
-        .querySelectorAll(".nav-btn")
-        .forEach(
-          nav =>
-            nav.classList.remove("active")
-        );
+          filter =
+            b.dataset.f;
+
+
+          render();
+
+        }
+      )
+  );
+
+
+document
+  .getElementById(
+    "shareSelection"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+      const text =
+        selectionText();
+
+
+      if(navigator.share){
+
+        try{
+
+          await navigator.share({
+            title:
+              "CapTrade Auswahl",
+            text
+          });
+
+          return;
+
+        }
+        catch(e){
+
+          if(
+            e &&
+            e.name ===
+            "AbortError"
+          ){
+            return;
+          }
+
+        }
+
+      }
+
+
+      try{
+
+        await navigator
+          .clipboard
+          .writeText(text);
+
+      }
+      catch(e){}
 
 
       document
         .getElementById(
-          btn.dataset.page
+          "selectionText"
+        )
+        .value =
+          text;
+
+
+      document
+        .getElementById(
+          "sheet"
         )
         .classList
-        .add("active");
-
-
-      btn.classList
-        .add("active");
-
-
-      window.scrollTo({
-        top:0,
-        behavior:"smooth"
-      });
-
-    };
-
-  });
-
-
-document
-  .getElementById("searchInput")
-  .oninput =
-  renderHome;
-
-
-document
-  .getElementById("sortSelect")
-  .onchange =
-  renderHome;
-
-
-document
-  .getElementById("checkFilter")
-  .onchange =
-  renderCheckGrid;
-
-
-document
-  .getElementById("checkSort")
-  .onchange =
-  renderCheckGrid;
-
-
-document
-  .getElementById("clearTrade")
-  .onclick = () => {
-
-    if(
-      confirm(
-        "Komplette Tauschauswahl leeren?"
-      )
-    ){
-
-      trade = {};
-
-      saveTrade();
-      renderAll();
+        .add("show");
 
     }
-
-  };
-
-
-document
-  .getElementById("closeModal")
-  .onclick =
-  closeDetail;
-
-
-document
-  .getElementById("detailModal")
-  .onclick = event => {
-
-    if(
-      event.target.id === "detailModal"
-    ){
-
-      closeDetail();
-
-    }
-
-  };
-
-
-/*
-  GESAMMELTER ZUORDNUNGSIMPORT
-
-  Erwartetes JSON-Beispiel:
-
-  {
-    "1": {
-      "brewery": "Veltins",
-      "status": "safe"
-    },
-    "2": {
-      "brewery": "Veltins",
-      "status": "probable"
-    }
-  }
-
-*/
-
-
-const assignmentInput =
-  document.getElementById(
-    "assignmentInput"
   );
 
 
 document
-  .getElementById("assignmentButton")
-  .onclick = () => {
+  .getElementById(
+    "closeSheet"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-    assignmentInput.click();
+      document
+        .getElementById(
+          "sheet"
+        )
+        .classList
+        .remove("show");
 
-  };
+    }
+  );
 
 
-assignmentInput.onchange = event => {
+render();
 
-  const file =
-    event.target.files[0];
+<\/script>
 
+</body>
 
-  if(!file){
-    return;
+</html>`;
+
   }
 
 
-  const reader =
-    new FileReader();
+  $("shareBtn")
+    .addEventListener(
+      "click",
+      async () => {
+
+        const available =
+          caps.filter(
+            c =>
+              c.status !==
+              "traded"
+          );
 
 
-  reader.onload = e => {
+        if(!available.length){
 
-    try{
+          alert(
+            "Es sind keine verfügbaren Kronkorken vorhanden."
+          );
 
-      const assignments =
-        JSON.parse(
-          e.target.result
-        );
-
-
-      let changed =
-        0;
+          return;
+        }
 
 
-      Object
-        .entries(assignments)
-        .forEach(
-          ([id,data]) => {
+        const btn =
+          $("shareBtn");
+
+        const original =
+          btn.textContent;
+
+
+        btn.disabled =
+          true;
+
+        btn.textContent =
+          "Erstelle …";
+
+
+        try{
+
+          const exportCaps = [];
+
+
+          for(
+            let i = 0;
+            i < available.length;
+            i++
+          ){
 
             const cap =
-              caps.find(
-                c =>
-                  c.id === Number(id)
+              available[i];
+
+
+            btn.textContent =
+              `Erstelle ${i+1}/${available.length}`;
+
+
+            const image =
+              await compactImage(
+                cap.image
               );
 
 
-            if(!cap){
-              return;
-            }
+            exportCaps.push({
 
+              id:
+                cap.id,
 
-            if(
-              typeof data.brewery === "string" &&
-              data.brewery.trim()
-            ){
+              board:
+                cap.board,
 
-              cap.brewery =
-                data.brewery.trim();
+              position:
+                cap.position,
 
-            }
+              image
 
-
-            if(
-              ["safe","probable","unclear"]
-                .includes(data.status)
-            ){
-
-              cap.recognitionStatus =
-                data.status;
-
-            }
-
-
-            changed++;
+            });
 
           }
-        );
 
 
-      saveCaps();
-      renderAll();
+          const viewerHTML =
+            buildTradeViewerHTML(
+              exportCaps
+            );
 
 
-      const note =
-        document.getElementById(
-          "assignmentSuccess"
-        );
+          const blob =
+            new Blob(
+              [viewerHTML],
+              {
+                type:
+                  "text/html;charset=utf-8"
+              }
+            );
 
 
-      note.textContent =
-        `✓ ${changed} Zuordnungen wurden übernommen.`;
+          const file =
+            new File(
+              [blob],
+              "CapTrade-Tauschliste.html",
+              {
+                type:
+                  "text/html"
+              }
+            );
 
 
-      note.classList
-        .add("show");
+          if(
+            navigator.share &&
+            navigator.canShare &&
+            navigator.canShare({
+              files:[file]
+            })
+          ){
 
+            try{
 
-    }catch(error){
+              await navigator.share({
 
-      alert(
-        "Die Zuordnungsdatei konnte nicht gelesen werden."
-      );
+                title:
+                  "CapTrade Tauschliste",
 
-    }
+                text:
+                  "Hier kannst du dir meine verfügbaren Kronkorken aussuchen. Du kannst dabei nichts löschen oder verändern.",
 
-  };
+                files:[
+                  file
+                ]
 
+              });
 
-  reader.readAsText(file);
 
-};
+              toast(
+                "Tauschdatei erstellt"
+              );
 
 
-/*
-  BRETT-F-IMPORT
-*/
+              return;
 
+            }
+            catch(e){
 
-const boardFInput =
-  document.getElementById(
-    "boardFInput"
-  );
+              if(
+                e &&
+                e.name ===
+                "AbortError"
+              ){
+                return;
+              }
 
+            }
 
-document
-  .getElementById("boardFButton")
-  .onclick = () => {
+          }
 
-    boardFInput.click();
 
-  };
+          const url =
+            URL.createObjectURL(
+              blob
+            );
 
 
-boardFInput.onchange = event => {
+          const a =
+            document.createElement(
+              "a"
+            );
 
-  const file =
-    event.target.files[0];
 
+          a.href =
+            url;
 
-  if(!file){
-    return;
-  }
 
+          a.download =
+            "CapTrade-Tauschliste.html";
 
-  const reader =
-    new FileReader();
 
+          document.body
+            .appendChild(a);
 
-  reader.onload = e => {
 
-    const img =
-      new Image();
+          a.click();
 
 
-    img.onload = async () => {
+          a.remove();
 
-      await importBoardF(img);
 
-    };
-
-
-    img.src =
-      e.target.result;
-
-  };
-
-
-  reader.readAsDataURL(file);
-
-};
-
-
-async function importBoardF(img){
-
-  const progressBox =
-    document.getElementById("progressBox");
-
-
-  const progressText =
-    document.getElementById("progressText");
-
-
-  const progressFill =
-    document.getElementById("progressFill");
-
-
-  const successBox =
-    document.getElementById("successBox");
-
-
-  progressBox
-    .classList
-    .add("show");
-
-
-  successBox
-    .classList
-    .remove("show");
-
-
-  const scaleX =
-    img.naturalWidth /
-    1152;
-
-
-  const scaleY =
-    img.naturalHeight /
-    1536;
-
-
-  const cropHalf =
-    56;
-
-
-  const imported =
-    [];
-
-
-  let currentRow =
-    1;
-
-
-  let positionInRow =
-    0;
-
-
-  for(
-    let i = 0;
-    i < boardFPoints.length;
-    i++
-  ){
-
-    if(i === 0){
-
-      currentRow =
-        1;
-
-      positionInRow =
-        1;
-
-    }else if(i < 9){
-
-      positionInRow++;
-
-    }else{
-
-      const afterFirst =
-        i - 9;
-
-
-      currentRow =
-        2 +
-        Math.floor(
-          afterFirst /
-          10
-        );
-
-
-      positionInRow =
-        1 +
-        (
-          afterFirst %
-          10
-        );
-
-    }
-
-
-    const point =
-      boardFPoints[i];
-
-
-    const centerX =
-      point[0] *
-      scaleX;
-
-
-    const centerY =
-      point[1] *
-      scaleY;
-
-
-    const halfX =
-      cropHalf *
-      scaleX;
-
-
-    const halfY =
-      cropHalf *
-      scaleY;
-
-
-    const sourceX =
-      Math.max(
-        0,
-        centerX-halfX
-      );
-
-
-    const sourceY =
-      Math.max(
-        0,
-        centerY-halfY
-      );
-
-
-    const sourceW =
-      Math.min(
-        halfX*2,
-        img.naturalWidth-sourceX
-      );
-
-
-    const sourceH =
-      Math.min(
-        halfY*2,
-        img.naturalHeight-sourceY
-      );
-
-
-    const canvas =
-      document.createElement(
-        "canvas"
-      );
-
-
-    canvas.width =
-      110;
-
-
-    canvas.height =
-      110;
-
-
-    const ctx =
-      canvas.getContext("2d");
-
-
-    ctx.fillStyle =
-      "#ffffff";
-
-
-    ctx.fillRect(
-      0,
-      0,
-      110,
-      110
-    );
-
-
-    ctx.drawImage(
-      img,
-      sourceX,
-      sourceY,
-      sourceW,
-      sourceH,
-      0,
-      0,
-      110,
-      110
-    );
-
-
-    const image =
-      canvas.toDataURL(
-        "image/jpeg",
-        .72
-      );
-
-
-    imported.push({
-
-      id:
-        i+1,
-
-      brewery:
-        "Zuordnung prüfen",
-
-      recognitionStatus:
-        "unclear",
-
-      image,
-
-      storage:
-        "Brett F",
-
-      row:
-        currentRow,
-
-      position:
-        positionInRow,
-
-      available:
-        true
-
-    });
-
-
-    const percent =
-      Math.round(
-        (
-          (i+1) /
-          boardFPoints.length
-        ) *
-        100
-      );
-
-
-    progressFill.style.width =
-      percent + "%";
-
-
-    progressText.textContent =
-      `Kronkorken ${i+1} von 139 wird vorbereitet …`;
-
-
-    if(i % 10 === 0){
-
-      await new Promise(
-        resolve =>
           setTimeout(
-            resolve,
-            20
-          )
-      );
+            () =>
+              URL.revokeObjectURL(
+                url
+              ),
+            5000
+          );
+
+
+          toast(
+            "Tauschdatei gespeichert"
+          );
+
+        }
+        catch(err){
+
+          console.error(err);
+
+
+          alert(
+            "Die Tauschdatei konnte nicht erstellt werden."
+          );
+
+        }
+        finally{
+
+          btn.disabled =
+            false;
+
+
+          btn.textContent =
+            original;
+
+        }
+
+      }
+    );
+
+
+  async function init(){
+
+    try{
+
+      db =
+        await openDB();
+
+
+      await load();
+
+    }
+    catch(err){
+
+      console.error(err);
+
+
+      grid.innerHTML = `
+        <div
+          class="empty"
+          style="grid-column:1/-1"
+        >
+
+          <strong>
+            Speicher konnte nicht geöffnet werden.
+          </strong>
+
+          Bitte öffne CapTrade nicht
+          im privaten Browsermodus.
+
+        </div>
+      `;
 
     }
 
   }
 
 
-  caps =
-    imported;
+  init();
 
 
-  try{
-
-    saveCaps();
-
-  }catch(error){
-
-    alert(
-      "Der lokale Speicher ist voll."
-    );
-
-    progressBox
-      .classList
-      .remove("show");
-
-    return;
-
-  }
-
-
-  trade = {};
-
-  saveTrade();
-
-
-  progressText.textContent =
-    "Import abgeschlossen";
-
-
-  progressFill.style.width =
-    "100%";
-
-
-  successBox
-    .classList
-    .add("show");
-
-
-  renderAll();
-
-}
-
-
-document
-  .getElementById("deleteBoardF")
-  .onclick = () => {
-
-    if(
-      !confirm(
-        "Brett F wirklich löschen?"
-      )
-    ){
-
-      return;
-
-    }
-
-
-    caps = [];
-    trade = {};
-
-
-    localStorage.removeItem(
-      "captradeCaps"
-    );
-
-
-    localStorage.removeItem(
-      "captradeSelection"
-    );
-
-
-    renderAll();
-
-  };
-
-
-saveCaps();
-renderAll();
+})();
 
 </script>
 
