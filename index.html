@@ -1,1801 +1,13 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0b1020" />
-  <title>CapTrade</title>
-
-  <style>
-    :root{
-      --bg:#0b1020;
-      --panel:#121a2d;
-      --panel2:#18233a;
-      --line:#273552;
-      --text:#f6f8ff;
-      --muted:#9aa8c3;
-      --blue:#4c8dff;
-      --blue2:#2d6eea;
-      --red:#ff4e5b;
-      --yellow:#f4c84b;
-      --green:#38c985;
-      --shadow:0 12px 30px rgba(0,0,0,.28);
-      --radius:18px;
-    }
-
-    *{box-sizing:border-box}
-
-    html{-webkit-text-size-adjust:100%}
-
-    body{
-      margin:0;
-      background:
-        radial-gradient(circle at 10% 0%, rgba(76,141,255,.12), transparent 28%),
-        var(--bg);
-      color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-      min-height:100vh;
-    }
-
-    button,input,select{font:inherit}
-    button{cursor:pointer}
-
-    .app{
-      width:min(1100px,100%);
-      margin:0 auto;
-      padding:calc(18px + env(safe-area-inset-top)) 14px calc(90px + env(safe-area-inset-bottom));
-    }
-
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:18px;
-    }
-
-    .brand{
-      font-size:28px;
-      font-weight:900;
-      letter-spacing:-1px;
-      line-height:1;
-    }
-
-    .brand span{color:var(--red)}
-
-    .sub{
-      color:var(--muted);
-      font-size:13px;
-      margin-top:5px;
-    }
-
-    .primary{
-      border:0;
-      background:linear-gradient(180deg,var(--blue),var(--blue2));
-      color:white;
-      padding:11px 15px;
-      border-radius:13px;
-      font-weight:800;
-      box-shadow:0 8px 18px rgba(76,141,255,.22);
-    }
-
-    .primary:active{transform:translateY(1px)}
-
-    .top-action{
-      width:104px;
-      min-width:104px;
-      height:42px;
-      padding:0 8px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      white-space:nowrap;
-    }
-
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
-      margin-bottom:14px;
-    }
-
-    .stat{
-      background:rgba(18,26,45,.88);
-      border:1px solid var(--line);
-      border-radius:15px;
-      padding:12px;
-      box-shadow:var(--shadow);
-    }
-
-    .stat .n{
-      font-size:22px;
-      font-weight:900;
-    }
-
-    .stat .l{
-      font-size:12px;
-      color:var(--muted);
-      margin-top:2px;
-    }
-
-    .tabs{
-      display:flex;
-      gap:8px;
-      overflow-x:auto;
-      padding-bottom:5px;
-      margin-bottom:14px;
-      scrollbar-width:none;
-    }
-
-    .tabs::-webkit-scrollbar{display:none}
-
-    .tab{
-      flex:0 0 auto;
-      background:var(--panel);
-      color:var(--muted);
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:9px 13px;
-      font-weight:800;
-      font-size:13px;
-    }
-
-    .tab.active{
-      background:var(--blue);
-      border-color:var(--blue);
-      color:white;
-    }
-
-    .toolbar{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      margin-bottom:14px;
-    }
-
-    .search{
-      flex:1;
-      background:var(--panel);
-      border:1px solid var(--line);
-      color:var(--text);
-      border-radius:13px;
-      padding:11px 12px;
-      outline:none;
-    }
-
-    .search:focus{border-color:var(--blue)}
-
-    .ghost{
-      background:var(--panel);
-      border:1px solid var(--line);
-      color:var(--text);
-      border-radius:13px;
-      padding:11px 12px;
-      font-weight:800;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
-    }
-
-    @media (min-width:680px){
-      .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-    }
-
-    @media (min-width:960px){
-      .grid{grid-template-columns:repeat(5,minmax(0,1fr))}
-    }
-
-    .cap{
-      background:linear-gradient(180deg,var(--panel2),var(--panel));
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      overflow:hidden;
-      box-shadow:var(--shadow);
-      position:relative;
-    }
-
-    .cap.selected{
-      border-color:var(--blue);
-      box-shadow:0 0 0 2px rgba(76,141,255,.14),var(--shadow);
-    }
-
-    .cap.maybe{
-      border-color:var(--yellow);
-      box-shadow:0 0 0 2px rgba(244,200,75,.12),var(--shadow);
-    }
-
-    .cap.traded{opacity:.75}
-
-    .cap-img-wrap{
-      aspect-ratio:1/1;
-      background:#0a0f1d;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      position:relative;
-    }
-
-    .cap-img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    .badge{
-      position:absolute;
-      top:8px;
-      left:8px;
-      background:rgba(7,11,20,.82);
-      backdrop-filter:blur(7px);
-      color:white;
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:999px;
-      padding:5px 8px;
-      font-size:11px;
-      font-weight:900;
-    }
-
-    .cap-body{padding:10px}
-
-    .cap-title{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap:8px;
-      margin-bottom:4px;
-    }
-
-    .cap-no{
-      font-weight:900;
-      font-size:15px;
-    }
-
-    .loc{
-      color:var(--muted);
-      font-size:11px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .actions{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:7px;
-      margin-top:9px;
-    }
-
-    .act{
-      border:1px solid var(--line);
-      background:#0f1728;
-      color:var(--text);
-      border-radius:11px;
-      padding:8px 5px;
-      font-size:11px;
-      font-weight:850;
-      min-height:37px;
-    }
-
-    .act.select.on{
-      background:rgba(76,141,255,.17);
-      border-color:var(--blue);
-      color:#cfe0ff;
-    }
-
-    .act.maybe.on{
-      background:rgba(244,200,75,.14);
-      border-color:var(--yellow);
-      color:#ffeaa1;
-    }
-
-    .act.trade{grid-column:1/-1}
-
-    .act.trade.on{
-      background:rgba(56,201,133,.14);
-      border-color:var(--green);
-      color:#b9f4d6;
-    }
-
-    .empty{
-      border:1px dashed var(--line);
-      border-radius:18px;
-      padding:42px 18px;
-      text-align:center;
-      color:var(--muted);
-      background:rgba(18,26,45,.45);
-    }
-
-    .empty strong{
-      display:block;
-      color:var(--text);
-      font-size:18px;
-      margin-bottom:7px;
-    }
-
-    .modalback{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.62);
-      backdrop-filter:blur(8px);
-      display:none;
-      align-items:flex-end;
-      justify-content:center;
-      z-index:20;
-      padding:0;
-    }
-
-    .modalback.show{display:flex}
-
-    .modal{
-      width:min(620px,100%);
-      background:#111a2d;
-      border:1px solid var(--line);
-      border-radius:22px 22px 0 0;
-      padding:18px 16px calc(18px + env(safe-area-inset-bottom));
-      max-height:90vh;
-      overflow:auto;
-    }
-
-    @media(min-width:700px){
-      .modalback{
-        align-items:center;
-        padding:20px;
-      }
-
-      .modal{border-radius:22px}
-    }
-
-    .modal h2{
-      margin:0 0 5px;
-      font-size:22px;
-    }
-
-    .modal p{
-      margin:0 0 16px;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.45;
-    }
-
-    .field{margin-bottom:13px}
-
-    .field label{
-      display:block;
-      font-size:12px;
-      font-weight:800;
-      color:#cbd5e8;
-      margin-bottom:6px;
-    }
-
-    .field input,
-    .field select{
-      width:100%;
-      background:#0c1425;
-      border:1px solid var(--line);
-      color:var(--text);
-      border-radius:12px;
-      padding:12px;
-      outline:none;
-    }
-
-    .field input:focus{border-color:var(--blue)}
-
-    .filebox{
-      border:1px dashed #405477;
-      border-radius:14px;
-      padding:18px;
-      text-align:center;
-      background:#0c1425;
-      color:var(--muted);
-    }
-
-    .filebox input{
-      margin-top:10px;
-      width:100%;
-    }
-
-    .modal-actions{
-      display:flex;
-      gap:9px;
-      margin-top:16px;
-    }
-
-    .modal-actions button{flex:1}
-
-    .danger{
-      background:rgba(255,78,91,.12);
-      border:1px solid rgba(255,78,91,.5);
-      color:#ffb7bd;
-      border-radius:13px;
-      padding:11px;
-      font-weight:800;
-    }
-
-    .footer-note{
-      color:var(--muted);
-      font-size:11px;
-      text-align:center;
-      margin-top:20px;
-      line-height:1.45;
-    }
-
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:calc(24px + env(safe-area-inset-bottom));
-      transform:translateX(-50%) translateY(120px);
-      background:#edf3ff;
-      color:#101827;
-      font-weight:800;
-      border-radius:999px;
-      padding:10px 14px;
-      z-index:50;
-      transition:.25s ease;
-      box-shadow:0 12px 30px rgba(0,0,0,.28);
-      font-size:13px;
-      max-width:90vw;
-      text-align:center;
-    }
-
-    .toast.show{
-      transform:translateX(-50%) translateY(0);
-    }
-
-    .mini-menu{
-      position:absolute;
-      top:8px;
-      right:8px;
-      border:1px solid rgba(255,255,255,.13);
-      background:rgba(7,11,20,.82);
-      color:white;
-      border-radius:10px;
-      width:30px;
-      height:30px;
-      font-weight:900;
-      backdrop-filter:blur(7px);
-    }
-  </style>
-</head>
-
-<body>
-
-  <main class="app">
-
-    <header class="topbar">
-      <div>
-        <div class="brand">Cap<span>Trade</span></div>
-        <div class="sub">Sony‘s Tauschkronkorken</div>
-      </div>
-
-      <div style="display:flex; gap:8px; align-items:center;">
-        <button class="ghost top-action" id="shareBtn">↗ Teilen</button>
-        <button class="primary top-action" id="addBtn">+ Brett</button>
-      </div>
-    </header>
-
-    <section class="stats">
-
-      <div class="stat">
-        <div class="n" id="availableCount">0</div>
-        <div class="l">verfügbar</div>
-      </div>
-
-      <div class="stat">
-        <div class="n" id="selectedCount">0</div>
-        <div class="l">ausgewählt</div>
-      </div>
-
-      <div class="stat">
-        <div class="n" id="maybeCount">0</div>
-        <div class="l">vielleicht</div>
-      </div>
-
-    </section>
-
-    <nav class="tabs" aria-label="Filter">
-      <button class="tab active" data-filter="all">Alle</button>
-      <button class="tab" data-filter="selected">Ausgewählt</button>
-      <button class="tab" data-filter="maybe">Vielleicht</button>
-      <button class="tab" data-filter="traded">Getauscht</button>
-    </nav>
-
-    <section class="toolbar">
-      <input
-        id="search"
-        class="search"
-        type="search"
-        placeholder="Nr. oder Brett suchen …"
-      />
-
-      <button
-        id="resetBtn"
-        class="ghost"
-        title="Tauschauswahl zurücksetzen"
-      >↺</button>
-    </section>
-
-    <section id="grid" class="grid"></section>
-
-    <div class="footer-note">
-      Besitzer-Modus · Deine Daten bleiben auf diesem Gerät.
-      Eine Tauschdatei ist nur eine schreibgeschützte Kopie
-      der aktuell verfügbaren Kronkorken.
-    </div>
-
-  </main>
-
-
-  <!-- BRETT HINZUFÜGEN -->
-
-  <div class="modalback" id="addModal">
-    <div class="modal">
-
-      <h2>Brett hinzufügen</h2>
-
-      <p>
-        Wähle die bereits ausgeschnittenen Kronkorkenbilder eines Bretts aus.
-        CapTrade vergibt die Positionen automatisch in der Reihenfolge
-        der Dateinamen.
-      </p>
-
-      <div class="field">
-        <label for="boardName">Brettname</label>
-
-        <input
-          id="boardName"
-          type="text"
-          placeholder="z. B. Brett A"
-          autocomplete="off"
-        />
-      </div>
-
-      <div class="field">
-        <label>Kronkorkenbilder</label>
-
-        <div class="filebox">
-          Mehrere Bilder gleichzeitig auswählen
-
-          <input
-            id="capFiles"
-            type="file"
-            accept="image/*"
-            multiple
-          />
-        </div>
-      </div>
-
-      <div class="modal-actions">
-        <button class="ghost" id="cancelAdd">
-          Abbrechen
-        </button>
-
-        <button class="primary" id="importBtn">
-          Importieren
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- KRONKORKEN BEARBEITEN -->
-
-  <div class="modalback" id="editModal">
-    <div class="modal">
-
-      <h2>Kronkorken bearbeiten</h2>
-
-      <p>
-        Hier kannst du Brett oder Position korrigieren.
-      </p>
-
-      <input type="hidden" id="editId" />
-
-      <div class="field">
-        <label for="editBoard">Brett</label>
-        <input id="editBoard" type="text" />
-      </div>
-
-      <div class="field">
-        <label for="editPosition">Position</label>
-
-        <input
-          id="editPosition"
-          type="number"
-          min="1"
-          inputmode="numeric"
-        />
-      </div>
-
-      <div class="modal-actions">
-
-        <button class="danger" id="deleteCap">
-          Löschen
-        </button>
-
-        <button class="ghost" id="cancelEdit">
-          Abbrechen
-        </button>
-
-        <button class="primary" id="saveEdit">
-          Speichern
-        </button>
-
-      </div>
-
-    </div>
-  </div>
-
-  <div class="toast" id="toast"></div>
-
-
-<script>
-
-(() => {
-
-  const DB_NAME = "captrade_local";
-  const DB_VERSION = 1;
-  const STORE = "caps";
-
-  let db;
-  let caps = [];
-  let filter = "all";
-
-  const $ = (id) => document.getElementById(id);
-
-  const grid = $("grid");
-  const search = $("search");
-  const addModal = $("addModal");
-  const editModal = $("editModal");
-  const toastEl = $("toast");
-
-
-  function openDB(){
-
-    return new Promise((resolve, reject) => {
-
-      const req = indexedDB.open(DB_NAME, DB_VERSION);
-
-      req.onupgradeneeded = () => {
-
-        const d = req.result;
-
-        if(!d.objectStoreNames.contains(STORE)){
-
-          const store = d.createObjectStore(
-            STORE,
-            {
-              keyPath:"id",
-              autoIncrement:true
-            }
-          );
-
-          store.createIndex(
-            "status",
-            "status",
-            {unique:false}
-          );
-
-          store.createIndex(
-            "board",
-            "board",
-            {unique:false}
-          );
-        }
-      };
-
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
-
-    });
-  }
-
-
-  function getAll(){
-
-    return new Promise((resolve, reject) => {
-
-      const tx = db.transaction(
-        STORE,
-        "readonly"
-      );
-
-      const req = tx
-        .objectStore(STORE)
-        .getAll();
-
-      req.onsuccess = () =>
-        resolve(req.result || []);
-
-      req.onerror = () =>
-        reject(req.error);
-
-    });
-  }
-
-
-  function addRecord(record){
-
-    return new Promise((resolve, reject) => {
-
-      const tx = db.transaction(
-        STORE,
-        "readwrite"
-      );
-
-      const req = tx
-        .objectStore(STORE)
-        .add(record);
-
-      req.onsuccess = () =>
-        resolve(req.result);
-
-      req.onerror = () =>
-        reject(req.error);
-
-    });
-  }
-
-
-  function putRecord(record){
-
-    return new Promise((resolve, reject) => {
-
-      const tx = db.transaction(
-        STORE,
-        "readwrite"
-      );
-
-      const req = tx
-        .objectStore(STORE)
-        .put(record);
-
-      req.onsuccess = () =>
-        resolve();
-
-      req.onerror = () =>
-        reject(req.error);
-
-    });
-  }
-
-
-  function deleteRecord(id){
-
-    return new Promise((resolve, reject) => {
-
-      const tx = db.transaction(
-        STORE,
-        "readwrite"
-      );
-
-      const req = tx
-        .objectStore(STORE)
-        .delete(id);
-
-      req.onsuccess = () =>
-        resolve();
-
-      req.onerror = () =>
-        reject(req.error);
-
-    });
-  }
-
-
-  async function load(){
-
-    caps = await getAll();
-
-    caps.sort(
-      (a,b) => a.id-b.id
-    );
-
-    render();
-  }
-
-
-  function naturalSortFiles(files){
-
-    return [...files].sort(
-      (a,b) =>
-        a.name.localeCompare(
-          b.name,
-          undefined,
-          {
-            numeric:true,
-            sensitivity:"base"
-          }
-        )
-    );
-  }
-
-
-  function fileToDataURL(file){
-
-    return new Promise(
-      (resolve, reject) => {
-
-        const reader =
-          new FileReader();
-
-        reader.onload = () =>
-          resolve(reader.result);
-
-        reader.onerror =
-          reject;
-
-        reader.readAsDataURL(file);
-
-      }
-    );
-  }
-
-
-  function capNumber(id){
-
-    return "#" +
-      String(id).padStart(3,"0");
-  }
-
-
-  function toast(msg){
-
-    toastEl.textContent = msg;
-
-    toastEl.classList.add("show");
-
-    clearTimeout(
-      toastEl._timer
-    );
-
-    toastEl._timer =
-      setTimeout(
-        () =>
-          toastEl.classList.remove("show"),
-        1800
-      );
-  }
-
-
-  function statusClass(cap){
-
-    if(cap.status === "selected")
-      return "selected";
-
-    if(cap.status === "maybe")
-      return "maybe";
-
-    if(cap.status === "traded")
-      return "traded";
-
-    return "";
-  }
-
-
-  function visibleCaps(){
-
-    const q =
-      search.value
-        .trim()
-        .toLowerCase();
-
-    return caps.filter(cap => {
-
-      if(
-        filter === "all" &&
-        cap.status === "traded"
-      ) return false;
-
-      if(
-        filter === "selected" &&
-        cap.status !== "selected"
-      ) return false;
-
-      if(
-        filter === "maybe" &&
-        cap.status !== "maybe"
-      ) return false;
-
-      if(
-        filter === "traded" &&
-        cap.status !== "traded"
-      ) return false;
-
-      if(q){
-
-        const hay = [
-          capNumber(cap.id),
-          String(cap.id),
-          cap.board || "",
-          cap.position || ""
-        ]
-        .join(" ")
-        .toLowerCase();
-
-        if(!hay.includes(q))
-          return false;
-      }
-
-      return true;
-
-    });
-  }
-
-
-  function updateStats(){
-
-    $("availableCount").textContent =
-      caps.filter(
-        c => c.status !== "traded"
-      ).length;
-
-    $("selectedCount").textContent =
-      caps.filter(
-        c => c.status === "selected"
-      ).length;
-
-    $("maybeCount").textContent =
-      caps.filter(
-        c => c.status === "maybe"
-      ).length;
-  }
-
-
-  function render(){
-
-    updateStats();
-
-    const list = visibleCaps();
-
-    if(!list.length){
-
-      grid.innerHTML = `
-        <div
-          class="empty"
-          style="grid-column:1/-1"
-        >
-
-          <strong>
-            ${
-              caps.length
-                ? "Hier ist gerade nichts."
-                : "Noch keine Kronkorken"
-            }
-          </strong>
-
-          ${
-            caps.length
-              ? "Wähle einen anderen Filter oder ändere die Suche."
-              : "Tippe oben auf „+ Brett“, um deine ersten ausgeschnittenen Kronkorken zu importieren."
-          }
-
-        </div>
-      `;
-
-      return;
-    }
-        grid.innerHTML = list.map(cap => `
-      <article class="cap ${statusClass(cap)}" data-id="${cap.id}">
-
-        <div class="cap-img-wrap">
-
-          <img
-            class="cap-img"
-            src="${cap.image}"
-            alt="${capNumber(cap.id)}"
-          />
-
-          <div class="badge">
-            ${capNumber(cap.id)}
-          </div>
-
-          <button
-            class="mini-menu"
-            data-action="edit"
-            data-id="${cap.id}"
-            aria-label="Bearbeiten"
-          >•••</button>
-
-        </div>
-
-        <div class="cap-body">
-
-          <div class="cap-title">
-
-            <div class="cap-no">
-              ${capNumber(cap.id)}
-            </div>
-
-            <div class="loc">
-              ${escapeHTML(cap.board)} · Pos. ${cap.position}
-            </div>
-
-          </div>
-
-          <div class="actions">
-
-            ${
-              cap.status !== "traded"
-              ? `
-                <button
-                  class="act select ${cap.status === "selected" ? "on":""}"
-                  data-action="selected"
-                  data-id="${cap.id}"
-                >
-                  ${
-                    cap.status === "selected"
-                    ? "✓ Ausgewählt"
-                    : "Auswählen"
-                  }
-                </button>
-
-                <button
-                  class="act maybe ${cap.status === "maybe" ? "on":""}"
-                  data-action="maybe"
-                  data-id="${cap.id}"
-                >
-                  ${
-                    cap.status === "maybe"
-                    ? "★ Vielleicht"
-                    : "Vielleicht"
-                  }
-                </button>
-
-                <button
-                  class="act trade"
-                  data-action="traded"
-                  data-id="${cap.id}"
-                >
-                  Getauscht
-                </button>
-              `
-              : `
-                <button
-                  class="act trade on"
-                  data-action="restore"
-                  data-id="${cap.id}"
-                >
-                  ↺ Wieder verfügbar
-                </button>
-              `
-            }
-
-          </div>
-
-        </div>
-
-      </article>
-    `).join("");
-  }
-
-
-  function escapeHTML(str){
-
-    return String(str ?? "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-
-
-  async function setStatus(id, next){
-
-    const cap =
-      caps.find(c => c.id === id);
-
-    if(!cap) return;
-
-    if(
-      (next === "selected" ||
-       next === "maybe") &&
-      cap.status === next
-    ){
-      cap.status = "available";
-    }
-    else{
-      cap.status = next;
-    }
-
-    cap.updatedAt = Date.now();
-
-    await putRecord(cap);
-
-    render();
-
-    if(next === "traded"){
-      toast(
-        `${capNumber(id)} ist jetzt getauscht`
-      );
-    }
-  }
-
-
-  grid.addEventListener(
-    "click",
-    async (e) => {
-
-      const btn =
-        e.target.closest(
-          "[data-action]"
-        );
-
-      if(!btn) return;
-
-      const id =
-        Number(btn.dataset.id);
-
-      const action =
-        btn.dataset.action;
-
-
-      if(action === "edit"){
-
-        const cap =
-          caps.find(
-            c => c.id === id
-          );
-
-        if(!cap) return;
-
-        $("editId").value =
-          cap.id;
-
-        $("editBoard").value =
-          cap.board;
-
-        $("editPosition").value =
-          cap.position;
-
-        editModal
-          .classList
-          .add("show");
-
-        return;
-      }
-
-
-      if(action === "traded"){
-
-        const cap =
-          caps.find(
-            c => c.id === id
-          );
-
-        if(!cap) return;
-
-        const ok = confirm(
-          `${capNumber(id)} wirklich als getauscht markieren?
-
-Er verschwindet danach aus der normalen Ansicht.`
-        );
-
-        if(!ok) return;
-
-        await setStatus(
-          id,
-          "traded"
-        );
-
-        return;
-      }
-
-
-      if(action === "restore"){
-
-        await setStatus(
-          id,
-          "available"
-        );
-
-        toast(
-          `${capNumber(id)} ist wieder verfügbar`
-        );
-
-        return;
-      }
-
-
-      if(
-        action === "selected" ||
-        action === "maybe"
-      ){
-
-        await setStatus(
-          id,
-          action
-        );
-      }
-
-    }
-  );
-
-
-  document
-    .querySelectorAll(".tab")
-    .forEach(btn => {
-
-      btn.addEventListener(
-        "click",
-        () => {
-
-          document
-            .querySelectorAll(".tab")
-            .forEach(
-              b =>
-                b.classList.remove(
-                  "active"
-                )
-            );
-
-          btn.classList.add(
-            "active"
-          );
-
-          filter =
-            btn.dataset.filter;
-
-          render();
-
-        }
-      );
-
-    });
-
-
-  search.addEventListener(
-    "input",
-    render
-  );
-
-
-  $("addBtn")
-    .addEventListener(
-      "click",
-      () => {
-
-        $("boardName").value = "";
-
-        $("capFiles").value = "";
-
-        addModal
-          .classList
-          .add("show");
-
-        setTimeout(
-          () =>
-            $("boardName").focus(),
-          120
-        );
-
-      }
-    );
-
-
-  $("cancelAdd")
-    .addEventListener(
-      "click",
-      () =>
-        addModal
-          .classList
-          .remove("show")
-    );
-
-
-  $("cancelEdit")
-    .addEventListener(
-      "click",
-      () =>
-        editModal
-          .classList
-          .remove("show")
-    );
-
-
-  addModal.addEventListener(
-    "click",
-    (e) => {
-
-      if(e.target === addModal){
-
-        addModal
-          .classList
-          .remove("show");
-
-      }
-
-    }
-  );
-
-
-  editModal.addEventListener(
-    "click",
-    (e) => {
-
-      if(e.target === editModal){
-
-        editModal
-          .classList
-          .remove("show");
-
-      }
-
-    }
-  );
-
-
-  $("importBtn")
-    .addEventListener(
-      "click",
-      async () => {
-
-        const board =
-          $("boardName")
-            .value
-            .trim();
-
-        const files =
-          naturalSortFiles(
-            $("capFiles").files
-          );
-
-
-        if(!board){
-
-          alert(
-            "Bitte gib zuerst einen Brettnamen ein."
-          );
-
-          return;
-        }
-
-
-        if(!files.length){
-
-          alert(
-            "Bitte wähle mindestens ein Kronkorkenbild aus."
-          );
-
-          return;
-        }
-
-
-        const importBtn =
-          $("importBtn");
-
-        importBtn.disabled =
-          true;
-
-        importBtn.textContent =
-          "Importiere …";
-
-
-        try{
-
-          const currentPositions =
-            caps
-              .filter(
-                c =>
-                  (c.board || "")
-                    .toLowerCase() ===
-                  board.toLowerCase()
-              )
-              .map(
-                c =>
-                  Number(c.position) || 0
-              );
-
-
-          let position =
-            currentPositions.length
-              ? Math.max(
-                  ...currentPositions
-                ) + 1
-              : 1;
-
-
-          for(const file of files){
-
-            const image =
-              await fileToDataURL(
-                file
-              );
-
-
-            await addRecord({
-
-              board,
-
-              position,
-
-              image,
-
-              status:
-                "available",
-
-              createdAt:
-                Date.now(),
-
-              updatedAt:
-                Date.now()
-
-            });
-
-
-            position++;
-
-          }
-
-
-          addModal
-            .classList
-            .remove("show");
-
-
-          await load();
-
-
-          toast(
-            `${files.length} Kronkorken hinzugefügt`
-          );
-
-        }
-        catch(err){
-
-          console.error(err);
-
-          alert(
-            "Beim Import ist etwas schiefgelaufen."
-          );
-
-        }
-        finally{
-
-          importBtn.disabled =
-            false;
-
-          importBtn.textContent =
-            "Importieren";
-
-        }
-
-      }
-    );
-
-
-  $("saveEdit")
-    .addEventListener(
-      "click",
-      async () => {
-
-        const id =
-          Number(
-            $("editId").value
-          );
-
-        const cap =
-          caps.find(
-            c => c.id === id
-          );
-
-        if(!cap) return;
-
-
-        const board =
-          $("editBoard")
-            .value
-            .trim();
-
-
-        const position =
-          Math.max(
-            1,
-            Number(
-              $("editPosition").value
-            ) || 1
-          );
-
-
-        if(!board){
-
-          alert(
-            "Bitte gib einen Brettnamen ein."
-          );
-
-          return;
-        }
-
-
-        cap.board =
-          board;
-
-        cap.position =
-          position;
-
-        cap.updatedAt =
-          Date.now();
-
-
-        await putRecord(cap);
-
-
-        editModal
-          .classList
-          .remove("show");
-
-
-        render();
-
-
-        toast(
-          `${capNumber(id)} gespeichert`
-        );
-
-      }
-    );
-
-
-  $("deleteCap")
-    .addEventListener(
-      "click",
-      async () => {
-
-        const id =
-          Number(
-            $("editId").value
-          );
-
-        const cap =
-          caps.find(
-            c => c.id === id
-          );
-
-        if(!cap) return;
-
-
-        const ok =
-          confirm(
-            `${capNumber(id)} wirklich dauerhaft löschen?`
-          );
-
-
-        if(!ok) return;
-
-
-        await deleteRecord(id);
-
-
-        editModal
-          .classList
-          .remove("show");
-
-
-        await load();
-
-
-        toast(
-          `${capNumber(id)} gelöscht`
-        );
-
-      }
-    );
-
-
-  $("resetBtn")
-    .addEventListener(
-      "click",
-      async () => {
-
-        const affected =
-          caps.filter(
-            c =>
-              c.status === "selected" ||
-              c.status === "maybe"
-          );
-
-
-        if(!affected.length){
-
-          toast(
-            "Keine Auswahl vorhanden"
-          );
-
-          return;
-        }
-
-
-        const ok =
-          confirm(
-            `Auswahl und „Vielleicht“ bei ${affected.length} Kronkorken zurücksetzen?`
-          );
-
-
-        if(!ok) return;
-
-
-        for(
-          const cap
-          of affected
-        ){
-
-          cap.status =
-            "available";
-
-          cap.updatedAt =
-            Date.now();
-
-          await putRecord(cap);
-
-        }
-
-
-        render();
-
-
-        toast(
-          "Tauschauswahl zurückgesetzt"
-        );
-
-      }
-    );
-
-
-  function safeScriptJSON(value){
-
-    return JSON
-      .stringify(value)
-      .replace(
-        /</g,
-        "\\u003c"
-      );
-  }
-
-
-  function dataURLToImage(dataURL){
-
-    return new Promise(
-      (resolve,reject) => {
-
-        const img =
-          new Image();
-
-        img.onload =
-          () => resolve(img);
-
-        img.onerror =
-          reject;
-
-        img.src =
-          dataURL;
-
-      }
-    );
-  }
-
-
-  async function compactImage(
-    dataURL,
-    maxSize = 440,
-    quality = .82
-  ){
-
-    try{
-
-      const img =
-        await dataURLToImage(
-          dataURL
-        );
-
-
-      const scale =
-        Math.min(
-          1,
-          maxSize /
-          Math.max(
-            img.width,
-            img.height
-          )
-        );
-
-
-      const w =
-        Math.max(
-          1,
-          Math.round(
-            img.width * scale
-          )
-        );
-
-
-      const h =
-        Math.max(
-          1,
-          Math.round(
-            img.height * scale
-          )
-        );
-
-
-      const canvas =
-        document.createElement(
-          "canvas"
-        );
-
-
-      canvas.width =
-        w;
-
-      canvas.height =
-        h;
-
-
-      const ctx =
-        canvas.getContext(
-          "2d"
-        );
-
-
-      ctx.drawImage(
-        img,
-        0,
-        0,
-        w,
-        h
-      );
-
-
-      return canvas
-        .toDataURL(
-          "image/jpeg",
-          quality
-        );
-
-    }
-    catch(e){
-
-      return dataURL;
-
-    }
-  }
-
-
-  function buildTradeViewerHTML(items){
-
-    const payload =
-      safeScriptJSON(items);
-
-
-    return `<!DOCTYPE html>
-<html lang="de">
-
-<head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1, viewport-fit=cover"
->
-
-<meta
-  name="theme-color"
-  content="#0b1020"
->
-
-<title>
-CapTrade – Tauschliste
-</title>
-
+<title>CapTrade</title>
 
 <style>
-
 :root{
   --bg:#0b1020;
   --panel:#121a2d;
@@ -1804,7 +16,10 @@ CapTrade – Tauschliste
   --text:#f6f8ff;
   --muted:#9aa8c3;
   --blue:#4c8dff;
+  --blue2:#2d6eea;
+  --red:#ff4e5b;
   --yellow:#f4c84b;
+  --green:#38c985;
 }
 
 *{
@@ -1815,13 +30,7 @@ body{
   margin:0;
   background:var(--bg);
   color:var(--text);
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Arial,
-    sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
 
 button,
@@ -1829,21 +38,24 @@ input{
   font:inherit;
 }
 
+button{
+  cursor:pointer;
+}
+
 .app{
   width:min(1100px,100%);
   margin:auto;
-  padding:
-    calc(18px + env(safe-area-inset-top))
-    14px
-    calc(80px + env(safe-area-inset-bottom));
+  padding:20px 14px 80px;
 }
 
-.head{
+/* HEADER */
+
+.topbar{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:10px;
-  margin-bottom:14px;
+  margin-bottom:18px;
 }
 
 .brand{
@@ -1853,127 +65,125 @@ input{
 }
 
 .brand span{
-  color:#ff4e5b;
+  color:var(--red);
 }
 
-.sub{
-  font-size:12px;
+.subtitle{
   color:var(--muted);
-  margin-top:4px;
+  font-size:13px;
+  margin-top:3px;
 }
 
-.readonly{
-  font-size:11px;
-  color:#b8c8e7;
-  background:#18233a;
-  border:1px solid var(--line);
-  padding:7px 9px;
-  border-radius:999px;
-  white-space:nowrap;
+.topbuttons{
+  display:flex;
+  gap:8px;
 }
+
+.btn{
+  height:42px;
+  width:104px;
+  border-radius:13px;
+  font-weight:800;
+}
+
+.btn-secondary{
+  background:var(--panel);
+  color:white;
+  border:1px solid var(--line);
+}
+
+.btn-primary{
+  border:0;
+  color:white;
+  background:linear-gradient(180deg,var(--blue),var(--blue2));
+}
+
+/* STATISTIK */
 
 .stats{
   display:grid;
-  grid-template-columns:
-    repeat(3,1fr);
-  gap:9px;
-  margin-bottom:12px;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:14px;
 }
 
 .stat{
   background:var(--panel);
   border:1px solid var(--line);
-  border-radius:14px;
-  padding:11px;
+  border-radius:15px;
+  padding:12px;
 }
 
-.n{
-  font-size:20px;
+.stat-number{
+  font-size:22px;
   font-weight:900;
 }
 
-.l{
-  font-size:11px;
+.stat-label{
   color:var(--muted);
+  font-size:12px;
 }
+
+/* FILTER */
 
 .tabs{
   display:flex;
-  gap:7px;
+  gap:8px;
   overflow:auto;
-  margin-bottom:11px;
-  padding-bottom:4px;
+  margin-bottom:14px;
 }
 
 .tab{
   border:1px solid var(--line);
   background:var(--panel);
   color:var(--muted);
+  padding:9px 13px;
   border-radius:999px;
-  padding:8px 12px;
   font-weight:800;
   white-space:nowrap;
 }
 
-.tab.on{
+.tab.active{
   background:var(--blue);
   border-color:var(--blue);
-  color:#fff;
+  color:white;
 }
+
+/* SUCHE */
 
 .search{
   width:100%;
-  border:1px solid var(--line);
   background:var(--panel);
-  color:#fff;
+  border:1px solid var(--line);
+  color:white;
   border-radius:13px;
-  padding:11px;
-  margin-bottom:12px;
+  padding:12px;
+  margin-bottom:14px;
   outline:none;
 }
 
+/* KRONKORKEN */
+
 .grid{
   display:grid;
-  grid-template-columns:
-    repeat(2,minmax(0,1fr));
-  gap:11px;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
 }
 
 @media(min-width:680px){
-
   .grid{
-    grid-template-columns:
-      repeat(4,minmax(0,1fr));
+    grid-template-columns:repeat(4,minmax(0,1fr));
   }
-
-}
-
-@media(min-width:960px){
-
-  .grid{
-    grid-template-columns:
-      repeat(5,minmax(0,1fr));
-  }
-
 }
 
 .cap{
-  background:
-    linear-gradient(
-      180deg,
-      var(--panel2),
-      var(--panel)
-    );
-
-  border:
-    1px solid var(--line);
-
+  background:var(--panel2);
+  border:1px solid var(--line);
   border-radius:17px;
-
   overflow:hidden;
 }
 
-.cap.sel{
+.cap.selected{
   border-color:var(--blue);
 }
 
@@ -1981,1131 +191,1484 @@ input{
   border-color:var(--yellow);
 }
 
-.pic{
+.image-wrap{
   aspect-ratio:1/1;
   background:#080d18;
   position:relative;
-  overflow:hidden;
 }
 
-.pic img{
+.cap-image{
   width:100%;
   height:100%;
   object-fit:cover;
 }
 
-.badge{
+.number{
   position:absolute;
-  left:8px;
-  top:8px;
-  background:
-    rgba(6,10,18,.82);
-  border-radius:999px;
+  top:7px;
+  left:7px;
+  background:rgba(0,0,0,.72);
   padding:5px 8px;
+  border-radius:999px;
   font-size:11px;
   font-weight:900;
 }
 
-.body{
+.cap-body{
   padding:9px;
 }
 
-.loc{
+.location{
   font-size:11px;
   color:var(--muted);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  margin-bottom:7px;
+  margin-bottom:8px;
 }
 
 .actions{
   display:grid;
-  grid-template-columns:
-    1fr 1fr;
+  grid-template-columns:1fr 1fr;
   gap:6px;
 }
 
-.act{
+.action{
   border:1px solid var(--line);
   background:#0f1728;
-  color:#fff;
+  color:white;
   border-radius:10px;
   padding:8px 4px;
   font-size:11px;
-  font-weight:850;
+  font-weight:800;
 }
 
-.act.sel.on{
+.action.selected{
   border-color:var(--blue);
-  background:
-    rgba(76,141,255,.17);
+  background:rgba(76,141,255,.18);
 }
 
-.act.may.on{
+.action.maybe{
   border-color:var(--yellow);
-  background:
-    rgba(244,200,75,.14);
-  color:#ffeaa1;
+  background:rgba(244,200,75,.15);
 }
 
-.bottom{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  padding:
-    10px 14px
-    calc(10px + env(safe-area-inset-bottom));
-
-  background:
-    rgba(11,16,32,.94);
-
-  backdrop-filter:
-    blur(12px);
-
-  border-top:
-    1px solid var(--line);
-}
-
-.share{
-  width:min(600px,100%);
-  display:block;
-  margin:auto;
-  border:0;
-
-  background:
-    linear-gradient(
-      180deg,
-      #4c8dff,
-      #2d6eea
-    );
-
-  color:#fff;
-  border-radius:13px;
-  padding:12px;
-  font-weight:900;
+.action.traded{
+  grid-column:1/-1;
 }
 
 .empty{
   grid-column:1/-1;
   text-align:center;
+  border:1px dashed var(--line);
+  border-radius:18px;
+  padding:40px 15px;
   color:var(--muted);
-  padding:35px 10px;
 }
 
-.sheet{
-  display:none;
+/* MODAL */
+
+.modal-background{
   position:fixed;
   inset:0;
-  background:
-    rgba(0,0,0,.7);
-  z-index:50;
-  padding:20px;
-  align-items:center;
-  justify-content:center;
+  display:none;
+  background:rgba(0,0,0,.7);
+  z-index:100;
+  align-items:flex-end;
 }
 
-.sheet.show{
+.modal-background.open{
   display:flex;
 }
 
-.box{
-  width:min(560px,100%);
-  background:#121a2d;
-  border:
-    1px solid var(--line);
-  border-radius:18px;
-  padding:15px;
+.modal{
+  width:100%;
+  background:#111a2d;
+  border-radius:22px 22px 0 0;
+  padding:20px 16px calc(20px + env(safe-area-inset-bottom));
 }
 
-.box h2{
-  margin:0 0 8px;
+.modal h2{
+  margin:0 0 6px;
 }
 
-.box p{
+.modal-info{
   color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+  margin-bottom:18px;
+}
+
+.field{
+  margin-bottom:15px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:6px;
   font-size:12px;
-}
-
-textarea{
-  width:100%;
-  min-height:180px;
-  background:#0b1020;
-  color:#fff;
-  border:
-    1px solid var(--line);
-  border-radius:12px;
-  padding:10px;
-}
-
-.close{
-  width:100%;
-  margin-top:8px;
-  border:
-    1px solid var(--line);
-  background:#18233a;
-  color:#fff;
-  border-radius:12px;
-  padding:10px;
   font-weight:800;
 }
 
+.field input{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#0c1425;
+  color:white;
+}
+
+.filebox{
+  background:#0c1425;
+  border:1px dashed #405477;
+  border-radius:14px;
+  padding:16px;
+}
+
+.modal-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:18px;
+}
+
+.modal-buttons button{
+  height:44px;
+  border-radius:13px;
+  font-weight:800;
+}
+
+.cancel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  color:white;
+}
+
+.import{
+  background:var(--blue);
+  border:0;
+  color:white;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  bottom:30px;
+  left:50%;
+  transform:translate(-50%,100px);
+  background:white;
+  color:#111827;
+  border-radius:999px;
+  padding:10px 15px;
+  font-weight:800;
+  font-size:13px;
+  transition:.25s;
+  z-index:200;
+}
+
+.toast.show{
+  transform:translate(-50%,0);
+}
+
 </style>
-
 </head>
-
 
 <body>
 
-
 <main class="app">
 
-  <div class="head">
+<header class="topbar">
 
-    <div>
-
-      <div class="brand">
-        Cap<span>Trade</span>
-      </div>
-
-      <div class="sub">
-        Sony‘s Tauschkronkorken
-      </div>
-
-    </div>
-
-    <div class="readonly">
-      Nur auswählen
-    </div>
-
+<div>
+  <div class="brand">
+    Cap<span>Trade</span>
   </div>
 
-
-  <div class="stats">
-
-    <div class="stat">
-
-      <div
-        class="n"
-        id="total"
-      >0</div>
-
-      <div class="l">
-        verfügbar
-      </div>
-
-    </div>
-
-
-    <div class="stat">
-
-      <div
-        class="n"
-        id="selected"
-      >0</div>
-
-      <div class="l">
-        ausgewählt
-      </div>
-
-    </div>
-
-
-    <div class="stat">
-
-      <div
-        class="n"
-        id="maybe"
-      >0</div>
-
-      <div class="l">
-        vielleicht
-      </div>
-
-    </div>
-
+  <div class="subtitle">
+    Sony‘s Tauschkronkorken
   </div>
+</div>
+
+<div class="topbuttons">
+
+<button
+  class="btn btn-secondary"
+  id="shareButton">
+  ↗ Teilen
+</button>
+
+<button
+  class="btn btn-primary"
+  id="addBoardButton">
+  + Brett
+</button>
+
+</div>
+
+</header>
 
 
-  <div class="tabs">
+<section class="stats">
 
-    <button
-      class="tab on"
-      data-f="all"
-    >
-      Alle
-    </button>
+<div class="stat">
+  <div class="stat-number" id="availableCount">0</div>
+  <div class="stat-label">verfügbar</div>
+</div>
 
-    <button
-      class="tab"
-      data-f="selected"
-    >
-      Ausgewählt
-    </button>
+<div class="stat">
+  <div class="stat-number" id="selectedCount">0</div>
+  <div class="stat-label">ausgewählt</div>
+</div>
 
-    <button
-      class="tab"
-      data-f="maybe"
-    >
-      Vielleicht
-    </button>
+<div class="stat">
+  <div class="stat-number" id="maybeCount">0</div>
+  <div class="stat-label">vielleicht</div>
+</div>
 
-  </div>
+</section>
 
 
-  <input
-    class="search"
-    id="q"
-    type="search"
-    placeholder="Nr. oder Brett suchen …"
-  >
+<nav class="tabs">
+
+<button class="tab active" data-filter="all">
+Alle
+</button>
+
+<button class="tab" data-filter="selected">
+Ausgewählt
+</button>
+
+<button class="tab" data-filter="maybe">
+Vielleicht
+</button>
+
+<button class="tab" data-filter="traded">
+Getauscht
+</button>
+
+</nav>
 
 
-  <section
-    class="grid"
-    id="grid"
-  ></section>
+<input
+  id="search"
+  class="search"
+  placeholder="Nr. oder Brett suchen …"
+>
+
+
+<section
+  class="grid"
+  id="grid">
+</section>
 
 </main>
 
 
-<div class="bottom">
+<!-- BRETT IMPORT -->
 
-  <button
-    class="share"
-    id="shareSelection"
-  >
-    Auswahl teilen
-  </button>
+<div
+  class="modal-background"
+  id="boardModal">
+
+<div class="modal">
+
+<h2>
+Brett hinzufügen
+</h2>
+
+<div class="modal-info">
+Ein komplettes Brettfoto auswählen.
+CapTrade teilt es automatisch in
+<strong>10 Spalten × 14 Reihen</strong>
+und erstellt daraus 140 einzelne Kronkorken.
+</div>
+
+
+<div class="field">
+
+<label>
+Brettname
+</label>
+
+<input
+  id="boardName"
+  placeholder="z. B. Brett A"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Brettfoto
+</label>
+
+<div class="filebox">
+
+<input
+  id="boardImage"
+  type="file"
+  accept="image/*">
+
+</div>
+
+</div>
+
+
+<div class="modal-buttons">
+
+<button
+  class="cancel"
+  id="cancelButton">
+Abbrechen
+</button>
+
+<button
+  class="import"
+  id="importButton">
+Importieren
+</button>
+
+</div>
+
+</div>
 
 </div>
 
 
 <div
-  class="sheet"
-  id="sheet"
->
-
-  <div class="box">
-
-    <h2>
-      Meine Auswahl
-    </h2>
-
-    <p>
-      Falls das Teilen nicht automatisch funktioniert,
-      kannst du diese Liste kopieren und schicken.
-    </p>
-
-    <textarea
-      id="selectionText"
-      readonly
-    ></textarea>
-
-    <button
-      class="close"
-      id="closeSheet"
-    >
-      Schließen
-    </button>
-
-  </div>
-
+  class="toast"
+  id="toast">
 </div>
 
 
 <script>
 
-const caps = ${payload};
+/* =========================
+   DATENBANK
+========================= */
 
-const KEY =
-  "captrade_trade_selection_v1";
+const DB_NAME = "captrade";
+const STORE_NAME = "caps";
 
-let state = {};
-
-let filter =
-  "all";
-
-
-try{
-
-  state =
-    JSON.parse(
-      localStorage.getItem(KEY)
-      || "{}"
-    );
-
-}
-catch(e){
-
-  state = {};
-
-}
+let db;
+let caps = [];
+let currentFilter = "all";
 
 
-const grid =
-  document.getElementById(
-    "grid"
-  );
+function openDatabase(){
 
+return new Promise((resolve,reject)=>{
 
-const q =
-  document.getElementById(
-    "q"
-  );
+const request =
+indexedDB.open(DB_NAME,1);
 
+request.onupgradeneeded = function(){
 
-function num(id){
+const database =
+request.result;
 
-  return "#" +
-    String(id)
-      .padStart(3,"0");
-
-}
-
-
-function esc(s){
-
-  return String(s ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-
-function save(){
-
-  try{
-
-    localStorage.setItem(
-      KEY,
-      JSON.stringify(state)
-    );
-
-  }
-  catch(e){}
-
-}
-
-
-function setChoice(
-  id,
-  choice
+if(
+!database.objectStoreNames.contains(
+STORE_NAME
+)
 ){
 
-  if(state[id] === choice){
+database.createObjectStore(
+STORE_NAME,
+{
+keyPath:"id",
+autoIncrement:true
+}
+);
 
-    delete state[id];
+}
 
-  }
-  else{
+};
 
-    state[id] = choice;
+request.onsuccess = function(){
 
-  }
+resolve(
+request.result
+);
 
-  save();
+};
 
-  render();
+request.onerror = function(){
+
+reject(
+request.error
+);
+
+};
+
+});
 
 }
 
 
-function list(){
+function getAllCaps(){
 
-  const term =
-    q.value
-      .trim()
-      .toLowerCase();
+return new Promise((resolve,reject)=>{
 
+const transaction =
+db.transaction(
+STORE_NAME,
+"readonly"
+);
 
-  return caps.filter(c => {
+const store =
+transaction.objectStore(
+STORE_NAME
+);
 
-    const s =
-      state[c.id] || "";
+const request =
+store.getAll();
 
+request.onsuccess =
+()=>resolve(
+request.result || []
+);
 
-    if(
-      filter === "selected" &&
-      s !== "selected"
-    ){
-      return false;
-    }
+request.onerror =
+()=>reject(
+request.error
+);
 
+});
 
-    if(
-      filter === "maybe" &&
-      s !== "maybe"
-    ){
-      return false;
-    }
-
-
-    if(term){
-
-      const hay = [
-        num(c.id),
-        c.id,
-        c.board,
-        c.position
-      ]
-      .join(" ")
-      .toLowerCase();
+}
 
 
-      if(!hay.includes(term)){
-        return false;
-      }
+function addCap(cap){
 
-    }
+return new Promise((resolve,reject)=>{
+
+const transaction =
+db.transaction(
+STORE_NAME,
+"readwrite"
+);
+
+const request =
+transaction
+.objectStore(STORE_NAME)
+.add(cap);
+
+request.onsuccess =
+()=>resolve(
+request.result
+);
+
+request.onerror =
+()=>reject(
+request.error
+);
+
+});
+
+}
 
 
-    return true;
+function updateCap(cap){
 
-  });
+return new Promise((resolve,reject)=>{
+
+const transaction =
+db.transaction(
+STORE_NAME,
+"readwrite"
+);
+
+const request =
+transaction
+.objectStore(STORE_NAME)
+.put(cap);
+
+request.onsuccess =
+()=>resolve();
+
+request.onerror =
+()=>reject(
+request.error
+);
+
+});
+
+}
+
+
+/* =========================
+   BILDER
+========================= */
+
+function fileToDataURL(file){
+
+return new Promise(
+(resolve,reject)=>{
+
+const reader =
+new FileReader();
+
+reader.onload =
+()=>resolve(
+reader.result
+);
+
+reader.onerror =
+reject;
+
+reader.readAsDataURL(
+file
+);
+
+});
+
+}
+
+
+function loadImage(dataURL){
+
+return new Promise(
+(resolve,reject)=>{
+
+const image =
+new Image();
+
+image.onload =
+()=>resolve(image);
+
+image.onerror =
+reject;
+
+image.src =
+dataURL;
+
+});
+
+}
+
+
+/* =========================
+   BRETT AUSSCHNEIDEN
+========================= */
+
+async function splitBoard(file){
+
+const dataURL =
+await fileToDataURL(file);
+
+const image =
+await loadImage(dataURL);
+
+
+/*
+TESTBRETT:
+
+10 Spalten
+14 Reihen
+
+Diese Werte können wir später
+noch fein anpassen.
+*/
+
+const columns = 10;
+const rows = 14;
+
+
+/*
+Rand des Kronkorken-Rasters
+innerhalb des Fotos.
+*/
+
+const leftPercent = 0.055;
+const rightPercent = 0.965;
+
+const topPercent = 0.02;
+const bottomPercent = 0.985;
+
+
+const startX =
+image.width *
+leftPercent;
+
+const startY =
+image.height *
+topPercent;
+
+
+const gridWidth =
+image.width *
+(
+rightPercent -
+leftPercent
+);
+
+const gridHeight =
+image.height *
+(
+bottomPercent -
+topPercent
+);
+
+
+const cellWidth =
+gridWidth /
+columns;
+
+const cellHeight =
+gridHeight /
+rows;
+
+
+const images = [];
+
+
+for(
+let row = 0;
+row < rows;
+row++
+){
+
+for(
+let column = 0;
+column < columns;
+column++
+){
+
+const centerX =
+startX +
+(column + 0.5) *
+cellWidth;
+
+
+const centerY =
+startY +
+(row + 0.5) *
+cellHeight;
+
+
+/*
+Quadratischer Ausschnitt.
+
+Etwas kleiner als das Rasterfeld,
+damit möglichst kein Nachbar-
+Kronkorken mit im Bild landet.
+*/
+
+const size =
+Math.min(
+cellWidth,
+cellHeight
+) * 0.92;
+
+
+const sourceX =
+centerX -
+size / 2;
+
+const sourceY =
+centerY -
+size / 2;
+
+
+const canvas =
+document.createElement(
+"canvas"
+);
+
+
+canvas.width = 260;
+canvas.height = 260;
+
+
+const context =
+canvas.getContext(
+"2d"
+);
+
+
+context.fillStyle =
+"#ffffff";
+
+
+context.fillRect(
+0,
+0,
+260,
+260
+);
+
+
+context.drawImage(
+image,
+
+sourceX,
+sourceY,
+size,
+size,
+
+0,
+0,
+260,
+260
+);
+
+
+images.push(
+
+canvas.toDataURL(
+"image/jpeg",
+0.86
+)
+
+);
+
+}
+
+}
+
+
+return images;
+
+}
+
+
+/* =========================
+   ANZEIGE
+========================= */
+
+function capNumber(id){
+
+return "#" +
+String(id)
+.padStart(
+3,
+"0"
+);
+
+}
+
+
+function showToast(text){
+
+const toast =
+document.getElementById(
+"toast"
+);
+
+toast.textContent =
+text;
+
+toast.classList.add(
+"show"
+);
+
+setTimeout(
+()=>{
+
+toast.classList.remove(
+"show"
+);
+
+},
+1800
+);
+
+}
+
+
+function filteredCaps(){
+
+const search =
+document
+.getElementById("search")
+.value
+.toLowerCase()
+.trim();
+
+
+return caps.filter(cap=>{
+
+if(
+currentFilter === "all" &&
+cap.status === "traded"
+){
+
+return false;
+
+}
+
+
+if(
+currentFilter === "selected" &&
+cap.status !== "selected"
+){
+
+return false;
+
+}
+
+
+if(
+currentFilter === "maybe" &&
+cap.status !== "maybe"
+){
+
+return false;
+
+}
+
+
+if(
+currentFilter === "traded" &&
+cap.status !== "traded"
+){
+
+return false;
+
+}
+
+
+if(search){
+
+const text =
+(
+capNumber(cap.id) +
+" " +
+cap.board +
+" " +
+cap.position
+)
+.toLowerCase();
+
+
+if(
+!text.includes(search)
+){
+
+return false;
+
+}
+
+}
+
+
+return true;
+
+});
 
 }
 
 
 function render(){
 
-  const selected =
-    caps.filter(
-      c =>
-        state[c.id] ===
-        "selected"
-    ).length;
+const grid =
+document.getElementById(
+"grid"
+);
 
 
-  const maybe =
-    caps.filter(
-      c =>
-        state[c.id] ===
-        "maybe"
-    ).length;
+document.getElementById(
+"availableCount"
+).textContent =
+
+caps.filter(
+cap =>
+cap.status !== "traded"
+).length;
 
 
-  document
-    .getElementById(
-      "total"
-    )
-    .textContent =
-      caps.length;
+document.getElementById(
+"selectedCount"
+).textContent =
+
+caps.filter(
+cap =>
+cap.status === "selected"
+).length;
 
 
-  document
-    .getElementById(
-      "selected"
-    )
-    .textContent =
-      selected;
+document.getElementById(
+"maybeCount"
+).textContent =
+
+caps.filter(
+cap =>
+cap.status === "maybe"
+).length;
 
 
-  document
-    .getElementById(
-      "maybe"
-    )
-    .textContent =
-      maybe;
+const list =
+filteredCaps();
 
 
-  const rows =
-    list();
+if(
+list.length === 0
+){
 
+grid.innerHTML = `
 
-  if(!rows.length){
+<div class="empty">
 
-    grid.innerHTML =
-      '<div class="empty">Hier ist gerade nichts.</div>';
+<strong>
+Noch keine Kronkorken
+</strong>
 
-    return;
+<br><br>
 
-  }
+Tippe oben auf
+<strong>+ Brett</strong>
+und lade dein Testbrett hoch.
 
+</div>
 
-  grid.innerHTML =
-    rows.map(c => {
+`;
 
-      const s =
-        state[c.id] || "";
-
-
-      return \`
-        <article
-          class="cap \${
-            s === "selected"
-              ? "sel"
-              : s === "maybe"
-              ? "maybe"
-              : ""
-          }"
-        >
-
-          <div class="pic">
-
-            <img
-              src="\${c.image}"
-              alt="\${num(c.id)}"
-            >
-
-            <div class="badge">
-              \${num(c.id)}
-            </div>
-
-          </div>
-
-
-          <div class="body">
-
-            <div class="loc">
-              \${esc(c.board)}
-              · Pos. \${c.position}
-            </div>
-
-
-            <div class="actions">
-
-              <button
-                class="act sel \${
-                  s === "selected"
-                    ? "on"
-                    : ""
-                }"
-                data-id="\${c.id}"
-                data-choice="selected"
-              >
-                \${
-                  s === "selected"
-                    ? "✓ Ausgewählt"
-                    : "Auswählen"
-                }
-              </button>
-
-
-              <button
-                class="act may \${
-                  s === "maybe"
-                    ? "on"
-                    : ""
-                }"
-                data-id="\${c.id}"
-                data-choice="maybe"
-              >
-                \${
-                  s === "maybe"
-                    ? "★ Vielleicht"
-                    : "Vielleicht"
-                }
-              </button>
-
-            </div>
-
-          </div>
-
-        </article>
-      \`;
-
-    }).join("");
+return;
 
 }
 
 
-function selectionText(){
+grid.innerHTML =
 
-  const yes =
-    caps.filter(
-      c =>
-        state[c.id] ===
-        "selected"
-    );
+list.map(cap=>{
 
+const selected =
+cap.status ===
+"selected";
 
-  const maybe =
-    caps.filter(
-      c =>
-        state[c.id] ===
-        "maybe"
-    );
+const maybe =
+cap.status ===
+"maybe";
 
 
-  const lines = [
-    "CapTrade – meine Auswahl",
-    ""
-  ];
+return `
+
+<article
+class="
+cap
+${selected ? "selected" : ""}
+${maybe ? "maybe" : ""}
+">
+
+<div class="image-wrap">
+
+<img
+class="cap-image"
+src="${cap.image}"
+>
+
+<div class="number">
+${capNumber(cap.id)}
+</div>
+
+</div>
 
 
-  lines.push(
-    "AUSGEWÄHLT:"
-  );
+<div class="cap-body">
+
+<div class="location">
+
+${cap.board}
+· Pos. ${cap.position}
+
+</div>
 
 
-  lines.push(
-    yes.length
-      ? yes.map(
-          c =>
-            \`\${num(c.id)} – \${c.board}, Pos. \${c.position}\`
-        ).join("\\n")
-      : "–"
-  );
+<div class="actions">
 
 
-  lines.push(
-    "",
-    "VIELLEICHT:"
-  );
+<button
+class="
+action
+${selected ? "selected" : ""}
+"
+data-id="${cap.id}"
+data-status="selected"
+>
+
+${selected
+? "✓ Ausgewählt"
+: "Auswählen"}
+
+</button>
 
 
-  lines.push(
-    maybe.length
-      ? maybe.map(
-          c =>
-            \`\${num(c.id)} – \${c.board}, Pos. \${c.position}\`
-        ).join("\\n")
-      : "–"
-  );
+<button
+class="
+action
+${maybe ? "maybe" : ""}
+"
+data-id="${cap.id}"
+data-status="maybe"
+>
+
+${maybe
+? "★ Vielleicht"
+: "Vielleicht"}
+
+</button>
 
 
-  return lines.join(
-    "\\n"
-  );
+<button
+class="action traded"
+data-id="${cap.id}"
+data-status="traded"
+>
+
+Getauscht
+
+</button>
+
+
+</div>
+
+</div>
+
+</article>
+
+`;
+
+}).join("");
 
 }
 
 
-grid.addEventListener(
-  "click",
-  e => {
+/* =========================
+   + BRETT
+========================= */
 
-    const b =
-      e.target.closest(
-        "[data-choice]"
-      );
-
-
-    if(!b) return;
-
-
-    setChoice(
-      Number(
-        b.dataset.id
-      ),
-      b.dataset.choice
-    );
-
-  }
-);
-
-
-q.addEventListener(
-  "input",
-  render
+const modal =
+document.getElementById(
+"boardModal"
 );
 
 
 document
-  .querySelectorAll(".tab")
-  .forEach(
-    b =>
-      b.addEventListener(
-        "click",
-        () => {
+.getElementById(
+"addBoardButton"
+)
+.addEventListener(
+"click",
+function(){
 
-          document
-            .querySelectorAll(
-              ".tab"
-            )
-            .forEach(
-              x =>
-                x.classList.remove(
-                  "on"
-                )
-            );
+modal.classList.add(
+"open"
+);
 
-
-          b.classList.add(
-            "on"
-          );
-
-
-          filter =
-            b.dataset.f;
-
-
-          render();
-
-        }
-      )
-  );
+}
+);
 
 
 document
-  .getElementById(
-    "shareSelection"
-  )
-  .addEventListener(
-    "click",
-    async () => {
+.getElementById(
+"cancelButton"
+)
+.addEventListener(
+"click",
+function(){
 
-      const text =
-        selectionText();
+modal.classList.remove(
+"open"
+);
 
-
-      if(navigator.share){
-
-        try{
-
-          await navigator.share({
-            title:
-              "CapTrade Auswahl",
-            text
-          });
-
-          return;
-
-        }
-        catch(e){
-
-          if(
-            e &&
-            e.name ===
-            "AbortError"
-          ){
-            return;
-          }
-
-        }
-
-      }
+}
+);
 
 
-      try{
+modal.addEventListener(
+"click",
+function(event){
 
-        await navigator
-          .clipboard
-          .writeText(text);
+if(
+event.target === modal
+){
 
-      }
-      catch(e){}
+modal.classList.remove(
+"open"
+);
 
+}
 
-      document
-        .getElementById(
-          "selectionText"
-        )
-        .value =
-          text;
+}
+);
 
 
-      document
-        .getElementById(
-          "sheet"
-        )
-        .classList
-        .add("show");
-
-    }
-  );
-
+/* =========================
+   IMPORT
+========================= */
 
 document
-  .getElementById(
-    "closeSheet"
-  )
-  .addEventListener(
-    "click",
-    () => {
+.getElementById(
+"importButton"
+)
+.addEventListener(
+"click",
+async function(){
 
-      document
-        .getElementById(
-          "sheet"
-        )
-        .classList
-        .remove("show");
+const boardName =
+document
+.getElementById(
+"boardName"
+)
+.value
+.trim();
 
-    }
-  );
+
+const file =
+document
+.getElementById(
+"boardImage"
+)
+.files[0];
+
+
+if(
+!boardName
+){
+
+alert(
+"Bitte gib einen Brettnamen ein."
+);
+
+return;
+
+}
+
+
+if(
+!file
+){
+
+alert(
+"Bitte wähle ein Brettfoto aus."
+);
+
+return;
+
+}
+
+
+const button =
+document.getElementById(
+"importButton"
+);
+
+
+button.disabled =
+true;
+
+
+button.textContent =
+"Brett wird geschnitten …";
+
+
+try{
+
+const pieces =
+await splitBoard(
+file
+);
+
+
+/*
+Positionen beginnen bei 1.
+*/
+
+for(
+let i = 0;
+i < pieces.length;
+i++
+){
+
+button.textContent =
+"Speichere " +
+(i + 1) +
+" / 140";
+
+
+await addCap({
+
+board:
+boardName,
+
+position:
+i + 1,
+
+image:
+pieces[i],
+
+status:
+"available",
+
+createdAt:
+Date.now()
+
+});
+
+}
+
+
+modal.classList.remove(
+"open"
+);
+
+
+document.getElementById(
+"boardName"
+).value = "";
+
+
+document.getElementById(
+"boardImage"
+).value = "";
+
+
+await reload();
+
+
+showToast(
+"140 Kronkorken erstellt"
+);
+
+}
+catch(error){
+
+console.error(
+error
+);
+
+
+alert(
+"Das Brettfoto konnte nicht verarbeitet werden."
+);
+
+}
+finally{
+
+button.disabled =
+false;
+
+
+button.textContent =
+"Importieren";
+
+}
+
+}
+);
+
+
+/* =========================
+   STATUS
+========================= */
+
+document
+.getElementById(
+"grid"
+)
+.addEventListener(
+"click",
+async function(event){
+
+const button =
+event.target.closest(
+"[data-status]"
+);
+
+
+if(
+!button
+){
+
+return;
+
+}
+
+
+const id =
+Number(
+button.dataset.id
+);
+
+
+const status =
+button.dataset.status;
+
+
+const cap =
+caps.find(
+item =>
+item.id === id
+);
+
+
+if(
+!cap
+){
+
+return;
+
+}
+
+
+/*
+Wenn Auswahl erneut angeklickt wird,
+wird sie wieder entfernt.
+*/
+
+if(
+cap.status === status &&
+status !== "traded"
+){
+
+cap.status =
+"available";
+
+}
+else{
+
+cap.status =
+status;
+
+}
+
+
+await updateCap(
+cap
+);
+
+
+await reload();
+
+}
+);
+
+
+/* =========================
+   FILTER
+========================= */
+
+document
+.querySelectorAll(
+".tab"
+)
+.forEach(button=>{
+
+button.addEventListener(
+"click",
+function(){
+
+document
+.querySelectorAll(
+".tab"
+)
+.forEach(item=>{
+
+item.classList.remove(
+"active"
+);
+
+});
+
+
+button.classList.add(
+"active"
+);
+
+
+currentFilter =
+button.dataset.filter;
 
 
 render();
 
-<\/script>
+}
+);
 
-</body>
+});
 
-</html>`;
 
-  }
+document
+.getElementById(
+"search"
+)
+.addEventListener(
+"input",
+render
+);
 
 
-  $("shareBtn")
-    .addEventListener(
-      "click",
-      async () => {
+/* =========================
+   TEILEN
+========================= */
 
-        const available =
-          caps.filter(
-            c =>
-              c.status !==
-              "traded"
-          );
+document
+.getElementById(
+"shareButton"
+)
+.addEventListener(
+"click",
+function(){
 
+alert(
+"Der sichere Tauschmodus kommt wieder dazu, sobald wir geprüft haben, ob die 140 Kronkorken sauber ausgeschnitten werden."
+);
 
-        if(!available.length){
+}
+);
 
-          alert(
-            "Es sind keine verfügbaren Kronkorken vorhanden."
-          );
 
-          return;
-        }
+/* =========================
+   START
+========================= */
 
+async function reload(){
 
-        const btn =
-          $("shareBtn");
+caps =
+await getAllCaps();
 
-        const original =
-          btn.textContent;
 
+caps.sort(
+(a,b)=>
+a.id - b.id
+);
 
-        btn.disabled =
-          true;
 
-        btn.textContent =
-          "Erstelle …";
+render();
 
+}
 
-        try{
 
-          const exportCaps = [];
+async function start(){
 
+try{
 
-          for(
-            let i = 0;
-            i < available.length;
-            i++
-          ){
+db =
+await openDatabase();
 
-            const cap =
-              available[i];
 
+await reload();
 
-            btn.textContent =
-              `Erstelle ${i+1}/${available.length}`;
+}
+catch(error){
 
+console.error(
+error
+);
 
-            const image =
-              await compactImage(
-                cap.image
-              );
 
+alert(
+"CapTrade konnte den lokalen Speicher nicht öffnen."
+);
 
-            exportCaps.push({
+}
 
-              id:
-                cap.id,
+}
 
-              board:
-                cap.board,
 
-              position:
-                cap.position,
-
-              image
-
-            });
-
-          }
-
-
-          const viewerHTML =
-            buildTradeViewerHTML(
-              exportCaps
-            );
-
-
-          const blob =
-            new Blob(
-              [viewerHTML],
-              {
-                type:
-                  "text/html;charset=utf-8"
-              }
-            );
-
-
-          const file =
-            new File(
-              [blob],
-              "CapTrade-Tauschliste.html",
-              {
-                type:
-                  "text/html"
-              }
-            );
-
-
-          if(
-            navigator.share &&
-            navigator.canShare &&
-            navigator.canShare({
-              files:[file]
-            })
-          ){
-
-            try{
-
-              await navigator.share({
-
-                title:
-                  "CapTrade Tauschliste",
-
-                text:
-                  "Hier kannst du dir meine verfügbaren Kronkorken aussuchen. Du kannst dabei nichts löschen oder verändern.",
-
-                files:[
-                  file
-                ]
-
-              });
-
-
-              toast(
-                "Tauschdatei erstellt"
-              );
-
-
-              return;
-
-            }
-            catch(e){
-
-              if(
-                e &&
-                e.name ===
-                "AbortError"
-              ){
-                return;
-              }
-
-            }
-
-          }
-
-
-          const url =
-            URL.createObjectURL(
-              blob
-            );
-
-
-          const a =
-            document.createElement(
-              "a"
-            );
-
-
-          a.href =
-            url;
-
-
-          a.download =
-            "CapTrade-Tauschliste.html";
-
-
-          document.body
-            .appendChild(a);
-
-
-          a.click();
-
-
-          a.remove();
-
-
-          setTimeout(
-            () =>
-              URL.revokeObjectURL(
-                url
-              ),
-            5000
-          );
-
-
-          toast(
-            "Tauschdatei gespeichert"
-          );
-
-        }
-        catch(err){
-
-          console.error(err);
-
-
-          alert(
-            "Die Tauschdatei konnte nicht erstellt werden."
-          );
-
-        }
-        finally{
-
-          btn.disabled =
-            false;
-
-
-          btn.textContent =
-            original;
-
-        }
-
-      }
-    );
-
-
-  async function init(){
-
-    try{
-
-      db =
-        await openDB();
-
-
-      await load();
-
-    }
-    catch(err){
-
-      console.error(err);
-
-
-      grid.innerHTML = `
-        <div
-          class="empty"
-          style="grid-column:1/-1"
-        >
-
-          <strong>
-            Speicher konnte nicht geöffnet werden.
-          </strong>
-
-          Bitte öffne CapTrade nicht
-          im privaten Browsermodus.
-
-        </div>
-      `;
-
-    }
-
-  }
-
-
-  init();
-
-
-})();
+start();
 
 </script>
 
