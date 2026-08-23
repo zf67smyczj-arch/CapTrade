@@ -52,14 +52,27 @@ h1 {
   font-size: 13px;
 }
 
-.share-btn {
+.header-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.share-btn,
+.trade-header-btn {
   border: 0;
   background: white;
   color: #111827;
   font-weight: 700;
   border-radius: 10px;
-  padding: 10px 14px;
+  padding: 10px 12px;
   cursor: pointer;
+  white-space: nowrap;
+}
+
+.trade-header-btn {
+  background: #0a84ff;
+  color: white;
 }
 
 .search-wrap {
@@ -103,10 +116,32 @@ main {
   box-shadow: 0 2px 8px rgba(0,0,0,.08);
   cursor: pointer;
   text-align: center;
+  position: relative;
 }
 
 .cap-card:active {
   transform: scale(.97);
+}
+
+.cap-card.selected {
+  outline: 3px solid #0a84ff;
+}
+
+.selected-badge {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #0a84ff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 900;
+  z-index: 2;
 }
 
 .thumb {
@@ -214,10 +249,40 @@ main {
   padding: 14px;
   border: 0;
   border-radius: 12px;
-  margin-top: 18px;
+  margin-top: 12px;
   background: #111827;
   color: white;
   font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.trade-btn {
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-radius: 12px;
+  margin-top: 12px;
+  background: #0a84ff;
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.trade-btn.selected {
+  background: #16a34a;
+}
+
+.remove-btn {
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 10px;
+  margin-top: 8px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -284,9 +349,96 @@ main {
   grid-column: 1 / -1;
 }
 
+
+/* TAUSCHÜBERSICHT */
+
+.trade-title {
+  font-size: 24px;
+  font-weight: 800;
+  text-align: center;
+  margin: 4px 0 16px;
+}
+
+.trade-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.trade-item {
+  background: #f8fafc;
+  padding: 8px;
+  border-radius: 14px;
+  text-align: center;
+}
+
+.trade-thumb {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.trade-thumb canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.trade-item-number {
+  font-weight: 800;
+  margin-top: 5px;
+  color: #0a84ff;
+}
+
+.trade-item-board {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.trade-empty {
+  text-align: center;
+  color: #6b7280;
+  padding: 35px 10px;
+}
+
+.trade-actions {
+  margin-top: 16px;
+}
+
+.share-trade-btn {
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-radius: 12px;
+  background: #0a84ff;
+  color: white;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.clear-trade-btn {
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 12px;
+  background: #f3f4f6;
+  color: #111827;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
 @media (min-width: 600px) {
   .grid {
     grid-template-columns: repeat(5, 1fr);
+  }
+
+  .trade-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 </style>
@@ -305,11 +457,22 @@ main {
       <div class="subtitle">Meine Tausch-Kronkorken</div>
     </div>
 
-    <button
-      class="share-btn"
-      onclick="sharePage()">
-      Teilen
-    </button>
+    <div class="header-buttons">
+
+      <button
+        id="tradeHeaderBtn"
+        class="trade-header-btn"
+        onclick="openTradeOverview()">
+        Tausch (0)
+      </button>
+
+      <button
+        class="share-btn"
+        onclick="sharePage()">
+        Teilen
+      </button>
+
+    </div>
 
   </div>
 
@@ -331,11 +494,8 @@ main {
 <main>
 
   <div class="info">
-
     <span id="count"></span>
-
     <span>Brett F</span>
-
   </div>
 
   <div id="grid" class="grid"></div>
@@ -377,6 +537,12 @@ main {
       id="showBoardBtn"
       class="main-btn">
       Auf Brett anzeigen
+    </button>
+
+    <button
+      id="tradeBtn"
+      class="trade-btn">
+      Zum Tausch hinzufügen
     </button>
 
   </div>
@@ -427,60 +593,53 @@ main {
 </div>
 
 
+<!-- TAUSCHÜBERSICHT -->
+
+<div
+  id="tradeModal"
+  class="modal"
+  onclick="modalBackground(event,'tradeModal')">
+
+  <div class="modal-box">
+
+    <button
+      class="close"
+      onclick="closeModal('tradeModal')">
+      ×
+    </button>
+
+    <div class="trade-title">
+      Meine Tausch-Auswahl
+    </div>
+
+    <div id="tradeContent"></div>
+
+  </div>
+
+</div>
+
+
 <script>
 
 /* =====================================================
-   CAPTRADE
-   TESTBRETT F
-
-   Referenzfoto:
-   1152 × 1536
-
-   WICHTIG:
-   Die Koordinaten werden automatisch auf die
-   tatsächliche Auflösung des GitHub-Bildes skaliert.
+   CAPTRADE – BRETT F
    ===================================================== */
 
 const IMAGE = "IMG_6469.jpeg";
-
 const BOARD = "F";
-
 const START_NUMMER = 1;
-
-
-/*
-   Referenzgröße der Version,
-   anhand derer die Positionen bestimmt wurden.
-*/
 
 const REF_WIDTH = 1152;
 const REF_HEIGHT = 1536;
-
-
-/*
-   Größe eines Kronkorken-Ausschnitts
-   auf der Referenzversion.
-
-   Etwas größer gewählt, damit der komplette
-   Kronkorken inklusive Rand sichtbar bleibt.
-*/
-
 const REF_CROP = 112;
 
 
-/*
-   Tatsächliche Mittelpunkte der Kronkorken.
-
-   Jede Reihe enthält:
-   [x, y]
-
-   Erste Reihe besitzt nur 9 Kronkorken.
-   Rechts daneben steht nur das "F".
-*/
+/* =====================================================
+   KRONKORKEN-POSITIONEN
+   ===================================================== */
 
 const ROWS = [
 
-  /* Reihe 1 */
   [
     [123,98],
     [215,87],
@@ -493,7 +652,6 @@ const ROWS = [
     [913,93]
   ],
 
-  /* Reihe 2 */
   [
     [112,183],
     [207,181],
@@ -507,7 +665,6 @@ const ROWS = [
     [1018,172]
   ],
 
-  /* Reihe 3 */
   [
     [113,284],
     [212,284],
@@ -521,7 +678,6 @@ const ROWS = [
     [1033,273]
   ],
 
-  /* Reihe 4 */
   [
     [122,382],
     [224,369],
@@ -535,7 +691,6 @@ const ROWS = [
     [1023,375]
   ],
 
-  /* Reihe 5 */
   [
     [100,476],
     [206,484],
@@ -549,7 +704,6 @@ const ROWS = [
     [1027,472]
   ],
 
-  /* Reihe 6 */
   [
     [103,577],
     [203,583],
@@ -563,7 +717,6 @@ const ROWS = [
     [1025,579]
   ],
 
-  /* Reihe 7 */
   [
     [101,682],
     [206,680],
@@ -577,7 +730,6 @@ const ROWS = [
     [1055,676]
   ],
 
-  /* Reihe 8 */
   [
     [98,784],
     [194,783],
@@ -591,7 +743,6 @@ const ROWS = [
     [1049,770]
   ],
 
-  /* Reihe 9 */
   [
     [85,880],
     [193,879],
@@ -605,7 +756,6 @@ const ROWS = [
     [1045,884]
   ],
 
-  /* Reihe 10 */
   [
     [92,983],
     [195,986],
@@ -619,7 +769,6 @@ const ROWS = [
     [1049,992]
   ],
 
-  /* Reihe 11 */
   [
     [79,1087],
     [182,1090],
@@ -633,7 +782,6 @@ const ROWS = [
     [1063,1102]
   ],
 
-  /* Reihe 12 */
   [
     [71,1197],
     [176,1204],
@@ -647,7 +795,6 @@ const ROWS = [
     [1059,1226]
   ],
 
-  /* Reihe 13 */
   [
     [76,1304],
     [177,1313],
@@ -661,7 +808,6 @@ const ROWS = [
     [1073,1343]
   ],
 
-  /* Reihe 14 */
   [
     [69,1443],
     [169,1438],
@@ -679,7 +825,7 @@ const ROWS = [
 
 
 /* =====================================================
-   KRONKORKEN-DATEN ERZEUGEN
+   DATEN ERZEUGEN
    ===================================================== */
 
 const caps = [];
@@ -693,15 +839,12 @@ ROWS.forEach((row,rowIndex) => {
     caps.push({
 
       number: runningNumber,
-
       board: BOARD,
 
       row: rowIndex + 1,
-
       position: positionIndex + 1,
 
       refX: point[0],
-
       refY: point[1]
 
     });
@@ -714,7 +857,130 @@ ROWS.forEach((row,rowIndex) => {
 
 
 /* =====================================================
-   ORIGINALBILD LADEN
+   TAUSCHAUSWAHL
+   ===================================================== */
+
+let tradeSelection = [];
+
+try {
+
+  const saved =
+    localStorage.getItem(
+      "captrade-selection"
+    );
+
+  if (saved) {
+
+    tradeSelection =
+      JSON.parse(saved);
+
+  }
+
+} catch(e) {
+
+  tradeSelection = [];
+
+}
+
+
+function saveTradeSelection() {
+
+  localStorage.setItem(
+    "captrade-selection",
+    JSON.stringify(
+      tradeSelection
+    )
+  );
+
+  updateTradeCounter();
+
+  renderCaps();
+
+}
+
+
+function isSelected(cap) {
+
+  return tradeSelection.includes(
+    cap.number
+  );
+
+}
+
+
+function toggleTrade(cap) {
+
+  if (isSelected(cap)) {
+
+    tradeSelection =
+      tradeSelection.filter(
+        number =>
+          number !== cap.number
+      );
+
+  } else {
+
+    tradeSelection.push(
+      cap.number
+    );
+
+  }
+
+
+  saveTradeSelection();
+
+  updateTradeButton(cap);
+
+}
+
+
+function updateTradeCounter() {
+
+  document
+    .getElementById(
+      "tradeHeaderBtn"
+    )
+    .textContent =
+      "Tausch (" +
+      tradeSelection.length +
+      ")";
+
+}
+
+
+function updateTradeButton(cap) {
+
+  const button =
+    document.getElementById(
+      "tradeBtn"
+    );
+
+
+  if (isSelected(cap)) {
+
+    button.textContent =
+      "✓ Zum Tausch ausgewählt";
+
+    button.classList.add(
+      "selected"
+    );
+
+  } else {
+
+    button.textContent =
+      "Zum Tausch hinzufügen";
+
+    button.classList.remove(
+      "selected"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   BILD LADEN
    ===================================================== */
 
 const sourceImage = new Image();
@@ -724,14 +990,9 @@ sourceImage.src = IMAGE;
 
 sourceImage.onload = () => {
 
-  console.log(
-    "Bild geladen:",
-    sourceImage.naturalWidth,
-    "×",
-    sourceImage.naturalHeight
-  );
-
   renderCaps();
+
+  updateTradeCounter();
 
   openFromURL();
 
@@ -749,7 +1010,7 @@ sourceImage.onerror = () => {
 
 
 /* =====================================================
-   REFERENZPOSITION AUF ECHTE BILDGRÖSSE UMWANDELN
+   SKALIERUNG
    ===================================================== */
 
 function getScaledPosition(cap) {
@@ -787,7 +1048,7 @@ function getScaledPosition(cap) {
 
 
 /* =====================================================
-   KRONKORKEN AUSSCHNEIDEN
+   KRONKORKEN ZEICHNEN
    ===================================================== */
 
 function drawCap(
@@ -850,18 +1111,22 @@ function drawCap(
 
 
 /* =====================================================
-   LISTE
+   HAUPTLISTE
    ===================================================== */
 
 function renderCaps() {
 
   const grid =
-    document.getElementById("grid");
+    document.getElementById(
+      "grid"
+    );
 
 
   const search =
     document
-      .getElementById("search")
+      .getElementById(
+        "search"
+      )
       .value
       .trim()
       .toLowerCase();
@@ -901,7 +1166,9 @@ function renderCaps() {
 
 
   document
-    .getElementById("count")
+    .getElementById(
+      "count"
+    )
     .textContent =
       filtered.length +
       " Kronkorken";
@@ -922,15 +1189,48 @@ function renderCaps() {
   filtered.forEach(cap => {
 
     const card =
-      document.createElement("button");
+      document.createElement(
+        "button"
+      );
 
 
     card.className =
       "cap-card";
 
 
+    if (isSelected(cap)) {
+
+      card.classList.add(
+        "selected"
+      );
+
+    }
+
+
+    if (isSelected(cap)) {
+
+      const badge =
+        document.createElement(
+          "div"
+        );
+
+      badge.className =
+        "selected-badge";
+
+      badge.textContent =
+        "✓";
+
+      card.appendChild(
+        badge
+      );
+
+    }
+
+
     const thumb =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
 
     thumb.className =
@@ -938,7 +1238,9 @@ function renderCaps() {
 
 
     const canvas =
-      document.createElement("canvas");
+      document.createElement(
+        "canvas"
+      );
 
 
     drawCap(
@@ -954,7 +1256,9 @@ function renderCaps() {
 
 
     const number =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
 
     number.className =
@@ -967,7 +1271,9 @@ function renderCaps() {
 
 
     const board =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
 
     board.className =
@@ -1076,6 +1382,22 @@ function openCap(cap) {
     };
 
 
+  const tradeBtn =
+    document.getElementById(
+      "tradeBtn"
+    );
+
+
+  tradeBtn.onclick = () => {
+
+    toggleTrade(cap);
+
+  };
+
+
+  updateTradeButton(cap);
+
+
   document
     .getElementById(
       "detailModal"
@@ -1105,14 +1427,6 @@ function showOnBoard(cap) {
       "marker"
     );
 
-
-  /*
-     Hier können wir direkt mit den
-     Referenzwerten rechnen.
-
-     Dadurch bleibt die Markierung
-     unabhängig von der Displaygröße korrekt.
-  */
 
   const left =
     (cap.refX /
@@ -1161,7 +1475,412 @@ function showOnBoard(cap) {
 
 
 /* =====================================================
-   MODAL SCHLIESSEN
+   TAUSCHÜBERSICHT
+   ===================================================== */
+
+function openTradeOverview() {
+
+  renderTradeOverview();
+
+  document
+    .getElementById(
+      "tradeModal"
+    )
+    .classList
+    .add("open");
+
+}
+
+
+function renderTradeOverview() {
+
+  const content =
+    document.getElementById(
+      "tradeContent"
+    );
+
+
+  content.innerHTML = "";
+
+
+  if (!tradeSelection.length) {
+
+    content.innerHTML =
+      '<div class="trade-empty">' +
+      'Noch keine Kronkorken ausgewählt.' +
+      '</div>';
+
+    return;
+
+  }
+
+
+  const selectedCaps =
+    tradeSelection
+      .map(number =>
+        caps.find(
+          cap =>
+            cap.number === number
+        )
+      )
+      .filter(Boolean);
+
+
+  const grid =
+    document.createElement(
+      "div"
+    );
+
+
+  grid.className =
+    "trade-grid";
+
+
+  selectedCaps.forEach(cap => {
+
+    const item =
+      document.createElement(
+        "div"
+      );
+
+
+    item.className =
+      "trade-item";
+
+
+    const thumb =
+      document.createElement(
+        "div"
+      );
+
+
+    thumb.className =
+      "trade-thumb";
+
+
+    const canvas =
+      document.createElement(
+        "canvas"
+      );
+
+
+    drawCap(
+      canvas,
+      cap,
+      180
+    );
+
+
+    thumb.appendChild(
+      canvas
+    );
+
+
+    const number =
+      document.createElement(
+        "div"
+      );
+
+
+    number.className =
+      "trade-item-number";
+
+
+    number.textContent =
+      "Nr. " +
+      cap.number;
+
+
+    const board =
+      document.createElement(
+        "div"
+      );
+
+
+    board.className =
+      "trade-item-board";
+
+
+    board.textContent =
+      "Brett " +
+      cap.board;
+
+
+    const remove =
+      document.createElement(
+        "button"
+      );
+
+
+    remove.className =
+      "remove-btn";
+
+
+    remove.textContent =
+      "Entfernen";
+
+
+    remove.onclick = () => {
+
+      tradeSelection =
+        tradeSelection.filter(
+          number =>
+            number !== cap.number
+        );
+
+
+      saveTradeSelection();
+
+      renderTradeOverview();
+
+    };
+
+
+    item.appendChild(
+      thumb
+    );
+
+    item.appendChild(
+      number
+    );
+
+    item.appendChild(
+      board
+    );
+
+    item.appendChild(
+      remove
+    );
+
+
+    grid.appendChild(
+      item
+    );
+
+  });
+
+
+  content.appendChild(
+    grid
+  );
+
+
+  const actions =
+    document.createElement(
+      "div"
+    );
+
+
+  actions.className =
+    "trade-actions";
+
+
+  const shareBtn =
+    document.createElement(
+      "button"
+    );
+
+
+  shareBtn.className =
+    "share-trade-btn";
+
+
+  shareBtn.textContent =
+    "Tauschliste teilen";
+
+
+  shareBtn.onclick =
+    shareTradeSelection;
+
+
+  const clearBtn =
+    document.createElement(
+      "button"
+    );
+
+
+  clearBtn.className =
+    "clear-trade-btn";
+
+
+  clearBtn.textContent =
+    "Auswahl leeren";
+
+
+  clearBtn.onclick = () => {
+
+    if (
+      confirm(
+        "Komplette Tausch-Auswahl löschen?"
+      )
+    ) {
+
+      tradeSelection = [];
+
+      saveTradeSelection();
+
+      renderTradeOverview();
+
+    }
+
+  };
+
+
+  actions.appendChild(
+    shareBtn
+  );
+
+  actions.appendChild(
+    clearBtn
+  );
+
+
+  content.appendChild(
+    actions
+  );
+
+}
+
+
+/* =====================================================
+   TAUSCHLISTE TEILEN
+   ===================================================== */
+
+async function shareTradeSelection() {
+
+  if (!tradeSelection.length) {
+
+    alert(
+      "Noch keine Kronkorken ausgewählt."
+    );
+
+    return;
+
+  }
+
+
+  const sorted =
+    [...tradeSelection]
+      .sort(
+        (a,b) => a - b
+      );
+
+
+  const text =
+    "Meine CapTrade-Auswahl:\n\n" +
+
+    sorted
+      .map(number => {
+
+        const cap =
+          caps.find(
+            item =>
+              item.number === number
+          );
+
+        return (
+          "Nr. " +
+          number +
+          " – Brett " +
+          cap.board
+        );
+
+      })
+      .join("\n") +
+
+    "\n\n" +
+    window.location.origin +
+    window.location.pathname;
+
+
+  if (navigator.share) {
+
+    try {
+
+      await navigator.share({
+
+        title:
+          "CapTrade – Tauschliste",
+
+        text:
+          text
+
+      });
+
+    }
+
+    catch(e) {}
+
+  }
+
+  else {
+
+    try {
+
+      await navigator
+        .clipboard
+        .writeText(
+          text
+        );
+
+
+      alert(
+        "Tauschliste wurde kopiert."
+      );
+
+    }
+
+    catch(e) {
+
+      alert(text);
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   NORMALE SEITE TEILEN
+   ===================================================== */
+
+async function sharePage() {
+
+  const data = {
+
+    title:
+      "CapTrade",
+
+    text:
+      "Schau dir meine Tausch-Kronkorken an:",
+
+    url:
+      window.location.origin +
+      window.location.pathname
+
+  };
+
+
+  if (navigator.share) {
+
+    try {
+
+      await navigator.share(
+        data
+      );
+
+    }
+
+    catch(e) {}
+
+  }
+
+}
+
+
+/* =====================================================
+   MODALS
    ===================================================== */
 
 function closeModal(id) {
@@ -1184,70 +1903,6 @@ function modalBackground(
   ) {
 
     closeModal(id);
-
-  }
-
-}
-
-
-/* =====================================================
-   TEILEN
-   ===================================================== */
-
-async function sharePage() {
-
-  const data = {
-
-    title:
-      "CapTrade",
-
-    text:
-      "Schau dir meine Tausch-Kronkorken an:",
-
-    url:
-      window.location.href
-
-  };
-
-
-  if (navigator.share) {
-
-    try {
-
-      await navigator.share(
-        data
-      );
-
-    }
-
-    catch (e) {}
-
-  }
-
-  else {
-
-    try {
-
-      await navigator
-        .clipboard
-        .writeText(
-          window.location.href
-        );
-
-      alert(
-        "Link wurde kopiert."
-      );
-
-    }
-
-    catch(e) {
-
-      alert(
-        "Link: " +
-        window.location.href
-      );
-
-    }
 
   }
 
