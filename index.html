@@ -2,1720 +2,1091 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b1020">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111827">
+
 <title>CapTrade</title>
 
 <style>
-:root{
-  --bg:#0b1020;
-  --panel:#121a2d;
-  --panel2:#18233a;
-  --line:#273552;
-  --text:#f6f8ff;
-  --muted:#9aa8c3;
-  --blue:#4c8dff;
-  --blue2:#2d6eea;
-  --red:#ff4e5b;
-  --yellow:#f4c84b;
-  --green:#38c985;
+* {
+  box-sizing: border-box;
 }
 
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f3f4f6;
+  color: #111827;
 }
 
-button,input{font:inherit}
-
-.app{
-  max-width:1100px;
-  margin:auto;
-  padding:20px 14px 80px;
+header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #111827;
+  color: white;
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.15);
 }
 
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:18px;
+.header-inner {
+  max-width: 900px;
+  margin: auto;
 }
 
-.brand{
-  font-size:28px;
-  font-weight:900;
-  letter-spacing:-1px;
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-.brand span{color:var(--red)}
-
-.subtitle{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:4px;
+h1 {
+  margin: 0;
+  font-size: 26px;
 }
 
-.topbuttons{
-  display:flex;
-  gap:8px;
+.subtitle {
+  margin-top: 3px;
+  color: #cbd5e1;
+  font-size: 13px;
 }
 
-.topbtn{
-  width:104px;
-  height:42px;
-  border-radius:13px;
-  font-weight:800;
+.share-btn {
+  border: 0;
+  background: white;
+  color: #111827;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
 }
 
-.secondary{
-  color:white;
-  background:var(--panel);
-  border:1px solid var(--line);
+.search-wrap {
+  margin-top: 14px;
 }
 
-.primary{
-  color:white;
-  border:0;
-  background:linear-gradient(180deg,var(--blue),var(--blue2));
+#search {
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
 }
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-bottom:14px;
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 16px;
 }
 
-.stat{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:15px;
-  padding:12px;
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  font-size: 14px;
+  color: #4b5563;
 }
 
-.stat strong{
-  display:block;
-  font-size:22px;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
-.stat span{
-  color:var(--muted);
-  font-size:12px;
+.cap-card {
+  background: white;
+  border: 0;
+  border-radius: 14px;
+  padding: 9px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  cursor: pointer;
+  text-align: center;
 }
 
-.tabs{
-  display:flex;
-  gap:8px;
-  overflow:auto;
-  margin-bottom:14px;
+.cap-card:active {
+  transform: scale(.97);
 }
 
-.tab{
-  white-space:nowrap;
-  border:1px solid var(--line);
-  background:var(--panel);
-  color:var(--muted);
-  border-radius:999px;
-  padding:9px 13px;
-  font-weight:800;
+.thumb {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e5e7eb;
+  margin-bottom: 7px;
 }
 
-.tab.active{
-  background:var(--blue);
-  border-color:var(--blue);
-  color:white;
+.thumb canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-.search{
-  width:100%;
-  padding:12px;
-  border-radius:13px;
-  border:1px solid var(--line);
-  background:var(--panel);
-  color:white;
-  margin-bottom:14px;
-  outline:none;
+.cap-number {
+  font-weight: 800;
+  font-size: 15px;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-
-@media(min-width:680px){
-  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-}
-
-.cap{
-  background:var(--panel2);
-  border:1px solid var(--line);
-  border-radius:17px;
-  overflow:hidden;
-}
-
-.cap.selected{border-color:var(--blue)}
-.cap.maybe{border-color:var(--yellow)}
-
-.pic{
-  aspect-ratio:1;
-  position:relative;
-  background:#070c17;
-  overflow:hidden;
-}
-
-.pic img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.badge{
-  position:absolute;
-  top:7px;
-  left:7px;
-  background:rgba(0,0,0,.75);
-  border-radius:999px;
-  padding:5px 8px;
-  font-size:11px;
-  font-weight:900;
-}
-
-.capbody{padding:9px}
-
-.location{
-  color:var(--muted);
-  font-size:11px;
-  margin-bottom:8px;
-}
-
-.actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-}
-
-.action{
-  border:1px solid var(--line);
-  background:#0f1728;
-  color:white;
-  border-radius:10px;
-  padding:8px 3px;
-  font-size:11px;
-  font-weight:800;
-}
-
-.action.on-selected{
-  border-color:var(--blue);
-  background:rgba(76,141,255,.18);
-}
-
-.action.on-maybe{
-  border-color:var(--yellow);
-  background:rgba(244,200,75,.15);
-}
-
-.action.traded{
-  grid-column:1/-1;
-}
-
-.empty{
-  grid-column:1/-1;
-  padding:40px 15px;
-  text-align:center;
-  color:var(--muted);
-  border:1px dashed var(--line);
-  border-radius:18px;
+.cap-board {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
 }
 
 /* MODAL */
 
-.modalbg{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:100;
-  background:rgba(0,0,0,.72);
-  overflow:auto;
-  padding:20px 12px;
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.72);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
 }
 
-.modalbg.open{display:block}
-
-.modal{
-  max-width:650px;
-  margin:auto;
-  background:#111a2d;
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:18px;
+.modal.open {
+  display: flex;
 }
 
-.modal h2{
-  margin:0 0 6px;
+.modal-box {
+  width: 100%;
+  max-width: 500px;
+  max-height: 92vh;
+  overflow: auto;
+  background: white;
+  border-radius: 20px;
+  position: relative;
+  padding: 20px;
 }
 
-.info{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.45;
-  margin-bottom:15px;
+.close {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 0;
+  font-size: 24px;
+  background: #f3f4f6;
+  cursor: pointer;
+  z-index: 5;
 }
 
-.field{
-  margin-bottom:14px;
+.detail-image {
+  width: 220px;
+  height: 220px;
+  max-width: 72vw;
+  max-height: 72vw;
+  margin: 18px auto 12px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e5e7eb;
 }
 
-.field label{
-  display:block;
-  font-size:12px;
-  font-weight:800;
-  margin-bottom:6px;
+.detail-image canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-.field input{
-  width:100%;
-  border:1px solid var(--line);
-  background:#0c1425;
-  color:white;
-  border-radius:12px;
-  padding:12px;
+.detail-title {
+  font-size: 24px;
+  font-weight: 800;
+  text-align: center;
 }
 
-.previewbox{
-  display:none;
-  margin-top:15px;
+.detail-board {
+  text-align: center;
+  color: #6b7280;
+  margin-top: 4px;
+  font-size: 16px;
 }
 
-.previewbox.show{display:block}
-
-.steptext{
-  background:#0c1425;
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:10px;
-  margin-bottom:10px;
-  font-size:13px;
+.main-btn {
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-radius: 12px;
+  margin-top: 18px;
+  background: #111827;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-#boardCanvas{
-  display:block;
-  width:100%;
-  height:auto;
-  border-radius:14px;
-  border:1px solid var(--line);
-  touch-action:manipulation;
+/* BRETT */
+
+.board-wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 14px;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-.pointbuttons{
-  display:flex;
-  gap:8px;
-  margin-top:10px;
+.board-wrapper img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-.pointbuttons button{
-  flex:1;
-  border:1px solid var(--line);
-  background:var(--panel2);
-  color:white;
-  border-radius:11px;
-  padding:10px;
-  font-weight:800;
+.marker {
+  position: absolute;
+  width: 9%;
+  aspect-ratio: 1;
+  border: 4px solid red;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 0 3px white,
+    0 0 18px red;
+  animation: pulse 1s infinite alternate;
+  pointer-events: none;
 }
 
-.modalbuttons{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-top:16px;
+@keyframes pulse {
+  from {
+    transform: translate(-50%, -50%) scale(.9);
+  }
+
+  to {
+    transform: translate(-50%, -50%) scale(1.15);
+  }
 }
 
-.modalbuttons button{
-  min-height:44px;
-  border-radius:13px;
-  font-weight:800;
+.board-head {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  margin-top: 5px;
 }
 
-.cancel{
-  border:1px solid var(--line);
-  background:var(--panel);
-  color:white;
+.board-note {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+  margin-top: 4px;
 }
 
-.import{
-  border:0;
-  background:var(--blue);
-  color:white;
+.empty {
+  text-align: center;
+  padding: 40px 10px;
+  color: #6b7280;
+  grid-column: 1 / -1;
 }
 
-.import:disabled{
-  opacity:.4;
-}
+@media (min-width: 600px) {
 
-.resetall{
-  margin-top:20px;
-  width:100%;
-  padding:11px;
-  border-radius:12px;
-  border:1px solid rgba(255,78,91,.45);
-  color:#ffb8bd;
-  background:rgba(255,78,91,.08);
-  font-weight:800;
-}
+  .grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
 
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:30px;
-  transform:translate(-50%,100px);
-  background:white;
-  color:#111827;
-  padding:10px 15px;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:800;
-  transition:.25s;
-  z-index:200;
-}
-
-.toast.show{
-  transform:translate(-50%,0);
 }
 </style>
 </head>
 
 <body>
 
-<main class="app">
+<header>
 
-<header class="topbar">
+<div class="header-inner">
 
-<div>
-  <div class="brand">Cap<span>Trade</span></div>
-  <div class="subtitle">Sony‘s Tauschkronkorken</div>
-</div>
+  <div class="title-row">
 
-<div class="topbuttons">
-  <button class="topbtn secondary" id="shareBtn">↗ Teilen</button>
-  <button class="topbtn primary" id="addBtn">+ Brett</button>
+    <div>
+      <h1>CapTrade</h1>
+      <div class="subtitle">
+        Meine Tausch-Kronkorken
+      </div>
+    </div>
+
+    <button
+      class="share-btn"
+      onclick="sharePage()">
+      Teilen
+    </button>
+
+  </div>
+
+  <div class="search-wrap">
+
+    <input
+      id="search"
+      type="search"
+      placeholder="Nummer oder Brett suchen …"
+      oninput="renderCaps()">
+
+  </div>
+
 </div>
 
 </header>
 
-<section class="stats">
 
-<div class="stat">
-  <strong id="availableCount">0</strong>
-  <span>verfügbar</span>
-</div>
+<main>
 
-<div class="stat">
-  <strong id="selectedCount">0</strong>
-  <span>ausgewählt</span>
-</div>
+  <div class="info">
 
-<div class="stat">
-  <strong id="maybeCount">0</strong>
-  <span>vielleicht</span>
-</div>
+    <span id="count"></span>
 
-</section>
+    <span>Brett F</span>
 
-<nav class="tabs">
-  <button class="tab active" data-filter="all">Alle</button>
-  <button class="tab" data-filter="selected">Ausgewählt</button>
-  <button class="tab" data-filter="maybe">Vielleicht</button>
-  <button class="tab" data-filter="traded">Getauscht</button>
-</nav>
+  </div>
 
-<input
-  class="search"
-  id="search"
-  placeholder="Nr. oder Brett suchen …"
->
-
-<section id="grid" class="grid"></section>
+  <div
+    id="grid"
+    class="grid">
+  </div>
 
 </main>
 
 
-<!-- BRETT IMPORT -->
+<!-- DETAIL -->
 
-<div class="modalbg" id="modal">
+<div
+  id="detailModal"
+  class="modal"
+  onclick="modalBackground(event,'detailModal')">
 
-<div class="modal">
+  <div class="modal-box">
 
-<h2>Brett hinzufügen</h2>
+    <button
+      class="close"
+      onclick="closeModal('detailModal')">
+      ×
+    </button>
 
-<div class="info">
-Wähle dein komplettes Brettfoto aus und markiere anschließend
-die <strong>Mitte der vier äußeren Kronkorken</strong>.
-</div>
+    <div
+      id="detailImage"
+      class="detail-image">
+    </div>
 
-<div class="field">
+    <div
+      id="detailTitle"
+      class="detail-title">
+    </div>
 
-<label>Brettname</label>
+    <div
+      id="detailBoard"
+      class="detail-board">
+    </div>
 
-<input
-  id="boardName"
-  placeholder="z. B. Brett F"
->
+    <button
+      id="showBoardBtn"
+      class="main-btn">
+      Auf Brett anzeigen
+    </button>
 
-</div>
-
-<div class="field">
-
-<label>Brettfoto</label>
-
-<input
-  id="boardFile"
-  type="file"
-  accept="image/*">
-
-</div>
-
-
-<div class="previewbox" id="previewBox">
-
-<div class="steptext" id="stepText">
-1. Tippe auf die Mitte des Kronkorkens oben links.
-</div>
-
-<canvas id="boardCanvas"></canvas>
-
-<div class="pointbuttons">
-
-<button id="undoPoint">
-↶ Punkt zurück
-</button>
-
-<button id="resetPoints">
-Punkte löschen
-</button>
-
-</div>
+  </div>
 
 </div>
 
 
-<div class="modalbuttons">
+<!-- BRETTÜBERSICHT -->
 
-<button class="cancel" id="cancelBtn">
-Abbrechen
-</button>
+<div
+  id="boardModal"
+  class="modal"
+  onclick="modalBackground(event,'boardModal')">
 
-<button
-  class="import"
-  id="importBtn"
-  disabled>
-Ausschneiden
-</button>
+  <div class="modal-box">
+
+    <button
+      class="close"
+      onclick="closeModal('boardModal')">
+      ×
+    </button>
+
+    <div
+      id="boardHead"
+      class="board-head">
+      Brett F
+    </div>
+
+    <div
+      id="boardNote"
+      class="board-note">
+    </div>
+
+    <div class="board-wrapper">
+
+      <img
+        id="boardImage"
+        src="IMG_6469.jpeg"
+        alt="Brett F">
+
+      <div
+        id="marker"
+        class="marker">
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
-
-<button class="resetall" id="deleteAll">
-Alle bisherigen Test-Kronkorken löschen
-</button>
-
-</div>
-
-</div>
-
-
-<div class="toast" id="toast"></div>
 
 
 <script>
 
-/* =========================================
-   DATENBANK
-========================================= */
-
-const DB_NAME = "captrade";
-const STORE = "caps";
-
-let db;
-let caps = [];
-let filter = "all";
-
-function openDB(){
-
-  return new Promise((resolve,reject)=>{
-
-    const req = indexedDB.open(DB_NAME,1);
-
-    req.onupgradeneeded = ()=>{
-
-      const database = req.result;
-
-      if(!database.objectStoreNames.contains(STORE)){
-
-        database.createObjectStore(
-          STORE,
-          {
-            keyPath:"id",
-            autoIncrement:true
-          }
-        );
-
-      }
-
-    };
-
-    req.onsuccess = ()=>resolve(req.result);
-    req.onerror = ()=>reject(req.error);
-
-  });
-
-}
-
-
-function getAll(){
-
-  return new Promise((resolve,reject)=>{
-
-    const tx = db.transaction(STORE,"readonly");
-    const req = tx.objectStore(STORE).getAll();
-
-    req.onsuccess = ()=>resolve(req.result || []);
-    req.onerror = ()=>reject(req.error);
-
-  });
-
-}
-
-
-function addCap(cap){
-
-  return new Promise((resolve,reject)=>{
-
-    const tx = db.transaction(STORE,"readwrite");
-    const req = tx.objectStore(STORE).add(cap);
-
-    req.onsuccess = ()=>resolve(req.result);
-    req.onerror = ()=>reject(req.error);
-
-  });
-
-}
-
-
-function saveCap(cap){
-
-  return new Promise((resolve,reject)=>{
-
-    const tx = db.transaction(STORE,"readwrite");
-    const req = tx.objectStore(STORE).put(cap);
-
-    req.onsuccess = ()=>resolve();
-    req.onerror = ()=>reject(req.error);
-
-  });
-
-}
-
-
-function clearCaps(){
-
-  return new Promise((resolve,reject)=>{
-
-    const tx = db.transaction(STORE,"readwrite");
-    const req = tx.objectStore(STORE).clear();
-
-    req.onsuccess = ()=>resolve();
-    req.onerror = ()=>reject(req.error);
-
-  });
-
-}
-
-
-/* =========================================
-   HAUPTANSICHT
-========================================= */
-
-function number(id){
-  return "#" + String(id).padStart(3,"0");
-}
-
-
-function visibleCaps(){
-
-  const query =
-    document
-    .getElementById("search")
-    .value
-    .trim()
-    .toLowerCase();
-
-
-  return caps.filter(cap=>{
-
-    if(
-      filter === "all" &&
-      cap.status === "traded"
-    ) return false;
-
-    if(
-      filter === "selected" &&
-      cap.status !== "selected"
-    ) return false;
-
-    if(
-      filter === "maybe" &&
-      cap.status !== "maybe"
-    ) return false;
-
-    if(
-      filter === "traded" &&
-      cap.status !== "traded"
-    ) return false;
-
-
-    if(query){
-
-      const text =
-        (
-          number(cap.id) +
-          " " +
-          cap.board +
-          " " +
-          cap.position
-        ).toLowerCase();
-
-      if(!text.includes(query)){
-        return false;
-      }
-
-    }
-
-    return true;
-
-  });
-
-}
-
-
-function render(){
-
-  document.getElementById("availableCount").textContent =
-    caps.filter(c=>c.status !== "traded").length;
-
-  document.getElementById("selectedCount").textContent =
-    caps.filter(c=>c.status === "selected").length;
-
-  document.getElementById("maybeCount").textContent =
-    caps.filter(c=>c.status === "maybe").length;
-
-
-  const grid = document.getElementById("grid");
-  const list = visibleCaps();
-
-
-  if(!list.length){
-
-    grid.innerHTML = `
-      <div class="empty">
-        Noch keine Kronkorken.<br><br>
-        Tippe auf <strong>+ Brett</strong>.
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  grid.innerHTML = list.map(cap=>{
-
-    const selected =
-      cap.status === "selected";
-
-    const maybe =
-      cap.status === "maybe";
-
-
-    return `
-
-      <article class="cap ${selected ? "selected":""} ${maybe ? "maybe":""}">
-
-        <div class="pic">
-
-          <img src="${cap.image}">
-
-          <div class="badge">
-            ${number(cap.id)}
-          </div>
-
-        </div>
-
-
-        <div class="capbody">
-
-          <div class="location">
-            ${cap.board} · Pos. ${cap.position}
-          </div>
-
-
-          <div class="actions">
-
-            <button
-              class="action ${selected ? "on-selected":""}"
-              data-id="${cap.id}"
-              data-status="selected">
-
-              ${selected ? "✓ Ausgewählt":"Auswählen"}
-
-            </button>
-
-
-            <button
-              class="action ${maybe ? "on-maybe":""}"
-              data-id="${cap.id}"
-              data-status="maybe">
-
-              ${maybe ? "★ Vielleicht":"Vielleicht"}
-
-            </button>
-
-
-            <button
-              class="action traded"
-              data-id="${cap.id}"
-              data-status="traded">
-
-              Getauscht
-
-            </button>
-
-          </div>
-
-        </div>
-
-      </article>
-
-    `;
-
-  }).join("");
-
-}
-
-
-async function reload(){
-
-  caps = await getAll();
-
-  caps.sort(
-    (a,b)=>a.id-b.id
-  );
-
-  render();
-
-}
-
-
-/* =========================================
-   FILTER
-========================================= */
-
-document
-.querySelectorAll(".tab")
-.forEach(button=>{
-
-  button.addEventListener("click",()=>{
-
-    document
-    .querySelectorAll(".tab")
-    .forEach(item=>item.classList.remove("active"));
-
-    button.classList.add("active");
-
-    filter =
-      button.dataset.filter;
-
-    render();
-
-  });
-
-});
-
-
-document
-.getElementById("search")
-.addEventListener(
-  "input",
-  render
-);
-
-
-/* =========================================
-   STATUS
-========================================= */
-
-document
-.getElementById("grid")
-.addEventListener(
-"click",
-async event=>{
-
-  const button =
-    event.target.closest("[data-status]");
-
-  if(!button) return;
-
-
-  const id =
-    Number(button.dataset.id);
-
-  const status =
-    button.dataset.status;
-
-
-  const cap =
-    caps.find(item=>item.id === id);
-
-  if(!cap) return;
-
-
-  if(
-    cap.status === status &&
-    status !== "traded"
-  ){
-
-    cap.status = "available";
-
-  }else{
-
-    cap.status = status;
-
-  }
-
-
-  await saveCap(cap);
-  await reload();
-
-});
-
-
-/* =========================================
-   MODAL
-========================================= */
-
-const modal =
-  document.getElementById("modal");
-
-
-document
-.getElementById("addBtn")
-.addEventListener(
-"click",
-()=>{
-
-  modal.classList.add("open");
-
-});
-
-
-document
-.getElementById("cancelBtn")
-.addEventListener(
-"click",
-()=>{
-
-  modal.classList.remove("open");
-
-});
-
-
-/* =========================================
-   FOTO LADEN
-========================================= */
-
-const canvas =
-  document.getElementById("boardCanvas");
-
-const ctx =
-  canvas.getContext("2d");
-
-let boardImage = null;
-
-let points = [];
+/* ==========================================
+   CAPTRADE
+   TESTBRETT F
+   ========================================== */
 
 
 /*
-Punkte werden in dieser Reihenfolge gesetzt:
-
-0 = oben links
-1 = oben rechts
-2 = unten rechts
-3 = unten links
+   DEIN BILD AUF GITHUB
 */
 
-const instructions = [
+const IMAGE = "IMG_6469.jpeg";
 
-  "1. Tippe auf die Mitte des Kronkorkens oben links.",
 
-  "2. Jetzt auf die Mitte des Kronkorkens oben rechts.",
+/*
+   Brettbezeichnung
+*/
 
-  "3. Jetzt auf die Mitte des Kronkorkens unten rechts.",
+const BOARD = "F";
 
-  "4. Jetzt auf die Mitte des Kronkorkens unten links.",
 
-  "Perfekt. Alle vier Punkte sind gesetzt."
+/*
+   Nummer des ersten Kronkorkens.
+
+   Später können wir hier z.B.
+   501 eintragen, wenn Brett F
+   bei Nr. 501 beginnen soll.
+*/
+
+const START_NUMMER = 1;
+
+
+/*
+   Originalgröße des Fotos
+*/
+
+const ORIGINAL_WIDTH = 1152;
+const ORIGINAL_HEIGHT = 1536;
+
+
+/*
+   Mittelpunkt der 10 Spalten
+*/
+
+const COL_X = [
+
+  94,
+  195,
+  295,
+  399,
+  503,
+  607,
+  722,
+  829,
+  939,
+  1049
 
 ];
 
 
-function fileToDataURL(file){
+/*
+   Mittelpunkt der 14 Reihen
+*/
 
-  return new Promise((resolve,reject)=>{
+const ROW_Y = [
 
-    const reader =
-      new FileReader();
+  81,
+  173,
+  264,
+  370,
+  468,
+  561,
+  675,
+  780,
+  896,
+  995,
+  1107,
+  1225,
+  1322,
+  1433
 
-    reader.onload =
-      ()=>resolve(reader.result);
+];
 
-    reader.onerror =
-      reject;
 
-    reader.readAsDataURL(file);
+/*
+   Ausschnittgröße eines Kronkorkens
+*/
+
+const CROP_SIZE = 92;
+
+
+/* ==========================================
+   KRONKORKEN ERZEUGEN
+   ========================================== */
+
+const caps = [];
+
+let runningNumber = START_NUMMER;
+
+
+ROW_Y.forEach((y,rowIndex) => {
+
+  COL_X.forEach((x,colIndex) => {
+
+    caps.push({
+
+      number: runningNumber,
+
+      board: BOARD,
+
+      row: rowIndex + 1,
+
+      position: colIndex + 1,
+
+      x: x,
+
+      y: y
+
+    });
+
+    runningNumber++;
 
   });
 
-}
+});
 
 
-function loadImage(dataURL){
+/* ==========================================
+   ORIGINALBILD LADEN
+   ========================================== */
 
-  return new Promise((resolve,reject)=>{
+const sourceImage = new Image();
 
-    const image =
-      new Image();
-
-    image.onload =
-      ()=>resolve(image);
-
-    image.onerror =
-      reject;
-
-    image.src =
-      dataURL;
-
-  });
-
-}
+sourceImage.src = IMAGE;
 
 
-document
-.getElementById("boardFile")
-.addEventListener(
-"change",
-async event=>{
+sourceImage.onload = () => {
 
-  const file =
-    event.target.files[0];
+  renderCaps();
 
-  if(!file) return;
+  openFromURL();
+
+};
 
 
-  const dataURL =
-    await fileToDataURL(file);
+sourceImage.onerror = () => {
 
-  boardImage =
-    await loadImage(dataURL);
+  document.getElementById("grid").innerHTML =
+    '<div class="empty">' +
+    'Das Bild IMG_6469.jpeg konnte nicht geladen werden.' +
+    '</div>';
+
+};
 
 
-  /*
-  Canvas nutzt intern die echte Fotoauflösung.
-  Dadurch bleiben die Klickpunkte exakt.
-  */
+/* ==========================================
+   KRONKORKEN AUSSCHNEIDEN
+   ========================================== */
+
+function drawCap(
+  canvas,
+  cap,
+  outputSize = 180
+) {
+
+  const ctx =
+    canvas.getContext("2d");
+
 
   canvas.width =
-    boardImage.width;
+    outputSize;
 
   canvas.height =
-    boardImage.height;
+    outputSize;
 
 
-  points = [];
+  const sx =
+    cap.x - CROP_SIZE / 2;
 
-  document
-  .getElementById("previewBox")
-  .classList.add("show");
-
-
-  drawPreview();
-
-  updateStep();
-
-});
-
-
-/* =========================================
-   PUNKTE SETZEN
-========================================= */
-
-canvas.addEventListener(
-"click",
-event=>{
-
-  if(!boardImage) return;
-
-  if(points.length >= 4){
-    return;
-  }
-
-
-  const rect =
-    canvas.getBoundingClientRect();
-
-
-  const scaleX =
-    canvas.width / rect.width;
-
-  const scaleY =
-    canvas.height / rect.height;
-
-
-  const x =
-    (event.clientX - rect.left) *
-    scaleX;
-
-  const y =
-    (event.clientY - rect.top) *
-    scaleY;
-
-
-  points.push({x,y});
-
-
-  drawPreview();
-
-  updateStep();
-
-});
-
-
-function updateStep(){
-
-  document
-  .getElementById("stepText")
-  .textContent =
-    instructions[
-      Math.min(
-        points.length,
-        4
-      )
-    ];
-
-
-  document
-  .getElementById("importBtn")
-  .disabled =
-    points.length !== 4;
-
-}
-
-
-function drawPreview(){
-
-  if(!boardImage) return;
+  const sy =
+    cap.y - CROP_SIZE / 2;
 
 
   ctx.clearRect(
     0,
     0,
-    canvas.width,
-    canvas.height
+    outputSize,
+    outputSize
   );
 
 
   ctx.drawImage(
-    boardImage,
+
+    sourceImage,
+
+    sx,
+    sy,
+
+    CROP_SIZE,
+    CROP_SIZE,
+
     0,
-    0
+    0,
+
+    outputSize,
+    outputSize
+
   );
 
-
-  const radius =
-    Math.max(
-      12,
-      canvas.width * 0.012
-    );
+}
 
 
-  points.forEach(
-  (point,index)=>{
+/* ==========================================
+   LISTE ANZEIGEN
+   ========================================== */
 
-    ctx.beginPath();
+function renderCaps() {
 
-    ctx.arc(
-      point.x,
-      point.y,
-      radius,
-      0,
-      Math.PI * 2
-    );
-
-    ctx.fillStyle =
-      "rgba(76,141,255,.9)";
-
-    ctx.fill();
+  if (!sourceImage.complete) {
+    return;
+  }
 
 
-    ctx.lineWidth =
-      Math.max(
-        3,
-        canvas.width * .003
+  const grid =
+    document.getElementById("grid");
+
+
+  const search =
+    document
+      .getElementById("search")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  grid.innerHTML = "";
+
+
+  const filtered =
+    caps.filter(cap => {
+
+      if (!search) {
+        return true;
+      }
+
+
+      return (
+
+        String(cap.number)
+          .includes(search)
+
+        ||
+
+        ("brett " + cap.board)
+          .toLowerCase()
+          .includes(search)
+
+        ||
+
+        cap.board
+          .toLowerCase()
+          .includes(search)
+
       );
 
-    ctx.strokeStyle =
-      "white";
-
-    ctx.stroke();
+    });
 
 
-    ctx.fillStyle =
-      "white";
+  document
+    .getElementById("count")
+    .textContent =
+      filtered.length +
+      " Kronkorken";
 
-    ctx.font =
-      `bold ${radius}px Arial`;
 
-    ctx.textAlign =
-      "center";
+  if (!filtered.length) {
 
-    ctx.textBaseline =
-      "middle";
+    grid.innerHTML =
+      '<div class="empty">' +
+      'Keine Kronkorken gefunden.' +
+      '</div>';
 
-    ctx.fillText(
-      String(index + 1),
-      point.x,
-      point.y
+    return;
+
+  }
+
+
+  filtered.forEach(cap => {
+
+    const card =
+      document.createElement("button");
+
+
+    card.className =
+      "cap-card";
+
+
+    const thumb =
+      document.createElement("div");
+
+
+    thumb.className =
+      "thumb";
+
+
+    const canvas =
+      document.createElement("canvas");
+
+
+    drawCap(
+      canvas,
+      cap,
+      180
+    );
+
+
+    thumb.appendChild(
+      canvas
+    );
+
+
+    const number =
+      document.createElement("div");
+
+
+    number.className =
+      "cap-number";
+
+
+    number.textContent =
+      "Nr. " +
+      cap.number;
+
+
+    const board =
+      document.createElement("div");
+
+
+    board.className =
+      "cap-board";
+
+
+    board.textContent =
+      "Brett " +
+      cap.board;
+
+
+    card.appendChild(
+      thumb
+    );
+
+    card.appendChild(
+      number
+    );
+
+    card.appendChild(
+      board
+    );
+
+
+    card.onclick = () => {
+
+      openCap(cap);
+
+    };
+
+
+    grid.appendChild(
+      card
     );
 
   });
 
-
-  if(points.length === 4){
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-      points[0].x,
-      points[0].y
-    );
-
-    ctx.lineTo(
-      points[1].x,
-      points[1].y
-    );
-
-    ctx.lineTo(
-      points[2].x,
-      points[2].y
-    );
-
-    ctx.lineTo(
-      points[3].x,
-      points[3].y
-    );
-
-    ctx.closePath();
-
-
-    ctx.lineWidth =
-      Math.max(
-        3,
-        canvas.width * .003
-      );
-
-    ctx.strokeStyle =
-      "#4c8dff";
-
-    ctx.stroke();
-
-  }
-
 }
 
 
-document
-.getElementById("undoPoint")
-.addEventListener(
-"click",
-()=>{
+/* ==========================================
+   DETAILANSICHT
+   ========================================== */
 
-  points.pop();
+function openCap(cap) {
 
-  drawPreview();
-
-  updateStep();
-
-});
-
-
-document
-.getElementById("resetPoints")
-.addEventListener(
-"click",
-()=>{
-
-  points = [];
-
-  drawPreview();
-
-  updateStep();
-
-});
-
-
-/* =========================================
-   PERSPEKTIVISCHES RASTER
-========================================= */
-
-/*
-Bilineare Interpolation innerhalb
-der vier gesetzten Eckpunkte.
-*/
-
-function gridPoint(u,v){
-
-  const TL = points[0];
-  const TR = points[1];
-  const BR = points[2];
-  const BL = points[3];
-
-
-  const x =
-    (1-u)*(1-v)*TL.x +
-    u*(1-v)*TR.x +
-    u*v*BR.x +
-    (1-u)*v*BL.x;
-
-
-  const y =
-    (1-u)*(1-v)*TL.y +
-    u*(1-v)*TR.y +
-    u*v*BR.y +
-    (1-u)*v*BL.y;
-
-
-  return {x,y};
-
-}
-
-
-/*
-Abstand zweier Punkte.
-*/
-
-function distance(a,b){
-
-  return Math.hypot(
-    a.x-b.x,
-    a.y-b.y
-  );
-
-}
-
-
-/* =========================================
-   140 KRONKORKEN AUSSCHNEIDEN
-========================================= */
-
-async function createCaps(){
-
-  const COLS = 10;
-  const ROWS = 14;
-
-  const results = [];
-
-
-  for(
-    let row=0;
-    row<ROWS;
-    row++
-  ){
-
-    for(
-      let col=0;
-      col<COLS;
-      col++
-    ){
-
-      /*
-      Da die 4 angeklickten Punkte bereits
-      die MITTEN der äußeren Kronkorken sind:
-
-      Spalte 0 = u 0
-      Spalte 9 = u 1
-
-      Reihe 0 = v 0
-      Reihe 13 = v 1
-      */
-
-      const u =
-        col / (COLS-1);
-
-      const v =
-        row / (ROWS-1);
-
-
-      const center =
-        gridPoint(u,v);
-
-
-      /*
-      Lokale Abstände zu Nachbarpositionen.
-      Dadurch werden die Ausschnitte unten
-      automatisch etwas größer, falls das
-      Brett perspektivisch größer wird.
-      */
-
-      const leftU =
-        Math.max(
-          0,
-          (col-1)/(COLS-1)
-        );
-
-      const rightU =
-        Math.min(
-          1,
-          (col+1)/(COLS-1)
-        );
-
-      const upV =
-        Math.max(
-          0,
-          (row-1)/(ROWS-1)
-        );
-
-      const downV =
-        Math.min(
-          1,
-          (row+1)/(ROWS-1)
-        );
-
-
-      const left =
-        gridPoint(leftU,v);
-
-      const right =
-        gridPoint(rightU,v);
-
-      const up =
-        gridPoint(u,upV);
-
-      const down =
-        gridPoint(u,downV);
-
-
-      let horizontal =
-        distance(left,right);
-
-      let vertical =
-        distance(up,down);
-
-
-      if(col>0 && col<COLS-1){
-        horizontal /= 2;
-      }
-
-      if(row>0 && row<ROWS-1){
-        vertical /= 2;
-      }
-
-
-      /*
-      84 % des kleineren Rasterabstands.
-      So bleibt etwas Luft um den Kronkorken.
-      */
-
-      const size =
-        Math.min(
-          horizontal,
-          vertical
-        ) * 0.84;
-
-
-      const output =
-        document.createElement("canvas");
-
-
-      output.width = 260;
-      output.height = 260;
-
-
-      const outputCtx =
-        output.getContext("2d");
-
-
-      outputCtx.fillStyle =
-        "#ffffff";
-
-
-      outputCtx.fillRect(
-        0,
-        0,
-        260,
-        260
-      );
-
-
-      outputCtx.drawImage(
-
-        boardImage,
-
-        center.x - size/2,
-        center.y - size/2,
-
-        size,
-        size,
-
-        0,
-        0,
-
-        260,
-        260
-
-      );
-
-
-      results.push(
-
-        output.toDataURL(
-          "image/jpeg",
-          .88
-        )
-
-      );
-
-    }
-
-  }
-
-
-  return results;
-
-}
-
-
-/* =========================================
-   IMPORTIEREN
-========================================= */
-
-document
-.getElementById("importBtn")
-.addEventListener(
-"click",
-async ()=>{
-
-  const board =
+  const container =
     document
-    .getElementById("boardName")
-    .value
-    .trim();
+      .getElementById(
+        "detailImage"
+      );
 
 
-  if(!board){
+  container.innerHTML = "";
 
-    alert(
-      "Bitte zuerst einen Brettnamen eingeben."
+
+  const canvas =
+    document.createElement(
+      "canvas"
     );
 
-    return;
+
+  drawCap(
+    canvas,
+    cap,
+    400
+  );
+
+
+  container.appendChild(
+    canvas
+  );
+
+
+  document
+    .getElementById(
+      "detailTitle"
+    )
+    .textContent =
+      "Nr. " +
+      cap.number;
+
+
+  document
+    .getElementById(
+      "detailBoard"
+    )
+    .textContent =
+      "Brett " +
+      cap.board;
+
+
+  document
+    .getElementById(
+      "showBoardBtn"
+    )
+    .onclick = () => {
+
+      closeModal(
+        "detailModal"
+      );
+
+      showOnBoard(
+        cap
+      );
+
+    };
+
+
+  document
+    .getElementById(
+      "detailModal"
+    )
+    .classList
+    .add("open");
+
+
+  history.replaceState(
+    null,
+    "",
+    "#cap=" +
+    cap.number
+  );
+
+}
+
+
+/* ==========================================
+   AUF BRETT ANZEIGEN
+   ========================================== */
+
+function showOnBoard(cap) {
+
+  const marker =
+    document
+      .getElementById(
+        "marker"
+      );
+
+
+  const left =
+    (cap.x /
+    ORIGINAL_WIDTH)
+    * 100;
+
+
+  const top =
+    (cap.y /
+    ORIGINAL_HEIGHT)
+    * 100;
+
+
+  marker.style.left =
+    left + "%";
+
+
+  marker.style.top =
+    top + "%";
+
+
+  document
+    .getElementById(
+      "boardNote"
+    )
+    .textContent =
+
+      "Nr. " +
+      cap.number +
+
+      " · Reihe " +
+      cap.row +
+
+      " · Position " +
+      cap.position;
+
+
+  document
+    .getElementById(
+      "boardModal"
+    )
+    .classList
+    .add("open");
+
+}
+
+
+/* ==========================================
+   FENSTER SCHLIESSEN
+   ========================================== */
+
+function closeModal(id) {
+
+  document
+    .getElementById(id)
+    .classList
+    .remove("open");
+
+}
+
+
+function modalBackground(
+  event,
+  id
+) {
+
+  if (
+    event.target.id === id
+  ) {
+
+    closeModal(id);
 
   }
 
-
-  if(!boardImage){
-
-    alert(
-      "Bitte ein Brettfoto auswählen."
-    );
-
-    return;
-
-  }
+}
 
 
-  if(points.length !== 4){
+/* ==========================================
+   TEILEN
+   ========================================== */
 
-    alert(
-      "Bitte zuerst alle vier Eck-Kronkorken markieren."
-    );
+async function sharePage() {
 
-    return;
+  const data = {
 
-  }
+    title:
+      "CapTrade",
 
+    text:
+      "Schau dir meine Tausch-Kronkorken an:",
 
-  const button =
-    document.getElementById("importBtn");
+    url:
+      window.location.href
 
-
-  button.disabled = true;
-  button.textContent = "Schneide Brett …";
-
-
-  try{
-
-    const images =
-      await createCaps();
+  };
 
 
-    for(
-      let i=0;
-      i<images.length;
-      i++
-    ){
+  if (navigator.share) {
 
-      button.textContent =
-        `Speichere ${i+1}/140`;
+    try {
 
-
-      await addCap({
-
-        board,
-
-        position:i+1,
-
-        image:images[i],
-
-        status:"available",
-
-        createdAt:Date.now()
-
-      });
+      await navigator.share(
+        data
+      );
 
     }
 
-
-    await reload();
-
-
-    modal.classList.remove("open");
-
-
-    showToast(
-      "140 Kronkorken erstellt"
-    );
+    catch (e) {}
 
   }
-  catch(error){
 
-    console.error(error);
+  else {
+
+    await navigator
+      .clipboard
+      .writeText(
+        window.location.href
+      );
+
 
     alert(
-      "Beim Ausschneiden ist etwas schiefgelaufen."
+      "Link wurde kopiert."
     );
 
   }
-  finally{
-
-    button.disabled = false;
-
-    button.textContent =
-      "Ausschneiden";
-
-  }
-
-});
-
-
-/* =========================================
-   TESTDATEN LÖSCHEN
-========================================= */
-
-document
-.getElementById("deleteAll")
-.addEventListener(
-"click",
-async ()=>{
-
-  const ok =
-    confirm(
-      "Wirklich alle bisherigen CapTrade-Kronkorken löschen?"
-    );
-
-
-  if(!ok) return;
-
-
-  await clearCaps();
-
-  await reload();
-
-  showToast(
-    "Alle Kronkorken gelöscht"
-  );
-
-});
-
-
-/* =========================================
-   TEILEN
-========================================= */
-
-document
-.getElementById("shareBtn")
-.addEventListener(
-"click",
-()=>{
-
-  alert(
-    "Den sicheren Tauschmodus setzen wir wieder ein, sobald der Brett-Ausschnitt sauber funktioniert."
-  );
-
-});
-
-
-/* =========================================
-   TOAST
-========================================= */
-
-function showToast(text){
-
-  const toast =
-    document.getElementById("toast");
-
-
-  toast.textContent =
-    text;
-
-
-  toast.classList.add("show");
-
-
-  setTimeout(
-    ()=>toast.classList.remove("show"),
-    1800
-  );
 
 }
 
 
-/* =========================================
-   START
-========================================= */
+/* ==========================================
+   DIREKTLINK
+   ========================================== */
 
-async function start(){
+function openFromURL() {
 
-  db =
-    await openDB();
+  const hash =
+    window.location.hash;
 
-  await reload();
+
+  if (
+    !hash.startsWith(
+      "#cap="
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const number =
+    Number(
+
+      hash.replace(
+        "#cap=",
+        ""
+      )
+
+    );
+
+
+  const cap =
+    caps.find(
+
+      item =>
+        item.number ===
+        number
+
+    );
+
+
+  if (cap) {
+
+    openCap(cap);
+
+  }
 
 }
-
-
-start();
 
 </script>
 
