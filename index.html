@@ -9,465 +9,501 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 
-<title>CapTrade</title>
+<title>CapTrade v0.14</title>
 
 <style>
-* {
-  box-sizing: border-box;
+* { box-sizing:border-box; }
+
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#f3f4f6;
+  color:#111827;
 }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f3f4f6;
-  color: #111827;
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:#111827;
+  color:white;
+  padding:16px;
+  box-shadow:0 2px 10px rgba(0,0,0,.15);
 }
 
-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: #111827;
-  color: white;
-  padding: 16px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.15);
+.header-inner{
+  max-width:900px;
+  margin:auto;
 }
 
-.header-inner {
-  max-width: 900px;
-  margin: auto;
+.title-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
 }
 
-.title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+.title-box{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
 }
 
-.title-box {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
+h1{
+  margin:0;
+  font-size:26px;
 }
 
-h1 {
-  margin: 0;
-  font-size: 26px;
+.version{
+  font-size:13px;
+  color:#94a3b8;
+  font-weight:800;
 }
 
-.version {
-  font-size: 12px;
-  color: #94a3b8;
-  font-weight: 700;
+.subtitle{
+  margin-top:3px;
+  color:#cbd5e1;
+  font-size:13px;
 }
 
-.subtitle {
-  margin-top: 3px;
-  color: #cbd5e1;
-  font-size: 13px;
-}
-
-.header-buttons {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+.header-buttons{
+  display:flex;
+  gap:8px;
 }
 
 .share-btn,
-.trade-header-btn {
-  border: 0;
-  background: white;
-  color: #111827;
-  font-weight: 700;
-  border-radius: 10px;
-  padding: 10px 12px;
-  cursor: pointer;
-  white-space: nowrap;
+.trade-header-btn{
+  border:0;
+  font-weight:700;
+  border-radius:10px;
+  padding:10px 12px;
+  cursor:pointer;
 }
 
-.trade-header-btn {
-  background: #0a84ff;
-  color: white;
+.share-btn{
+  background:white;
+  color:#111827;
 }
 
-.search-wrap {
-  margin-top: 14px;
+.trade-header-btn{
+  background:#0a84ff;
+  color:white;
 }
 
-#search {
-  width: 100%;
-  padding: 12px 14px;
-  border: 0;
-  border-radius: 10px;
-  font-size: 16px;
-  outline: none;
+.search-wrap{
+  margin-top:14px;
 }
 
-.view-switch {
-  max-width: 900px;
-  margin: 14px auto 0;
-  padding: 0 16px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+#search{
+  width:100%;
+  padding:12px 14px;
+  border:0;
+  border-radius:10px;
+  font-size:16px;
+  outline:none;
 }
 
-.view-btn {
-  border: 0;
-  border-radius: 10px;
-  padding: 11px;
-  font-weight: 800;
-  cursor: pointer;
-  background: #e5e7eb;
-  color: #111827;
+.view-switch{
+  max-width:900px;
+  margin:14px auto 0;
+  padding:0 16px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
 }
 
-.view-btn.active {
-  background: #111827;
-  color: white;
+.view-btn{
+  border:0;
+  border-radius:10px;
+  padding:11px;
+  font-weight:800;
+  background:#e5e7eb;
+  color:#111827;
 }
 
-main {
-  max-width: 900px;
-  margin: auto;
-  padding: 16px;
+.view-btn.active{
+  background:#111827;
+  color:white;
 }
 
-.info {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 14px;
-  font-size: 14px;
-  color: #4b5563;
+main,
+.board-view,
+.request-screen{
+  max-width:900px;
+  margin:auto;
+  padding:16px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+.info{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:14px;
+  font-size:14px;
+  color:#4b5563;
 }
 
-.cap-card {
-  background: white;
-  border: 0;
-  border-radius: 14px;
-  padding: 9px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.08);
-  cursor: pointer;
-  text-align: center;
-  position: relative;
+/* LISTE */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
 }
 
-.cap-card:active {
-  transform: scale(.97);
+.cap-card{
+  background:white;
+  border:0;
+  border-radius:14px;
+  padding:9px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  text-align:center;
+  position:relative;
 }
 
-.cap-card.selected {
-  outline: 3px solid #0a84ff;
+.cap-card.selected{
+  outline:3px solid #0a84ff;
 }
 
-.selected-badge {
-  position: absolute;
-  top: 7px;
-  right: 7px;
-  width: 27px;
-  height: 27px;
-  border-radius: 50%;
-  background: #0a84ff;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: 900;
-  z-index: 2;
+.selected-badge{
+  position:absolute;
+  top:7px;
+  right:7px;
+  width:27px;
+  height:27px;
+  border-radius:50%;
+  background:#0a84ff;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  z-index:2;
 }
 
 .thumb,
 .trade-thumb,
-.request-thumb {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #e5e7eb;
+.request-thumb{
+  width:100%;
+  aspect-ratio:1;
+  border-radius:50%;
+  overflow:hidden;
+  background:#e5e7eb;
 }
 
-.thumb {
-  margin-bottom: 7px;
+.thumb{
+  margin-bottom:7px;
 }
 
-.thumb canvas,
-.trade-thumb canvas,
-.request-thumb canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
+canvas{
+  width:100%;
+  height:100%;
+  display:block;
 }
 
 .cap-number,
 .trade-item-number,
-.request-number {
-  font-weight: 800;
-  color: #0a84ff;
-}
-
-.cap-number {
-  font-size: 15px;
+.request-number{
+  font-weight:800;
+  color:#0a84ff;
 }
 
 .cap-board,
 .trade-item-board,
-.request-board {
-  font-size: 12px;
-  color: #6b7280;
-  margin-top: 2px;
+.request-board{
+  font-size:12px;
+  color:#6b7280;
+  margin-top:2px;
 }
 
-.board-view {
-  display: none;
-  max-width: 900px;
-  margin: auto;
-  padding: 16px;
+/* BRETT */
+
+.board-view{
+  display:none;
 }
 
-.board-view.active {
-  display: block;
+.board-view.active{
+  display:block;
 }
 
-.board-image-wrap {
-  position: relative;
-  width: 100%;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0,0,0,.12);
-  background: white;
+.board-image-wrap{
+  position:relative;
+  width:100%;
+  border-radius:14px;
+  overflow:hidden;
+  background:white;
+  box-shadow:0 2px 10px rgba(0,0,0,.12);
 }
 
-.board-image-wrap img {
-  display: block;
-  width: 100%;
-  height: auto;
+.board-image-wrap img{
+  display:block;
+  width:100%;
+  height:auto;
 }
 
-.cap-hotspot {
-  position: absolute;
-  width: 9.7%;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  border: 0;
-  background: transparent;
-  cursor: pointer;
+/* unsichtbarer Klickbereich */
+
+.cap-hotspot{
+  position:absolute;
+  width:9.7%;
+  aspect-ratio:1;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  border:0;
+  background:transparent;
+  padding:0;
+  z-index:3;
 }
 
-.cap-hotspot:active {
-  background: rgba(10,132,255,.22);
-  outline: 3px solid rgba(10,132,255,.7);
+/* BLAUER HAKEN */
+
+.board-check{
+  position:absolute;
+  width:25px;
+  height:25px;
+  border-radius:50%;
+  background:#0a84ff;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  font-weight:900;
+  transform:translate(10%,-85%);
+  z-index:6;
+  pointer-events:none;
+  box-shadow:0 1px 4px rgba(0,0,0,.3);
 }
 
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.72);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
+/* SCHWARZER KREIS */
+
+.board-gone{
+  position:absolute;
+  width:9.2%;
+  aspect-ratio:1;
+  border-radius:50%;
+  background:rgba(0,0,0,.94);
+  transform:translate(-50%,-50%);
+  z-index:5;
+  pointer-events:none;
 }
 
-.modal.open {
-  display: flex;
+/* LEGENDE */
+
+.legend{
+  margin-top:14px;
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  font-size:13px;
+  color:#4b5563;
 }
 
-.modal-box {
-  width: 100%;
-  max-width: 500px;
-  max-height: 92vh;
-  overflow: auto;
-  background: white;
-  border-radius: 20px;
-  position: relative;
-  padding: 20px;
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:7px;
 }
 
-.close {
-  position: absolute;
-  right: 12px;
-  top: 12px;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 0;
-  font-size: 24px;
-  background: #f3f4f6;
-  cursor: pointer;
-  z-index: 5;
+.legend-check{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#0a84ff;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
 }
 
-.detail-image {
-  width: 230px;
-  height: 230px;
-  max-width: 72vw;
-  max-height: 72vw;
-  margin: 18px auto 12px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #e5e7eb;
+.legend-gone{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#000;
 }
 
-.detail-image canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
 }
 
-.detail-title {
-  font-size: 24px;
-  font-weight: 800;
-  text-align: center;
+.modal.open{
+  display:flex;
 }
 
-.detail-board {
-  text-align: center;
-  color: #6b7280;
-  margin-top: 4px;
-  font-size: 16px;
+.modal-box{
+  width:100%;
+  max-width:500px;
+  max-height:92vh;
+  overflow:auto;
+  background:white;
+  border-radius:20px;
+  position:relative;
+  padding:20px;
 }
 
-.trade-btn {
-  width: 100%;
-  padding: 14px;
-  border: 0;
-  border-radius: 12px;
-  margin-top: 16px;
-  background: #0a84ff;
-  color: white;
-  font-size: 16px;
-  font-weight: 800;
-  cursor: pointer;
+.close{
+  position:absolute;
+  right:12px;
+  top:12px;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  border:0;
+  font-size:24px;
+  background:#f3f4f6;
 }
 
-.trade-btn.selected {
-  background: #16a34a;
+.detail-image{
+  width:230px;
+  height:230px;
+  max-width:72vw;
+  max-height:72vw;
+  margin:18px auto 12px;
+  border-radius:50%;
+  overflow:hidden;
+  background:#e5e7eb;
 }
+
+.detail-title{
+  font-size:24px;
+  font-weight:800;
+  text-align:center;
+}
+
+.detail-board{
+  text-align:center;
+  color:#6b7280;
+  margin-top:4px;
+}
+
+.trade-btn{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:12px;
+  margin-top:16px;
+  background:#0a84ff;
+  color:white;
+  font-size:16px;
+  font-weight:800;
+}
+
+.trade-btn.selected{
+  background:#16a34a;
+}
+
+/* TAUSCH */
 
 .trade-title,
-.request-title {
-  font-size: 24px;
-  font-weight: 800;
-  text-align: center;
-  margin: 4px 0 16px;
+.request-title{
+  font-size:24px;
+  font-weight:800;
+  text-align:center;
+  margin:4px 0 16px;
 }
 
 .trade-grid,
-.request-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+.request-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
 }
 
 .trade-item,
-.request-item {
-  background: #f8fafc;
-  padding: 8px;
-  border-radius: 14px;
-  text-align: center;
+.request-item{
+  background:#f8fafc;
+  padding:8px;
+  border-radius:14px;
+  text-align:center;
 }
 
-.remove-btn {
-  width: 100%;
-  padding: 10px;
-  border: 0;
-  border-radius: 10px;
-  margin-top: 8px;
-  background: #fee2e2;
-  color: #b91c1c;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
+.remove-btn{
+  width:100%;
+  padding:9px;
+  border:0;
+  border-radius:9px;
+  margin-top:8px;
+  background:#fee2e2;
+  color:#b91c1c;
+  font-weight:700;
 }
 
-.trade-empty {
-  text-align: center;
-  color: #6b7280;
-  padding: 35px 10px;
+.trade-empty{
+  text-align:center;
+  color:#6b7280;
+  padding:35px 10px;
 }
 
-.trade-actions {
-  margin-top: 16px;
+.trade-actions{
+  margin-top:16px;
 }
 
 .share-trade-btn,
-.back-main-btn {
-  width: 100%;
-  padding: 14px;
-  border: 0;
-  border-radius: 12px;
-  font-weight: 800;
-  font-size: 16px;
-  cursor: pointer;
+.clear-trade-btn,
+.back-main-btn{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:12px;
+  font-weight:800;
+  font-size:15px;
 }
 
-.share-trade-btn {
-  background: #0a84ff;
-  color: white;
+.share-trade-btn{
+  background:#0a84ff;
+  color:white;
 }
 
-.back-main-btn {
-  background: #111827;
-  color: white;
-  margin-top: 12px;
+.clear-trade-btn{
+  margin-top:8px;
+  background:#f3f4f6;
 }
 
-.clear-trade-btn {
-  width: 100%;
-  padding: 12px;
-  border: 0;
-  border-radius: 12px;
-  background: #f3f4f6;
-  color: #111827;
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-  margin-top: 8px;
+.back-main-btn{
+  margin-top:16px;
+  background:#111827;
+  color:white;
 }
 
-.request-screen {
-  display: none;
-  max-width: 900px;
-  margin: auto;
-  padding: 16px;
+.request-screen{
+  display:none;
 }
 
-.request-screen.active {
-  display: block;
+.request-screen.active{
+  display:block;
 }
 
-.normal-main.hidden,
-.view-switch.hidden,
-.board-view.hidden {
-  display: none;
+.hidden{
+  display:none !important;
 }
 
-.request-info {
-  text-align: center;
-  color: #6b7280;
-  margin-bottom: 16px;
-  font-size: 14px;
+.request-info{
+  text-align:center;
+  color:#6b7280;
+  margin-bottom:16px;
 }
 
-@media (min-width: 600px) {
-  .grid {
-    grid-template-columns: repeat(5, 1fr);
+@media(min-width:600px){
+
+  .grid{
+    grid-template-columns:repeat(5,1fr);
   }
 
   .trade-grid,
-  .request-grid {
-    grid-template-columns: repeat(4, 1fr);
+  .request-grid{
+    grid-template-columns:repeat(4,1fr);
   }
+
 }
 </style>
 </head>
@@ -477,1499 +513,1665 @@ main {
 <header>
 <div class="header-inner">
 
-  <div class="title-row">
+<div class="title-row">
 
-    <div>
-      <div class="title-box">
-        <h1>CapTrade</h1>
-        <span class="version">v0.13</span>
-      </div>
+<div>
 
-      <div class="subtitle">Meine Tausch-Kronkorken</div>
-    </div>
+<div class="title-box">
+<h1>CapTrade</h1>
+<span class="version">v0.14</span>
+</div>
 
-    <div class="header-buttons" id="normalHeaderButtons">
+<div class="subtitle">
+Meine Tausch-Kronkorken
+</div>
 
-      <button
-        id="tradeHeaderBtn"
-        class="trade-header-btn"
-        onclick="openTradeOverview()">
-        Tausch (0)
-      </button>
+</div>
 
-      <button
-        class="share-btn"
-        onclick="sharePage()">
-        Teilen
-      </button>
+<div
+  class="header-buttons"
+  id="normalHeaderButtons">
 
-    </div>
+<button
+  id="tradeHeaderBtn"
+  class="trade-header-btn"
+  onclick="openTradeOverview()">
+Tausch (0)
+</button>
 
-  </div>
+<button
+  class="share-btn"
+  onclick="sharePage()">
+Teilen
+</button>
 
-  <div class="search-wrap" id="searchWrap">
-    <input
-      id="search"
-      type="search"
-      placeholder="Nummer oder Brett suchen …"
-      oninput="renderCaps()">
-  </div>
+</div>
+
+</div>
+
+<div
+  class="search-wrap"
+  id="searchWrap">
+
+<input
+  id="search"
+  type="search"
+  placeholder="Nummer oder Brett suchen …"
+  oninput="renderCaps()">
+
+</div>
 
 </div>
 </header>
 
-<div id="viewSwitch" class="view-switch">
 
-  <button
-    id="listViewBtn"
-    class="view-btn active"
-    onclick="showListView()">
-    Liste
-  </button>
+<div
+  id="viewSwitch"
+  class="view-switch">
 
-  <button
-    id="boardViewBtn"
-    class="view-btn"
-    onclick="showBoardView()">
-    Brett
-  </button>
+<button
+  id="listViewBtn"
+  class="view-btn active"
+  onclick="showListView()">
+Liste
+</button>
+
+<button
+  id="boardViewBtn"
+  class="view-btn"
+  onclick="showBoardView()">
+Brett
+</button>
 
 </div>
 
-<main id="normalMain" class="normal-main">
 
-  <div class="info">
-    <span id="count"></span>
-    <span>Brett F</span>
-  </div>
+<main id="normalMain">
 
-  <div id="grid" class="grid"></div>
+<div class="info">
+<span id="count"></span>
+<span>Brett F</span>
+</div>
+
+<div
+  id="grid"
+  class="grid">
+</div>
 
 </main>
 
-<section id="boardView" class="board-view">
 
-  <div class="info">
-    <span>Brettansicht</span>
-    <span>Brett F</span>
-  </div>
+<section
+  id="boardView"
+  class="board-view">
 
-  <div id="boardImageWrap" class="board-image-wrap">
+<div class="info">
+<span>Brettansicht</span>
+<span>Brett F</span>
+</div>
 
-    <img
-      id="boardImage"
-      src="IMG_6469.jpeg?v=3"
-      alt="Brett F">
+<div
+  id="boardImageWrap"
+  class="board-image-wrap">
 
-  </div>
+<img
+  id="boardImage"
+  src="IMG_6469.jpeg?v=14"
+  alt="Brett F">
+
+</div>
+
+<div class="legend">
+
+<div class="legend-item">
+<span class="legend-check">✓</span>
+<span>In Tauschliste</span>
+</div>
+
+<div class="legend-item">
+<span class="legend-gone"></span>
+<span>Weggetauscht</span>
+</div>
+
+</div>
 
 </section>
 
-<section id="requestScreen" class="request-screen">
 
-  <div class="request-title">
-    Tauschanfrage
-  </div>
+<section
+  id="requestScreen"
+  class="request-screen">
 
-  <div id="requestInfo" class="request-info"></div>
+<div class="request-title">
+Tauschanfrage
+</div>
 
-  <div id="requestGrid" class="request-grid"></div>
+<div
+  id="requestInfo"
+  class="request-info">
+</div>
 
-  <button
-    class="back-main-btn"
-    onclick="backToMain()">
-    Zur CapTrade-Hauptansicht
-  </button>
+<div
+  id="requestGrid"
+  class="request-grid">
+</div>
+
+<button
+  class="back-main-btn"
+  onclick="backToMain()">
+Zur CapTrade-Hauptansicht
+</button>
 
 </section>
+
+
+<!-- DETAIL -->
 
 <div
   id="detailModal"
   class="modal"
   onclick="modalBackground(event,'detailModal')">
 
-  <div class="modal-box">
+<div class="modal-box">
 
-    <button
-      class="close"
-      onclick="closeModal('detailModal')">
-      ×
-    </button>
+<button
+  class="close"
+  onclick="closeModal('detailModal')">
+×
+</button>
 
-    <div
-      id="detailImage"
-      class="detail-image">
-    </div>
+<div
+  id="detailImage"
+  class="detail-image">
+</div>
 
-    <div
-      id="detailTitle"
-      class="detail-title">
-    </div>
+<div
+  id="detailTitle"
+  class="detail-title">
+</div>
 
-    <div
-      id="detailBoard"
-      class="detail-board">
-    </div>
+<div
+  id="detailBoard"
+  class="detail-board">
+</div>
 
-    <button
-      id="tradeBtn"
-      class="trade-btn">
-      Zum Tausch hinzufügen
-    </button>
-
-  </div>
+<button
+  id="tradeBtn"
+  class="trade-btn">
+Zum Tausch hinzufügen
+</button>
 
 </div>
+</div>
+
+
+<!-- TAUSCHÜBERSICHT -->
 
 <div
   id="tradeModal"
   class="modal"
   onclick="modalBackground(event,'tradeModal')">
 
-  <div class="modal-box">
+<div class="modal-box">
 
-    <button
-      class="close"
-      onclick="closeModal('tradeModal')">
-      ×
-    </button>
+<button
+  class="close"
+  onclick="closeModal('tradeModal')">
+×
+</button>
 
-    <div class="trade-title">
-      Meine Tausch-Auswahl
-    </div>
+<div class="trade-title">
+Meine Tausch-Auswahl
+</div>
 
-    <div id="tradeContent"></div>
-
-  </div>
+<div id="tradeContent"></div>
 
 </div>
+</div>
+
 
 <script>
 
-const VERSION = "v0.13";
+/* =========================================
+   CAPTRADE v0.14
+========================================= */
+
+const VERSION = "0.14";
 
 const IMAGE = "IMG_6469.jpeg";
+
 const BOARD = "F";
+
 const START_NUMMER = 1;
 
 const REF_WIDTH = 1152;
 const REF_HEIGHT = 1536;
 const REF_CROP = 112;
 
+
+/* =========================================
+   POSITIONEN BRETT F
+========================================= */
+
 const ROWS = [
 
-  [
-    [123,98],[215,87],[317,88],[415,80],[515,85],
-    [616,85],[713,87],[814,87],[913,93]
-  ],
+[
+[123,98],[215,87],[317,88],[415,80],[515,85],
+[616,85],[713,87],[814,87],[913,93]
+],
 
-  [
-    [112,183],[207,181],[308,189],[418,178],[519,179],
-    [616,176],[717,179],[818,177],[917,188],[1018,172]
-  ],
+[
+[112,183],[207,181],[308,189],[418,178],[519,179],
+[616,176],[717,179],[818,177],[917,188],[1018,172]
+],
 
-  [
-    [113,284],[212,284],[321,278],[417,273],[517,275],
-    [622,263],[721,278],[819,275],[920,278],[1033,273]
-  ],
+[
+[113,284],[212,284],[321,278],[417,273],[517,275],
+[622,263],[721,278],[819,275],[920,278],[1033,273]
+],
 
-  [
-    [122,382],[224,369],[317,375],[412,376],[518,365],
-    [619,373],[717,375],[826,370],[921,375],[1023,375]
-  ],
+[
+[122,382],[224,369],[317,375],[412,376],[518,365],
+[619,373],[717,375],[826,370],[921,375],[1023,375]
+],
 
-  [
-    [100,476],[206,484],[308,481],[409,476],[512,469],
-    [617,470],[727,464],[819,476],[922,476],[1027,472]
-  ],
+[
+[100,476],[206,484],[308,481],[409,476],[512,469],
+[617,470],[727,464],[819,476],[922,476],[1027,472]
+],
 
-  [
-    [103,577],[203,583],[304,571],[401,574],[509,571],
-    [610,574],[707,580],[819,577],[927,578],[1025,579]
-  ],
+[
+[103,577],[203,583],[304,571],[401,574],[509,571],
+[610,574],[707,580],[819,577],[927,578],[1025,579]
+],
 
-  [
-    [101,682],[206,680],[309,679],[407,683],[513,668],
-    [614,671],[712,674],[821,680],[935,670],[1055,676]
-  ],
+[
+[101,682],[206,680],[309,679],[407,683],[513,668],
+[614,671],[712,674],[821,680],[935,670],[1055,676]
+],
 
-  [
-    [98,784],[194,783],[295,781],[410,784],[506,781],
-    [623,775],[724,772],[836,772],[928,778],[1049,770]
-  ],
+[
+[98,784],[194,783],[295,781],[410,784],[506,781],
+[623,775],[724,772],[836,772],[928,778],[1049,770]
+],
 
-  [
-    [85,880],[193,879],[298,878],[400,880],[509,875],
-    [619,881],[731,872],[826,890],[939,883],[1045,884]
-  ],
+[
+[85,880],[193,879],[298,878],[400,880],[509,875],
+[619,881],[731,872],[826,890],[939,883],[1045,884]
+],
 
-  [
-    [92,983],[195,986],[295,985],[398,985],[509,983],
-    [607,991],[721,993],[827,993],[938,993],[1049,992]
-  ],
+[
+[92,983],[195,986],[295,985],[398,985],[509,983],
+[607,991],[721,993],[827,993],[938,993],[1049,992]
+],
 
-  [
-    [79,1087],[182,1090],[287,1089],[394,1091],[502,1099],
-    [615,1100],[722,1107],[837,1107],[937,1105],[1063,1102]
-  ],
+[
+[79,1087],[182,1090],[287,1089],[394,1091],[502,1099],
+[615,1100],[722,1107],[837,1107],[937,1105],[1063,1102]
+],
 
-  [
-    [71,1197],[176,1204],[291,1196],[394,1204],[508,1207],
-    [621,1215],[728,1211],[839,1225],[951,1221],[1059,1226]
-  ],
+[
+[71,1197],[176,1204],[291,1196],[394,1204],[508,1207],
+[621,1215],[728,1211],[839,1225],[951,1221],[1059,1226]
+],
 
-  [
-    [76,1304],[177,1313],[295,1306],[400,1315],[506,1316],
-    [616,1328],[729,1328],[843,1340],[963,1335],[1073,1343]
-  ],
+[
+[76,1304],[177,1313],[295,1306],[400,1315],[506,1316],
+[616,1328],[729,1328],[843,1340],[963,1335],[1073,1343]
+],
 
-  [
-    [69,1443],[169,1438],[287,1435],[400,1441],[509,1437],
-    [623,1450],[739,1441],[859,1457],[969,1447],[1084,1472]
-  ]
+[
+[69,1443],[169,1438],[287,1435],[400,1441],[509,1437],
+[623,1450],[739,1441],[859,1457],[969,1447],[1084,1472]
+]
 
 ];
 
+
+/* =========================================
+   KRONKORKEN ERSTELLEN
+========================================= */
+
 const caps = [];
 
-let runningNumber = START_NUMMER;
+let runningNumber =
+  START_NUMMER;
 
-ROWS.forEach((row,rowIndex) => {
+ROWS.forEach(
+(row,rowIndex)=>{
 
-  row.forEach((point,positionIndex) => {
+row.forEach(
+(point,positionIndex)=>{
 
-    caps.push({
-      number: runningNumber,
-      board: BOARD,
-      row: rowIndex + 1,
-      position: positionIndex + 1,
-      refX: point[0],
-      refY: point[1]
-    });
+caps.push({
 
-    runningNumber++;
+number:
+runningNumber,
 
-  });
+board:
+BOARD,
+
+row:
+rowIndex+1,
+
+position:
+positionIndex+1,
+
+refX:
+point[0],
+
+refY:
+point[1]
+
+});
+
+runningNumber++;
+
+});
 
 });
 
 
-/* TAUSCHAUSWAHL */
+/* =========================================
+   TAUSCHAUSWAHL LADEN
+========================================= */
 
 let tradeSelection = [];
 
-try {
+try{
 
-  const saved =
-    localStorage.getItem(
-      "captrade-selection"
-    );
+const saved =
+localStorage.getItem(
+"captrade-selection"
+);
 
-  if (saved) {
-    tradeSelection = JSON.parse(saved);
-  }
+if(saved){
 
-} catch(e) {
-  tradeSelection = [];
-}
-
-
-function saveTradeSelection() {
-
-  localStorage.setItem(
-    "captrade-selection",
-    JSON.stringify(tradeSelection)
-  );
-
-  updateTradeCounter();
-  renderCaps();
+tradeSelection =
+JSON.parse(saved);
 
 }
 
+}catch(e){}
 
-function isSelected(cap) {
 
-  return tradeSelection.includes(
-    cap.number
-  );
+/* =========================================
+   WEGGETAUSCHTE LADEN
+========================================= */
+
+let tradedCaps = [];
+
+try{
+
+const saved =
+localStorage.getItem(
+"captrade-traded"
+);
+
+if(saved){
+
+tradedCaps =
+JSON.parse(saved);
 
 }
 
+}catch(e){}
 
-function toggleTrade(cap) {
 
-  if (isSelected(cap)) {
+/* =========================================
+   STATUS
+========================================= */
 
-    tradeSelection =
-      tradeSelection.filter(
-        number =>
-          number !== cap.number
-      );
+function isSelected(cap){
 
-  } else {
-
-    tradeSelection.push(
-      cap.number
-    );
-
-  }
-
-  saveTradeSelection();
+return tradeSelection.includes(
+cap.number
+);
 
 }
 
 
-/* BILD */
+function isTraded(cap){
 
-const sourceImage = new Image();
+return tradedCaps.includes(
+cap.number
+);
+
+}
+
+
+/* =========================================
+   SPEICHERN
+========================================= */
+
+function saveTradeSelection(){
+
+localStorage.setItem(
+"captrade-selection",
+JSON.stringify(
+tradeSelection
+)
+);
+
+updateTradeCounter();
+
+renderCaps();
+
+buildBoardHotspots();
+
+}
+
+
+/* =========================================
+   TAUSCH AUSWAHL
+========================================= */
+
+function toggleTrade(cap){
+
+if(isTraded(cap)){
+return;
+}
+
+if(isSelected(cap)){
+
+tradeSelection =
+tradeSelection.filter(
+n=>n!==cap.number
+);
+
+}else{
+
+tradeSelection.push(
+cap.number
+);
+
+}
+
+saveTradeSelection();
+
+}
+
+
+/* =========================================
+   BILD LADEN
+========================================= */
+
+const sourceImage =
+new Image();
 
 sourceImage.src =
-  IMAGE + "?v=3";
+IMAGE+"?v=14";
 
+sourceImage.onload=()=>{
 
-sourceImage.onload = () => {
+renderCaps();
 
-  renderCaps();
-  updateTradeCounter();
-  buildBoardHotspots();
-  checkForTradeRequest();
+updateTradeCounter();
+
+buildBoardHotspots();
+
+checkForTradeRequest();
 
 };
 
 
-/* SKALIERUNG */
+/* =========================================
+   SKALIERUNG
+========================================= */
 
-function getScaledPosition(cap) {
+function getScaledPosition(cap){
 
-  const scaleX =
-    sourceImage.naturalWidth /
-    REF_WIDTH;
+const scaleX =
+sourceImage.naturalWidth /
+REF_WIDTH;
 
-  const scaleY =
-    sourceImage.naturalHeight /
-    REF_HEIGHT;
+const scaleY =
+sourceImage.naturalHeight /
+REF_HEIGHT;
 
-  return {
+return{
 
-    x:
-      cap.refX *
-      scaleX,
+x:
+cap.refX*scaleX,
 
-    y:
-      cap.refY *
-      scaleY,
+y:
+cap.refY*scaleY,
 
-    cropX:
-      REF_CROP *
-      scaleX,
+cropX:
+REF_CROP*scaleX,
 
-    cropY:
-      REF_CROP *
-      scaleY
+cropY:
+REF_CROP*scaleY
 
-  };
+};
 
 }
 
 
-/* KRONKORKEN ZEICHNEN */
+/* =========================================
+   EINZELBILD
+========================================= */
 
 function drawCap(
-  canvas,
-  cap,
-  outputSize = 180
-) {
+canvas,
+cap,
+outputSize=180
+){
 
-  const ctx =
-    canvas.getContext("2d");
+const ctx =
+canvas.getContext("2d");
 
-  canvas.width = outputSize;
-  canvas.height = outputSize;
+canvas.width =
+outputSize;
 
-  const p =
-    getScaledPosition(cap);
+canvas.height =
+outputSize;
 
-  const sx =
-    p.x -
-    p.cropX / 2;
+const p =
+getScaledPosition(cap);
 
-  const sy =
-    p.y -
-    p.cropY / 2;
+ctx.drawImage(
 
-  ctx.clearRect(
-    0,
-    0,
-    outputSize,
-    outputSize
-  );
+sourceImage,
 
-  ctx.drawImage(
-    sourceImage,
-    sx,
-    sy,
-    p.cropX,
-    p.cropY,
-    0,
-    0,
-    outputSize,
-    outputSize
-  );
+p.x-p.cropX/2,
+p.y-p.cropY/2,
+
+p.cropX,
+p.cropY,
+
+0,
+0,
+
+outputSize,
+outputSize
+
+);
 
 }
 
 
-/* LISTE */
+/* =========================================
+   LISTE
+========================================= */
 
-function renderCaps() {
+function renderCaps(){
 
-  const grid =
-    document.getElementById(
-      "grid"
-    );
+const grid =
+document.getElementById(
+"grid"
+);
 
-  const search =
-    document
-      .getElementById(
-        "search"
-      )
-      .value
-      .trim()
-      .toLowerCase();
+const search =
+document.getElementById(
+"search"
+).value
+.trim()
+.toLowerCase();
 
-  grid.innerHTML = "";
-
-  const filtered =
-    caps.filter(cap => {
-
-      if (!search) {
-        return true;
-      }
-
-      return (
-        String(cap.number).includes(search)
-        ||
-        ("brett " + cap.board)
-          .toLowerCase()
-          .includes(search)
-        ||
-        cap.board
-          .toLowerCase()
-          .includes(search)
-      );
-
-    });
+grid.innerHTML="";
 
 
-  document
-    .getElementById(
-      "count"
-    )
-    .textContent =
-      filtered.length +
-      " Kronkorken";
+/*
+  Weggetauschte erscheinen
+  NICHT mehr in der Liste.
+*/
+
+const availableCaps =
+caps.filter(
+cap=>!isTraded(cap)
+);
 
 
-  filtered.forEach(cap => {
+const filtered =
+availableCaps.filter(cap=>{
 
-    const card =
-      document.createElement(
-        "button"
-      );
+if(!search){
+return true;
+}
 
-    card.className =
-      "cap-card";
+return(
 
+String(cap.number)
+.includes(search)
 
-    if (isSelected(cap)) {
+||
 
-      card.classList.add(
-        "selected"
-      );
+("brett "+cap.board)
+.toLowerCase()
+.includes(search)
 
-      const badge =
-        document.createElement(
-          "div"
-        );
+||
 
-      badge.className =
-        "selected-badge";
+cap.board
+.toLowerCase()
+.includes(search)
 
-      badge.textContent =
-        "✓";
+);
 
-      card.appendChild(
-        badge
-      );
-
-    }
+});
 
 
-    const thumb =
-      document.createElement(
-        "div"
-      );
+document.getElementById(
+"count"
+).textContent =
 
-    thumb.className =
-      "thumb";
-
-
-    const canvas =
-      document.createElement(
-        "canvas"
-      );
-
-    drawCap(
-      canvas,
-      cap,
-      200
-    );
-
-    thumb.appendChild(
-      canvas
-    );
+filtered.length+
+" Kronkorken";
 
 
-    const number =
-      document.createElement(
-        "div"
-      );
+filtered.forEach(cap=>{
 
-    number.className =
-      "cap-number";
+const card =
+document.createElement(
+"button"
+);
 
-    number.textContent =
-      "Nr. " +
-      cap.number;
+card.className =
+"cap-card";
 
 
-    const board =
-      document.createElement(
-        "div"
-      );
+if(isSelected(cap)){
 
-    board.className =
-      "cap-board";
+card.classList.add(
+"selected"
+);
 
-    board.textContent =
-      "Brett " +
-      cap.board;
+const badge =
+document.createElement(
+"div"
+);
 
+badge.className =
+"selected-badge";
 
-    card.appendChild(
-      thumb
-    );
+badge.textContent =
+"✓";
 
-    card.appendChild(
-      number
-    );
-
-    card.appendChild(
-      board
-    );
-
-
-    card.onclick = () => {
-      openCap(cap);
-    };
-
-
-    grid.appendChild(
-      card
-    );
-
-  });
+card.appendChild(
+badge
+);
 
 }
 
 
-/* BRETTANSICHT */
+const thumb =
+document.createElement(
+"div"
+);
 
-function buildBoardHotspots() {
-
-  const wrap =
-    document.getElementById(
-      "boardImageWrap"
-    );
-
-  wrap
-    .querySelectorAll(
-      ".cap-hotspot"
-    )
-    .forEach(
-      item =>
-        item.remove()
-    );
+thumb.className =
+"thumb";
 
 
-  caps.forEach(cap => {
+const canvas =
+document.createElement(
+"canvas"
+);
 
-    const hotspot =
-      document.createElement(
-        "button"
-      );
+drawCap(
+canvas,
+cap,
+200
+);
 
-    hotspot.className =
-      "cap-hotspot";
-
-
-    hotspot.style.left =
-      (
-        cap.refX /
-        REF_WIDTH *
-        100
-      ) + "%";
+thumb.appendChild(
+canvas
+);
 
 
-    hotspot.style.top =
-      (
-        cap.refY /
-        REF_HEIGHT *
-        100
-      ) + "%";
+const number =
+document.createElement(
+"div"
+);
+
+number.className =
+"cap-number";
+
+number.textContent =
+"Nr. "+cap.number;
 
 
-    hotspot.setAttribute(
-      "aria-label",
-      "Kronkorken Nr. " +
-      cap.number
-    );
+const board =
+document.createElement(
+"div"
+);
+
+board.className =
+"cap-board";
+
+board.textContent =
+"Brett "+cap.board;
 
 
-    hotspot.onclick = () => {
+card.appendChild(
+thumb
+);
 
-      openCap(cap);
+card.appendChild(
+number
+);
 
-    };
-
-
-    wrap.appendChild(
-      hotspot
-    );
-
-  });
-
-}
+card.appendChild(
+board
+);
 
 
-function showListView() {
+card.onclick=()=>{
 
-  document
-    .getElementById(
-      "normalMain"
-    )
-    .style
-    .display =
-      "block";
+openCap(cap);
 
-  document
-    .getElementById(
-      "boardView"
-    )
-    .classList
-    .remove(
-      "active"
-    );
+};
 
-  document
-    .getElementById(
-      "listViewBtn"
-    )
-    .classList
-    .add(
-      "active"
-    );
 
-  document
-    .getElementById(
-      "boardViewBtn"
-    )
-    .classList
-    .remove(
-      "active"
-    );
+grid.appendChild(
+card
+);
+
+});
 
 }
 
 
-function showBoardView() {
+/* =========================================
+   BRETT OVERLAYS
+========================================= */
 
-  document
-    .getElementById(
-      "normalMain"
-    )
-    .style
-    .display =
-      "none";
+function buildBoardHotspots(){
 
-  document
-    .getElementById(
-      "boardView"
-    )
-    .classList
-    .add(
-      "active"
-    );
-
-  document
-    .getElementById(
-      "boardViewBtn"
-    )
-    .classList
-    .add(
-      "active"
-    );
-
-  document
-    .getElementById(
-      "listViewBtn"
-    )
-    .classList
-    .remove(
-      "active"
-    );
-
-}
+const wrap =
+document.getElementById(
+"boardImageWrap"
+);
 
 
-/* DETAIL */
+/*
+  alte Overlays löschen
+*/
 
-function openCap(cap) {
-
-  const container =
-    document.getElementById(
-      "detailImage"
-    );
-
-  container.innerHTML = "";
-
-
-  const canvas =
-    document.createElement(
-      "canvas"
-    );
-
-  drawCap(
-    canvas,
-    cap,
-    500
-  );
-
-  container.appendChild(
-    canvas
-  );
+wrap.querySelectorAll(
+".cap-hotspot,.board-check,.board-gone"
+).forEach(
+el=>el.remove()
+);
 
 
-  document
-    .getElementById(
-      "detailTitle"
-    )
-    .textContent =
-      "Nr. " +
-      cap.number;
+caps.forEach(cap=>{
+
+const left =
+(cap.refX/REF_WIDTH)*100;
+
+const top =
+(cap.refY/REF_HEIGHT)*100;
 
 
-  document
-    .getElementById(
-      "detailBoard"
-    )
-    .textContent =
-      "Brett " +
-      cap.board;
+/* -------------------------
+   WEGGETAUSCHT
+------------------------- */
 
+if(isTraded(cap)){
 
-  const tradeBtn =
-    document.getElementById(
-      "tradeBtn"
-    );
+const gone =
+document.createElement(
+"div"
+);
 
+gone.className =
+"board-gone";
 
-  if (isSelected(cap)) {
+gone.style.left =
+left+"%";
 
-    tradeBtn.textContent =
-      "✓ Bereits ausgewählt";
+gone.style.top =
+top+"%";
 
-    tradeBtn.classList.add(
-      "selected"
-    );
+wrap.appendChild(
+gone
+);
 
-  } else {
-
-    tradeBtn.textContent =
-      "Zum Tausch hinzufügen";
-
-    tradeBtn.classList.remove(
-      "selected"
-    );
-
-  }
-
-
-  tradeBtn.onclick = () => {
-
-    toggleTrade(cap);
-
-    closeModal(
-      "detailModal"
-    );
-
-  };
-
-
-  document
-    .getElementById(
-      "detailModal"
-    )
-    .classList
-    .add(
-      "open"
-    );
+return;
 
 }
 
 
-/* TAUSCHZÄHLER */
+/* -------------------------
+   KLICKBARER KRONKORKEN
+------------------------- */
 
-function updateTradeCounter() {
+const hotspot =
+document.createElement(
+"button"
+);
 
-  document
-    .getElementById(
-      "tradeHeaderBtn"
-    )
-    .textContent =
-      "Tausch (" +
-      tradeSelection.length +
-      ")";
+hotspot.className =
+"cap-hotspot";
+
+hotspot.style.left =
+left+"%";
+
+hotspot.style.top =
+top+"%";
+
+hotspot.onclick=()=>{
+
+openCap(cap);
+
+};
+
+wrap.appendChild(
+hotspot
+);
+
+
+/* -------------------------
+   BLAUER HAKEN
+------------------------- */
+
+if(isSelected(cap)){
+
+const check =
+document.createElement(
+"div"
+);
+
+check.className =
+"board-check";
+
+check.textContent =
+"✓";
+
+check.style.left =
+left+"%";
+
+check.style.top =
+top+"%";
+
+wrap.appendChild(
+check
+);
+
+}
+
+});
 
 }
 
 
-/* TAUSCHÜBERSICHT */
+/* =========================================
+   ANSICHTEN
+========================================= */
 
-function openTradeOverview() {
+function showListView(){
 
-  renderTradeOverview();
+document.getElementById(
+"normalMain"
+).style.display =
+"block";
 
-  document
-    .getElementById(
-      "tradeModal"
-    )
-    .classList
-    .add(
-      "open"
-    );
+document.getElementById(
+"boardView"
+).classList.remove(
+"active"
+);
+
+document.getElementById(
+"listViewBtn"
+).classList.add(
+"active"
+);
+
+document.getElementById(
+"boardViewBtn"
+).classList.remove(
+"active"
+);
 
 }
 
 
-function renderTradeOverview() {
-
-  const content =
-    document.getElementById(
-      "tradeContent"
-    );
-
-  content.innerHTML = "";
-
-
-  if (!tradeSelection.length) {
-
-    content.innerHTML =
-      '<div class="trade-empty">' +
-      'Noch keine Kronkorken ausgewählt.' +
-      '</div>';
-
-    return;
-
-  }
-
-
-  const selectedCaps =
-    tradeSelection
-      .map(number =>
-        caps.find(
-          cap =>
-            cap.number === number
-        )
-      )
-      .filter(Boolean);
-
-
-  const grid =
-    document.createElement(
-      "div"
-    );
-
-  grid.className =
-    "trade-grid";
-
-
-  selectedCaps.forEach(cap => {
-
-    const item =
-      document.createElement(
-        "div"
-      );
-
-    item.className =
-      "trade-item";
-
-
-    const thumb =
-      document.createElement(
-        "div"
-      );
-
-    thumb.className =
-      "trade-thumb";
-
-
-    const canvas =
-      document.createElement(
-        "canvas"
-      );
-
-    drawCap(
-      canvas,
-      cap,
-      180
-    );
-
-    thumb.appendChild(
-      canvas
-    );
-
-
-    const number =
-      document.createElement(
-        "div"
-      );
-
-    number.className =
-      "trade-item-number";
-
-    number.textContent =
-      "Nr. " +
-      cap.number;
-
-
-    const board =
-      document.createElement(
-        "div"
-      );
-
-    board.className =
-      "trade-item-board";
-
-    board.textContent =
-      "Brett " +
-      cap.board;
-
-
-    const remove =
-      document.createElement(
-        "button"
-      );
-
-    remove.className =
-      "remove-btn";
-
-    remove.textContent =
-      "Entfernen";
-
-
-    remove.onclick = () => {
-
-      tradeSelection =
-        tradeSelection.filter(
-          number =>
-            number !== cap.number
-        );
-
-      saveTradeSelection();
-      renderTradeOverview();
-
-    };
-
-
-    item.appendChild(
-      thumb
-    );
-
-    item.appendChild(
-      number
-    );
-
-    item.appendChild(
-      board
-    );
-
-    item.appendChild(
-      remove
-    );
-
-
-    grid.appendChild(
-      item
-    );
-
-  });
-
-
-  content.appendChild(
-    grid
-  );
-
-
-  const actions =
-    document.createElement(
-      "div"
-    );
-
-  actions.className =
-    "trade-actions";
-
-
-  const shareBtn =
-    document.createElement(
-      "button"
-    );
-
-  shareBtn.className =
-    "share-trade-btn";
-
-  shareBtn.textContent =
-    "Tauschliste teilen";
-
-  shareBtn.onclick =
-    shareTradeSelection;
-
-
-  const clearBtn =
-    document.createElement(
-      "button"
-    );
-
-  clearBtn.className =
-    "clear-trade-btn";
-
-  clearBtn.textContent =
-    "Auswahl leeren";
-
-
-  clearBtn.onclick = () => {
-
-    if (
-      confirm(
-        "Komplette Tausch-Auswahl löschen?"
-      )
-    ) {
-
-      tradeSelection = [];
-
-      saveTradeSelection();
-      renderTradeOverview();
-
-    }
-
-  };
-
-
-  actions.appendChild(
-    shareBtn
-  );
-
-  actions.appendChild(
-    clearBtn
-  );
-
-  content.appendChild(
-    actions
-  );
+function showBoardView(){
+
+document.getElementById(
+"normalMain"
+).style.display =
+"none";
+
+document.getElementById(
+"boardView"
+).classList.add(
+"active"
+);
+
+document.getElementById(
+"boardViewBtn"
+).classList.add(
+"active"
+);
+
+document.getElementById(
+"listViewBtn"
+).classList.remove(
+"active"
+);
+
+buildBoardHotspots();
 
 }
 
 
-/* TAUSCHLINK */
+/* =========================================
+   DETAIL
+========================================= */
 
-function buildTradeLink() {
+function openCap(cap){
 
-  const sorted =
-    [...tradeSelection]
-      .sort(
-        (a,b) =>
-          a - b
-      );
+if(isTraded(cap)){
+return;
+}
+
+const container =
+document.getElementById(
+"detailImage"
+);
+
+container.innerHTML="";
 
 
-  return (
-    window.location.origin +
-    window.location.pathname +
-    "?trade=" +
-    encodeURIComponent(
-      sorted.join(",")
-    )
-  );
+const canvas =
+document.createElement(
+"canvas"
+);
+
+drawCap(
+canvas,
+cap,
+500
+);
+
+container.appendChild(
+canvas
+);
+
+
+document.getElementById(
+"detailTitle"
+).textContent =
+"Nr. "+cap.number;
+
+
+document.getElementById(
+"detailBoard"
+).textContent =
+"Brett "+cap.board;
+
+
+const tradeBtn =
+document.getElementById(
+"tradeBtn"
+);
+
+
+if(isSelected(cap)){
+
+tradeBtn.textContent =
+"Aus Tauschliste entfernen";
+
+tradeBtn.classList.add(
+"selected"
+);
+
+}else{
+
+tradeBtn.textContent =
+"Zum Tausch hinzufügen";
+
+tradeBtn.classList.remove(
+"selected"
+);
 
 }
 
 
-async function shareTradeSelection() {
+tradeBtn.onclick=()=>{
 
-  if (!tradeSelection.length) {
+toggleTrade(cap);
 
-    alert(
-      "Noch keine Kronkorken ausgewählt."
-    );
+/*
+  sofort wieder zurück
+*/
 
-    return;
+closeModal(
+"detailModal"
+);
 
-  }
-
-
-  const sorted =
-    [...tradeSelection]
-      .sort(
-        (a,b) =>
-          a - b
-      );
+};
 
 
-  const tradeLink =
-    buildTradeLink();
-
-
-  const text =
-    "Meine CapTrade-Auswahl:\n\n" +
-
-    sorted
-      .map(number => {
-
-        const cap =
-          caps.find(
-            item =>
-              item.number === number
-          );
-
-        return (
-          "Nr. " +
-          number +
-          " – Brett " +
-          cap.board
-        );
-
-      })
-      .join("\n") +
-
-    "\n\nTauschanfrage öffnen:\n" +
-    tradeLink;
-
-
-  if (navigator.share) {
-
-    try {
-
-      await navigator.share({
-        title:
-          "CapTrade – Tauschanfrage",
-        text:
-          text
-      });
-
-    }
-
-    catch(e) {}
-
-  }
+document.getElementById(
+"detailModal"
+).classList.add(
+"open"
+);
 
 }
 
 
-/* TAUSCHANFRAGE */
+/* =========================================
+   TAUSCHZÄHLER
+========================================= */
 
-function checkForTradeRequest() {
+function updateTradeCounter(){
 
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
+document.getElementById(
+"tradeHeaderBtn"
+).textContent =
 
-  const trade =
-    params.get(
-      "trade"
-    );
-
-  if (!trade) {
-    return;
-  }
-
-
-  const numbers =
-    trade
-      .split(",")
-      .map(
-        value =>
-          Number(value)
-      )
-      .filter(
-        value =>
-          Number.isInteger(value)
-      );
-
-
-  const requestedCaps =
-    numbers
-      .map(number =>
-        caps.find(
-          cap =>
-            cap.number === number
-        )
-      )
-      .filter(Boolean);
-
-
-  if (!requestedCaps.length) {
-    return;
-  }
-
-
-  showTradeRequest(
-    requestedCaps
-  );
+"Tausch ("+
+tradeSelection.length+
+")";
 
 }
 
+
+/* =========================================
+   TAUSCHÜBERSICHT
+========================================= */
+
+function openTradeOverview(){
+
+renderTradeOverview();
+
+document.getElementById(
+"tradeModal"
+).classList.add(
+"open"
+);
+
+}
+
+
+function renderTradeOverview(){
+
+const content =
+document.getElementById(
+"tradeContent"
+);
+
+content.innerHTML="";
+
+
+const selectedCaps =
+tradeSelection
+.map(number=>
+
+caps.find(
+cap=>
+cap.number===number
+)
+
+)
+.filter(
+cap=>
+cap && !isTraded(cap)
+);
+
+
+if(!selectedCaps.length){
+
+content.innerHTML =
+'<div class="trade-empty">'+
+'Noch keine Kronkorken ausgewählt.'+
+'</div>';
+
+return;
+
+}
+
+
+const grid =
+document.createElement(
+"div"
+);
+
+grid.className =
+"trade-grid";
+
+
+selectedCaps.forEach(cap=>{
+
+const item =
+document.createElement(
+"div"
+);
+
+item.className =
+"trade-item";
+
+
+const thumb =
+document.createElement(
+"div"
+);
+
+thumb.className =
+"trade-thumb";
+
+
+const canvas =
+document.createElement(
+"canvas"
+);
+
+drawCap(
+canvas,
+cap,
+180
+);
+
+thumb.appendChild(
+canvas
+);
+
+
+const number =
+document.createElement(
+"div"
+);
+
+number.className =
+"trade-item-number";
+
+number.textContent =
+"Nr. "+cap.number;
+
+
+const board =
+document.createElement(
+"div"
+);
+
+board.className =
+"trade-item-board";
+
+board.textContent =
+"Brett "+cap.board;
+
+
+const remove =
+document.createElement(
+"button"
+);
+
+remove.className =
+"remove-btn";
+
+remove.textContent =
+"Entfernen";
+
+
+remove.onclick=()=>{
+
+tradeSelection =
+tradeSelection.filter(
+n=>n!==cap.number
+);
+
+saveTradeSelection();
+
+renderTradeOverview();
+
+};
+
+
+item.appendChild(
+thumb
+);
+
+item.appendChild(
+number
+);
+
+item.appendChild(
+board
+);
+
+item.appendChild(
+remove
+);
+
+grid.appendChild(
+item
+);
+
+});
+
+
+content.appendChild(
+grid
+);
+
+
+const actions =
+document.createElement(
+"div"
+);
+
+actions.className =
+"trade-actions";
+
+
+const share =
+document.createElement(
+"button"
+);
+
+share.className =
+"share-trade-btn";
+
+share.textContent =
+"Tauschliste teilen";
+
+share.onclick =
+shareTradeSelection;
+
+
+const clear =
+document.createElement(
+"button"
+);
+
+clear.className =
+"clear-trade-btn";
+
+clear.textContent =
+"Auswahl leeren";
+
+clear.onclick=()=>{
+
+tradeSelection=[];
+
+saveTradeSelection();
+
+renderTradeOverview();
+
+};
+
+
+actions.appendChild(
+share
+);
+
+actions.appendChild(
+clear
+);
+
+content.appendChild(
+actions
+);
+
+}
+
+
+/* =========================================
+   TAUSCHLINK
+========================================= */
+
+function buildTradeLink(){
+
+const sorted =
+[...tradeSelection]
+.sort(
+(a,b)=>a-b
+);
+
+return(
+
+window.location.origin+
+window.location.pathname+
+"?trade="+
+encodeURIComponent(
+sorted.join(",")
+)
+
+);
+
+}
+
+
+async function shareTradeSelection(){
+
+if(!tradeSelection.length){
+return;
+}
+
+const sorted =
+[...tradeSelection]
+.sort(
+(a,b)=>a-b
+);
+
+const tradeLink =
+buildTradeLink();
+
+
+const text =
+
+"Meine CapTrade-Auswahl:\n\n"+
+
+sorted
+.map(number=>{
+
+const cap =
+caps.find(
+item=>
+item.number===number
+);
+
+return(
+
+"Nr. "+
+number+
+" – Brett "+
+cap.board
+
+);
+
+})
+.join("\n")
+
++
+
+"\n\nTauschanfrage öffnen:\n"+
+tradeLink;
+
+
+if(navigator.share){
+
+try{
+
+await navigator.share({
+
+title:
+"CapTrade – Tauschanfrage",
+
+text:text
+
+});
+
+}catch(e){}
+
+}
+
+}
+
+
+/* =========================================
+   TAUSCHANFRAGE LESEN
+========================================= */
+
+function checkForTradeRequest(){
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const trade =
+params.get(
+"trade"
+);
+
+if(!trade){
+return;
+}
+
+
+const numbers =
+trade
+.split(",")
+.map(Number)
+.filter(
+Number.isInteger
+);
+
+
+const requestedCaps =
+numbers
+.map(number=>
+
+caps.find(
+cap=>
+cap.number===number
+)
+
+)
+.filter(Boolean);
+
+
+if(!requestedCaps.length){
+return;
+}
+
+showTradeRequest(
+requestedCaps
+);
+
+}
+
+
+/* =========================================
+   TAUSCHANFRAGE
+========================================= */
 
 function showTradeRequest(
-  requestedCaps
-) {
+requestedCaps
+){
 
-  document
-    .getElementById(
-      "normalMain"
-    )
-    .classList
-    .add(
-      "hidden"
-    );
+document.getElementById(
+"normalMain"
+).classList.add(
+"hidden"
+);
 
-  document
-    .getElementById(
-      "boardView"
-    )
-    .classList
-    .add(
-      "hidden"
-    );
+document.getElementById(
+"boardView"
+).classList.add(
+"hidden"
+);
 
-  document
-    .getElementById(
-      "viewSwitch"
-    )
-    .classList
-    .add(
-      "hidden"
-    );
+document.getElementById(
+"viewSwitch"
+).classList.add(
+"hidden"
+);
 
-  document
-    .getElementById(
-      "searchWrap"
-    )
-    .style
-    .display =
-      "none";
+document.getElementById(
+"searchWrap"
+).style.display =
+"none";
 
-  document
-    .getElementById(
-      "normalHeaderButtons"
-    )
-    .style
-    .display =
-      "none";
+document.getElementById(
+"normalHeaderButtons"
+).style.display =
+"none";
 
 
-  const screen =
-    document.getElementById(
-      "requestScreen"
-    );
+const screen =
+document.getElementById(
+"requestScreen"
+);
 
-  screen.classList.add(
-    "active"
-  );
-
-
-  document
-    .getElementById(
-      "requestInfo"
-    )
-    .textContent =
-      requestedCaps.length +
-      " Kronkorken ausgewählt";
+screen.classList.add(
+"active"
+);
 
 
-  const grid =
-    document.getElementById(
-      "requestGrid"
-    );
+document.getElementById(
+"requestInfo"
+).textContent =
 
-  grid.innerHTML = "";
-
-
-  requestedCaps.forEach(cap => {
-
-    const item =
-      document.createElement(
-        "div"
-      );
-
-    item.className =
-      "request-item";
+requestedCaps.length+
+" Kronkorken ausgewählt";
 
 
-    const thumb =
-      document.createElement(
-        "div"
-      );
+const grid =
+document.getElementById(
+"requestGrid"
+);
 
-    thumb.className =
-      "request-thumb";
-
-
-    const canvas =
-      document.createElement(
-        "canvas"
-      );
-
-    drawCap(
-      canvas,
-      cap,
-      180
-    );
-
-    thumb.appendChild(
-      canvas
-    );
+grid.innerHTML="";
 
 
-    const number =
-      document.createElement(
-        "div"
-      );
+requestedCaps.forEach(cap=>{
 
-    number.className =
-      "request-number";
+const item =
+document.createElement(
+"div"
+);
 
-    number.textContent =
-      "Nr. " +
-      cap.number;
+item.className =
+"request-item";
 
 
-    const board =
-      document.createElement(
-        "div"
-      );
+const thumb =
+document.createElement(
+"div"
+);
 
-    board.className =
-      "request-board";
-
-    board.textContent =
-      "Brett " +
-      cap.board;
+thumb.className =
+"request-thumb";
 
 
-    item.appendChild(
-      thumb
-    );
+const canvas =
+document.createElement(
+"canvas"
+);
 
-    item.appendChild(
-      number
-    );
+drawCap(
+canvas,
+cap,
+180
+);
 
-    item.appendChild(
-      board
-    );
+thumb.appendChild(
+canvas
+);
 
 
-    grid.appendChild(
-      item
-    );
+const number =
+document.createElement(
+"div"
+);
 
-  });
+number.className =
+"request-number";
+
+number.textContent =
+"Nr. "+cap.number;
+
+
+const board =
+document.createElement(
+"div"
+);
+
+board.className =
+"request-board";
+
+board.textContent =
+"Brett "+cap.board;
+
+
+item.appendChild(
+thumb
+);
+
+item.appendChild(
+number
+);
+
+item.appendChild(
+board
+);
+
+grid.appendChild(
+item
+);
+
+});
 
 }
 
 
-function backToMain() {
+/* =========================================
+   ZUR HAUPTANSICHT
+========================================= */
 
-  window.location.href =
-    window.location.origin +
-    window.location.pathname;
+function backToMain(){
 
-}
+window.location.href =
 
-
-/* SEITE TEILEN */
-
-async function sharePage() {
-
-  const data = {
-
-    title:
-      "CapTrade",
-
-    text:
-      "Schau dir meine Tausch-Kronkorken an:",
-
-    url:
-      window.location.origin +
-      window.location.pathname
-
-  };
-
-
-  if (navigator.share) {
-
-    try {
-
-      await navigator.share(
-        data
-      );
-
-    }
-
-    catch(e) {}
-
-  }
+window.location.origin+
+window.location.pathname;
 
 }
 
 
-/* MODALS */
+/* =========================================
+   NORMALES TEILEN
+========================================= */
 
-function closeModal(id) {
+async function sharePage(){
 
-  document
-    .getElementById(id)
-    .classList
-    .remove(
-      "open"
-    );
+if(navigator.share){
+
+try{
+
+await navigator.share({
+
+title:"CapTrade",
+
+text:
+"Schau dir meine Tausch-Kronkorken an:",
+
+url:
+window.location.origin+
+window.location.pathname
+
+});
+
+}catch(e){}
+
+}
+
+}
+
+
+/* =========================================
+   MODALS
+========================================= */
+
+function closeModal(id){
+
+document.getElementById(
+id
+).classList.remove(
+"open"
+);
 
 }
 
 
 function modalBackground(
-  event,
-  id
-) {
+event,
+id
+){
 
-  if (
-    event.target.id === id
-  ) {
+if(event.target.id===id){
 
-    closeModal(id);
+closeModal(id);
 
-  }
+}
 
 }
 
