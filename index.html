@@ -111,7 +111,7 @@ main {
 
 .thumb {
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   overflow: hidden;
   background: #e5e7eb;
@@ -127,6 +127,7 @@ main {
 .cap-number {
   font-weight: 800;
   font-size: 15px;
+  color: #0a84ff;
 }
 
 .cap-board {
@@ -135,7 +136,8 @@ main {
   margin-top: 2px;
 }
 
-/* MODAL */
+
+/* MODALS */
 
 .modal {
   display: none;
@@ -178,8 +180,8 @@ main {
 }
 
 .detail-image {
-  width: 220px;
-  height: 220px;
+  width: 230px;
+  height: 230px;
   max-width: 72vw;
   max-height: 72vw;
   margin: 18px auto 12px;
@@ -220,6 +222,7 @@ main {
   cursor: pointer;
 }
 
+
 /* BRETT */
 
 .board-wrapper {
@@ -240,12 +243,12 @@ main {
   position: absolute;
   width: 9%;
   aspect-ratio: 1;
-  border: 4px solid red;
+  border: 4px solid #ff2d2d;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   box-shadow:
     0 0 0 3px white,
-    0 0 18px red;
+    0 0 18px #ff2d2d;
   animation: pulse 1s infinite alternate;
   pointer-events: none;
 }
@@ -282,11 +285,9 @@ main {
 }
 
 @media (min-width: 600px) {
-
   .grid {
     grid-template-columns: repeat(5, 1fr);
   }
-
 }
 </style>
 </head>
@@ -301,9 +302,7 @@ main {
 
     <div>
       <h1>CapTrade</h1>
-      <div class="subtitle">
-        Meine Tausch-Kronkorken
-      </div>
+      <div class="subtitle">Meine Tausch-Kronkorken</div>
     </div>
 
     <button
@@ -339,15 +338,12 @@ main {
 
   </div>
 
-  <div
-    id="grid"
-    class="grid">
-  </div>
+  <div id="grid" class="grid"></div>
 
 </main>
 
 
-<!-- DETAIL -->
+<!-- DETAILANSICHT -->
 
 <div
   id="detailModal"
@@ -403,9 +399,7 @@ main {
       ×
     </button>
 
-    <div
-      id="boardHead"
-      class="board-head">
+    <div class="board-head">
       Brett F
     </div>
 
@@ -435,108 +429,266 @@ main {
 
 <script>
 
-/* ==========================================
+/* =====================================================
    CAPTRADE
    TESTBRETT F
-   ========================================== */
 
+   Referenzfoto:
+   1152 × 1536
 
-/*
-   DEIN BILD AUF GITHUB
-*/
+   WICHTIG:
+   Die Koordinaten werden automatisch auf die
+   tatsächliche Auflösung des GitHub-Bildes skaliert.
+   ===================================================== */
 
 const IMAGE = "IMG_6469.jpeg";
 
-
-/*
-   Brettbezeichnung
-*/
-
 const BOARD = "F";
-
-
-/*
-   Nummer des ersten Kronkorkens.
-
-   Später können wir hier z.B.
-   501 eintragen, wenn Brett F
-   bei Nr. 501 beginnen soll.
-*/
 
 const START_NUMMER = 1;
 
 
 /*
-   Originalgröße des Fotos
+   Referenzgröße der Version,
+   anhand derer die Positionen bestimmt wurden.
 */
 
-const ORIGINAL_WIDTH = 1152;
-const ORIGINAL_HEIGHT = 1536;
+const REF_WIDTH = 1152;
+const REF_HEIGHT = 1536;
 
 
 /*
-   Mittelpunkt der 10 Spalten
+   Größe eines Kronkorken-Ausschnitts
+   auf der Referenzversion.
+
+   Etwas größer gewählt, damit der komplette
+   Kronkorken inklusive Rand sichtbar bleibt.
 */
 
-const COL_X = [
+const REF_CROP = 112;
 
-  94,
-  195,
-  295,
-  399,
-  503,
-  607,
-  722,
-  829,
-  939,
-  1049
+
+/*
+   Tatsächliche Mittelpunkte der Kronkorken.
+
+   Jede Reihe enthält:
+   [x, y]
+
+   Erste Reihe besitzt nur 9 Kronkorken.
+   Rechts daneben steht nur das "F".
+*/
+
+const ROWS = [
+
+  /* Reihe 1 */
+  [
+    [123,98],
+    [215,87],
+    [317,88],
+    [415,80],
+    [515,85],
+    [616,85],
+    [713,87],
+    [814,87],
+    [913,93]
+  ],
+
+  /* Reihe 2 */
+  [
+    [112,183],
+    [207,181],
+    [308,189],
+    [418,178],
+    [519,179],
+    [616,176],
+    [717,179],
+    [818,177],
+    [917,188],
+    [1018,172]
+  ],
+
+  /* Reihe 3 */
+  [
+    [113,284],
+    [212,284],
+    [321,278],
+    [417,273],
+    [517,275],
+    [622,263],
+    [721,278],
+    [819,275],
+    [920,278],
+    [1033,273]
+  ],
+
+  /* Reihe 4 */
+  [
+    [122,382],
+    [224,369],
+    [317,375],
+    [412,376],
+    [518,365],
+    [619,373],
+    [717,375],
+    [826,370],
+    [921,375],
+    [1023,375]
+  ],
+
+  /* Reihe 5 */
+  [
+    [100,476],
+    [206,484],
+    [308,481],
+    [409,476],
+    [512,469],
+    [617,470],
+    [727,464],
+    [819,476],
+    [922,476],
+    [1027,472]
+  ],
+
+  /* Reihe 6 */
+  [
+    [103,577],
+    [203,583],
+    [304,571],
+    [401,574],
+    [509,571],
+    [610,574],
+    [707,580],
+    [819,577],
+    [927,578],
+    [1025,579]
+  ],
+
+  /* Reihe 7 */
+  [
+    [101,682],
+    [206,680],
+    [309,679],
+    [407,683],
+    [513,668],
+    [614,671],
+    [712,674],
+    [821,680],
+    [935,670],
+    [1055,676]
+  ],
+
+  /* Reihe 8 */
+  [
+    [98,784],
+    [194,783],
+    [295,781],
+    [410,784],
+    [506,781],
+    [623,775],
+    [724,772],
+    [836,772],
+    [928,778],
+    [1049,770]
+  ],
+
+  /* Reihe 9 */
+  [
+    [85,880],
+    [193,879],
+    [298,878],
+    [400,880],
+    [509,875],
+    [619,881],
+    [731,872],
+    [826,890],
+    [939,883],
+    [1045,884]
+  ],
+
+  /* Reihe 10 */
+  [
+    [92,983],
+    [195,986],
+    [295,985],
+    [398,985],
+    [509,983],
+    [607,991],
+    [721,993],
+    [827,993],
+    [938,993],
+    [1049,992]
+  ],
+
+  /* Reihe 11 */
+  [
+    [79,1087],
+    [182,1090],
+    [287,1089],
+    [394,1091],
+    [502,1099],
+    [615,1100],
+    [722,1107],
+    [837,1107],
+    [937,1105],
+    [1063,1102]
+  ],
+
+  /* Reihe 12 */
+  [
+    [71,1197],
+    [176,1204],
+    [291,1196],
+    [394,1204],
+    [508,1207],
+    [621,1215],
+    [728,1211],
+    [839,1225],
+    [951,1221],
+    [1059,1226]
+  ],
+
+  /* Reihe 13 */
+  [
+    [76,1304],
+    [177,1313],
+    [295,1306],
+    [400,1315],
+    [506,1316],
+    [616,1328],
+    [729,1328],
+    [843,1340],
+    [963,1335],
+    [1073,1343]
+  ],
+
+  /* Reihe 14 */
+  [
+    [69,1443],
+    [169,1438],
+    [287,1435],
+    [400,1441],
+    [509,1437],
+    [623,1450],
+    [739,1441],
+    [859,1457],
+    [969,1447],
+    [1084,1472]
+  ]
 
 ];
 
 
-/*
-   Mittelpunkt der 14 Reihen
-*/
-
-const ROW_Y = [
-
-  81,
-  173,
-  264,
-  370,
-  468,
-  561,
-  675,
-  780,
-  896,
-  995,
-  1107,
-  1225,
-  1322,
-  1433
-
-];
-
-
-/*
-   Ausschnittgröße eines Kronkorkens
-*/
-
-const CROP_SIZE = 92;
-
-
-/* ==========================================
-   KRONKORKEN ERZEUGEN
-   ========================================== */
+/* =====================================================
+   KRONKORKEN-DATEN ERZEUGEN
+   ===================================================== */
 
 const caps = [];
 
 let runningNumber = START_NUMMER;
 
+ROWS.forEach((row,rowIndex) => {
 
-ROW_Y.forEach((y,rowIndex) => {
-
-  COL_X.forEach((x,colIndex) => {
+  row.forEach((point,positionIndex) => {
 
     caps.push({
 
@@ -546,11 +698,11 @@ ROW_Y.forEach((y,rowIndex) => {
 
       row: rowIndex + 1,
 
-      position: colIndex + 1,
+      position: positionIndex + 1,
 
-      x: x,
+      refX: point[0],
 
-      y: y
+      refY: point[1]
 
     });
 
@@ -561,9 +713,9 @@ ROW_Y.forEach((y,rowIndex) => {
 });
 
 
-/* ==========================================
+/* =====================================================
    ORIGINALBILD LADEN
-   ========================================== */
+   ===================================================== */
 
 const sourceImage = new Image();
 
@@ -571,6 +723,13 @@ sourceImage.src = IMAGE;
 
 
 sourceImage.onload = () => {
+
+  console.log(
+    "Bild geladen:",
+    sourceImage.naturalWidth,
+    "×",
+    sourceImage.naturalHeight
+  );
 
   renderCaps();
 
@@ -589,9 +748,47 @@ sourceImage.onerror = () => {
 };
 
 
-/* ==========================================
+/* =====================================================
+   REFERENZPOSITION AUF ECHTE BILDGRÖSSE UMWANDELN
+   ===================================================== */
+
+function getScaledPosition(cap) {
+
+  const scaleX =
+    sourceImage.naturalWidth /
+    REF_WIDTH;
+
+  const scaleY =
+    sourceImage.naturalHeight /
+    REF_HEIGHT;
+
+
+  return {
+
+    x:
+      cap.refX *
+      scaleX,
+
+    y:
+      cap.refY *
+      scaleY,
+
+    cropX:
+      REF_CROP *
+      scaleX,
+
+    cropY:
+      REF_CROP *
+      scaleY
+
+  };
+
+}
+
+
+/* =====================================================
    KRONKORKEN AUSSCHNEIDEN
-   ========================================== */
+   ===================================================== */
 
 function drawCap(
   canvas,
@@ -610,11 +807,17 @@ function drawCap(
     outputSize;
 
 
+  const p =
+    getScaledPosition(cap);
+
+
   const sx =
-    cap.x - CROP_SIZE / 2;
+    p.x -
+    p.cropX / 2;
 
   const sy =
-    cap.y - CROP_SIZE / 2;
+    p.y -
+    p.cropY / 2;
 
 
   ctx.clearRect(
@@ -632,8 +835,8 @@ function drawCap(
     sx,
     sy,
 
-    CROP_SIZE,
-    CROP_SIZE,
+    p.cropX,
+    p.cropY,
 
     0,
     0,
@@ -646,16 +849,11 @@ function drawCap(
 }
 
 
-/* ==========================================
-   LISTE ANZEIGEN
-   ========================================== */
+/* =====================================================
+   LISTE
+   ===================================================== */
 
 function renderCaps() {
-
-  if (!sourceImage.complete) {
-    return;
-  }
-
 
   const grid =
     document.getElementById("grid");
@@ -746,7 +944,7 @@ function renderCaps() {
     drawCap(
       canvas,
       cap,
-      180
+      200
     );
 
 
@@ -810,17 +1008,16 @@ function renderCaps() {
 }
 
 
-/* ==========================================
+/* =====================================================
    DETAILANSICHT
-   ========================================== */
+   ===================================================== */
 
 function openCap(cap) {
 
   const container =
-    document
-      .getElementById(
-        "detailImage"
-      );
+    document.getElementById(
+      "detailImage"
+    );
 
 
   container.innerHTML = "";
@@ -835,7 +1032,7 @@ function openCap(cap) {
   drawCap(
     canvas,
     cap,
-    400
+    500
   );
 
 
@@ -897,29 +1094,36 @@ function openCap(cap) {
 }
 
 
-/* ==========================================
+/* =====================================================
    AUF BRETT ANZEIGEN
-   ========================================== */
+   ===================================================== */
 
 function showOnBoard(cap) {
 
   const marker =
-    document
-      .getElementById(
-        "marker"
-      );
+    document.getElementById(
+      "marker"
+    );
 
+
+  /*
+     Hier können wir direkt mit den
+     Referenzwerten rechnen.
+
+     Dadurch bleibt die Markierung
+     unabhängig von der Displaygröße korrekt.
+  */
 
   const left =
-    (cap.x /
-    ORIGINAL_WIDTH)
-    * 100;
+    (cap.refX /
+    REF_WIDTH) *
+    100;
 
 
   const top =
-    (cap.y /
-    ORIGINAL_HEIGHT)
-    * 100;
+    (cap.refY /
+    REF_HEIGHT) *
+    100;
 
 
   marker.style.left =
@@ -956,9 +1160,9 @@ function showOnBoard(cap) {
 }
 
 
-/* ==========================================
-   FENSTER SCHLIESSEN
-   ========================================== */
+/* =====================================================
+   MODAL SCHLIESSEN
+   ===================================================== */
 
 function closeModal(id) {
 
@@ -986,9 +1190,9 @@ function modalBackground(
 }
 
 
-/* ==========================================
+/* =====================================================
    TEILEN
-   ========================================== */
+   ===================================================== */
 
 async function sharePage() {
 
@@ -1022,25 +1226,37 @@ async function sharePage() {
 
   else {
 
-    await navigator
-      .clipboard
-      .writeText(
+    try {
+
+      await navigator
+        .clipboard
+        .writeText(
+          window.location.href
+        );
+
+      alert(
+        "Link wurde kopiert."
+      );
+
+    }
+
+    catch(e) {
+
+      alert(
+        "Link: " +
         window.location.href
       );
 
-
-    alert(
-      "Link wurde kopiert."
-    );
+    }
 
   }
 
 }
 
 
-/* ==========================================
-   DIREKTLINK
-   ========================================== */
+/* =====================================================
+   DIREKTLINK ZU EINEM KRONKORKEN
+   ===================================================== */
 
 function openFromURL() {
 
